@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 14 ene 2025, 8:59:55 by Hibernate Tools 6.5.1.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class catalog="elorbase" name="modelo.Matriculaciones" optimistic-lock="none" table="matriculaciones">
+        <composite-id class="modelo.MatriculacionesId" name="id">
+            <key-property name="alumId" type="int">
+                <column name="alum_id"/>
+            </key-property>
+            <key-property name="cicloId" type="int">
+                <column name="ciclo_id"/>
+            </key-property>
+            <key-property name="curso" type="int">
+                <column name="curso"/>
+            </key-property>
+            <key-property name="fecha" type="date">
+                <column length="10" name="fecha"/>
+            </key-property>
+        </composite-id>
+        <many-to-one class="modelo.Ciclos" fetch="select" insert="false" name="ciclos" update="false">
+            <column name="ciclo_id" not-null="true"/>
+        </many-to-one>
+        <many-to-one class="modelo.Users" fetch="select" insert="false" name="users" update="false">
+            <column name="alum_id" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>
