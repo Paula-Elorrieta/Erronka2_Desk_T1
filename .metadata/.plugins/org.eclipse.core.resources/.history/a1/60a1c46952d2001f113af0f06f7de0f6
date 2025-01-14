@@ -1,0 +1,11 @@
+package controlador;
+
+import db;
+
+public class Login {
+	
+	public login() {
+		db.Konexioa konexioa = new db.Konexioa();
+    }
+
+}

@@ -296,3 +296,183 @@
 2025-01-14 09:02:15,406 [Worker-9: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
 2025-01-14 09:02:15,407 [Worker-9: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 2025-01-14 09:02:15,408 [Worker-9: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:16:34,450 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:16:34,451 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:16:34,453 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:16:34,454 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:18:03,896 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:18:03,896 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:18:03,898 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:18:03,898 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:18:18,487 [Worker-39: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:18:18,488 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:18:18,489 [Worker-39: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:18:18,490 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:19:39,246 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:19:39,246 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:19:39,247 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:19:39,247 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:20:39,281 [Worker-34: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:20:39,283 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:20:39,284 [Worker-34: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:20:39,285 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:20:48,176 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:20:48,177 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:20:48,179 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:20:48,179 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:23:22,634 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:23:22,634 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:23:22,635 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:23:22,635 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:24:40,945 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:24:40,946 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:24:40,947 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:24:40,947 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:25:05,333 [Worker-34: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:25:05,334 [Worker-34: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:25:05,335 [Worker-34: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:25:05,336 [Worker-34: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:25:21,274 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:25:21,275 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:25:21,276 [Worker-0: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:25:21,276 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:26:09,828 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:09,828 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:26:09,829 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:09,829 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:26:20,496 [Worker-42: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:20,496 [Worker-42: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:26:20,498 [Worker-42: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:20,499 [Worker-42: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:26:30,161 [Worker-44: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:30,161 [Worker-44: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:26:30,162 [Worker-44: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:30,163 [Worker-44: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:26:36,813 [Worker-42: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:36,814 [Worker-42: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:26:36,815 [Worker-42: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:36,815 [Worker-42: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:26:43,151 [Worker-45: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:43,152 [Worker-45: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:26:43,153 [Worker-45: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:43,154 [Worker-45: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:26:50,428 [Worker-45: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:50,429 [Worker-45: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:26:50,430 [Worker-45: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:26:50,430 [Worker-45: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:27:00,199 [Worker-45: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:27:00,199 [Worker-45: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:27:00,200 [Worker-45: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:27:00,201 [Worker-45: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:27:09,612 [Worker-42: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:27:09,612 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:27:09,613 [Worker-42: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:27:09,613 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:27:48,612 [Worker-42: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:27:48,613 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:27:48,614 [Worker-42: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:27:48,615 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:28:34,424 [Worker-46: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:28:34,425 [Worker-46: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:28:34,426 [Worker-46: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:28:34,427 [Worker-46: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:29:54,912 [Worker-48: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:29:54,913 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:29:54,914 [Worker-48: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:29:54,914 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:32:04,689 [Worker-44: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:32:04,689 [Worker-44: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:32:04,690 [Worker-44: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:32:04,691 [Worker-44: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:33:07,255 [Worker-45: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:33:07,255 [Worker-45: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:33:07,257 [Worker-45: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:33:07,257 [Worker-45: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:34:13,911 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:13,912 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:34:13,913 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:13,913 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:34:31,428 [Worker-39: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:31,429 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:34:31,430 [Worker-39: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:31,431 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:34:47,655 [Worker-42: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:47,656 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:34:47,657 [Worker-42: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:47,657 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:34:57,127 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:57,127 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:34:57,128 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:34:57,129 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:35:05,494 [Worker-39: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:05,495 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:35:05,496 [Worker-39: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:05,497 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:35:21,985 [Worker-34: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:21,985 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:35:21,986 [Worker-34: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:21,986 [Worker-34: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:35:29,198 [Worker-40: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:29,198 [Worker-40: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:35:29,199 [Worker-40: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:29,199 [Worker-40: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:35:42,638 [Worker-44: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:42,638 [Worker-44: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:35:42,639 [Worker-44: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:35:42,639 [Worker-44: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:38:46,198 [Worker-48: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:38:46,199 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:38:46,199 [Worker-48: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:38:46,200 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:41:41,771 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:41:41,772 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:41:41,773 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:41:41,773 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:43:18,289 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:43:18,289 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:43:18,290 [Worker-41: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:43:18,290 [Worker-41: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:43:26,287 [Worker-50: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:43:26,287 [Worker-50: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:43:26,288 [Worker-50: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:43:26,288 [Worker-50: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:43:33,159 [Worker-48: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:43:33,159 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:43:33,160 [Worker-48: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:43:33,160 [Worker-48: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:45:13,348 [Worker-49: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:45:13,348 [Worker-49: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:45:13,349 [Worker-49: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:45:13,349 [Worker-49: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:48:50,857 [Worker-50: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:48:50,857 [Worker-50: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:48:50,858 [Worker-50: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:48:50,858 [Worker-50: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:48:56,269 [Worker-51: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:48:56,269 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:48:56,270 [Worker-51: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:48:56,270 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:49:23,445 [Worker-41: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:49:23,445 [Worker-41: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:49:23,446 [Worker-41: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:49:23,446 [Worker-41: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:49:49,065 [Worker-51: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:49:49,065 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:49:49,066 [Worker-51: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:49:49,066 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:50:37,928 [Worker-50: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:50:37,929 [Worker-50: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:50:37,930 [Worker-50: Launching LoginV] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:50:37,930 [Worker-50: Launching LoginV] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:51:54,044 [Worker-51: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:51:54,044 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\main\resources
+2025-01-14 09:51:54,045 [Worker-51: Building] WARN  o.a.m.s.f.DefaultMavenResourcesFiltering - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2025-01-14 09:51:54,046 [Worker-51: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory D:\Jonander\Erronka2\DAM2_Deskt_T2\src\test\resources
+2025-01-14 09:51:55,335 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:391) - ... Waiting for all tasks ending
+2025-01-14 09:51:55,336 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:397) - Closing all component containers
+2025-01-14 09:51:55,338 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:403) - Closing FileSystemHelper
+2025-01-14 09:51:55,338 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:409) - ... Waiting for all tasks ending before shutting down the BackgroundExecutor
+2025-01-14 09:51:55,339 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:414) - Shutting down BackgroundExecutor
+2025-01-14 09:51:55,340 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:420) - Stopping all threads monitoring thread
+2025-01-14 09:51:55,340 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:425) - Closing ThreadHolder
+2025-01-14 09:51:55,340 [Burningwave - Resource releaser] INFO  o.b.c.a.StaticComponentContainer - (StaticComponentContainer.java:430) - Shutting down ThreadSupplier

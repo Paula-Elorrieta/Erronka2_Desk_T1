@@ -1,0 +1,10 @@
+package controlador;
+import controlador.db.Konexioa;
+
+public class Login {
+	
+	public void login() {
+		Konexioa konexioa = new Konexioa();
+    }
+
+}

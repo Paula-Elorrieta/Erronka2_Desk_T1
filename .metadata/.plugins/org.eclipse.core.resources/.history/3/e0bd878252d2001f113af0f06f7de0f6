@@ -1,0 +1,9 @@
+package controlador;
+
+public class Login {
+	
+	public void login() {
+		controlador.db.Konexioa konexioa = new db.Konexioa();
+    }
+
+}
