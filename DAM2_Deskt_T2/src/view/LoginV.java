@@ -91,23 +91,24 @@ public class LoginV extends JFrame {
             String password = new String(pasahitzaField.getPassword());
 
             try {
-                Socket socket = new Socket("localhost", Zerbitzaria.PUERTO);  // Conectarse al servidor
+                // Establecer la conexión con el servidor
+                Socket socket = new Socket("localhost", Zerbitzaria.PUERTO);
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
                 DataInputStream in = new DataInputStream(socket.getInputStream());
 
-                // Enviar el tipo de acción (LOGIN) y los datos
                 out.writeUTF("LOGIN");
                 out.writeUTF(username);
                 out.writeUTF(password);
 
-                // Esperar la respuesta del servidor
                 String respuesta = in.readUTF();
-                if ("OK".equals(respuesta)) {
+
+                if (respuesta.contains("Error")) {
+                    JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, respuesta, "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     MenuV menu = new MenuV();
                     menu.setVisible(true);
-                    dispose(); // Cierra la ventana de login
-                } else {
-                    JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+                    dispose();  
                 }
 
                 socket.close();

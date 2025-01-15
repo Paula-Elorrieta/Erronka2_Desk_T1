@@ -1,0 +1,93 @@
+package vista;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class TeacherMenu {
+
+    private JFrame frame;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                TeacherMenu window = new TeacherMenu();
+                window.frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Create the application.
+     */
+    public TeacherMenu() {
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        // Panel de fondo
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(20, 20, 20)); // Fondo oscuro
+        panel.setBounds(0, 0, 450, 300);
+        frame.getContentPane().add(panel);
+        panel.setLayout(null);
+
+        // Etiqueta de bienvenida
+        JLabel lblWelcome = new JLabel("Menú Principal");
+        lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
+        lblWelcome.setForeground(new Color(148, 0, 211)); // Morado neón
+        lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 18));
+        lblWelcome.setBounds(10, 10, 414, 30);
+        panel.add(lblWelcome);
+
+        // Botón para consultar el propio horario
+        JButton btnOwnSchedule = new JButton("Kontsultatu Nire Ordutegia");
+        btnOwnSchedule.setBounds(120, 60, 200, 30);
+        btnOwnSchedule.setBackground(new Color(148, 0, 211));
+        btnOwnSchedule.setForeground(Color.WHITE);
+        panel.add(btnOwnSchedule);
+        btnOwnSchedule.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Nire ordutegia ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE));
+
+        // Botón para consultar otros horarios
+        JButton btnOtherSchedules = new JButton("Beste Ordutegiak Kontsultatu");
+        btnOtherSchedules.setBounds(120, 110, 200, 30);
+        btnOtherSchedules.setBackground(new Color(148, 0, 211));
+        btnOtherSchedules.setForeground(Color.WHITE);
+        panel.add(btnOtherSchedules);
+        btnOtherSchedules.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Beste ordutegiak ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE));
+
+        // Botón para consultar reuniones
+        JButton btnMeetings = new JButton("Bilerak Kontsultatu");
+        btnMeetings.setBounds(120, 160, 200, 30);
+        btnMeetings.setBackground(new Color(148, 0, 211));
+        btnMeetings.setForeground(Color.WHITE);
+        panel.add(btnMeetings);
+        btnMeetings.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Bilerak ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE));
+
+        // Botón para desconectar
+        JButton btnLogout = new JButton("Deskonektatu");
+        btnLogout.setBounds(120, 210, 200, 30);
+        btnLogout.setBackground(new Color(211, 0, 0));
+        btnLogout.setForeground(Color.WHITE);
+        panel.add(btnLogout);
+        btnLogout.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "Deskonektatu zara.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+            frame.dispose(); // Cerrar la ventana actual
+            Login.main(null); // Volver al login
+        });
+    }
+}

@@ -1,0 +1,116 @@
+package servidor;
+
+import controlador.db.Konexioa;
+
+import java.io.*;
+import java.net.*;
+import java.sql.*;
+
+public class Servidor {
+
+    private static final int PUERTO = 5000; // Puerto para el servidor
+    private ServerSocket servidorSocket;
+
+    public Servidor() {
+        try {
+            // Crear el servidor que escucha en el puerto especificado
+            servidorSocket = new ServerSocket(PUERTO);
+            System.out.println("Servidor iniciado en el puerto " + PUERTO);
+        } catch (IOException e) {
+            System.out.println("Error al iniciar el servidor: " + e.getMessage());
+        }
+    }
+
+    public void iniciar() {
+        while (true) {
+            try {
+                // Esperar la conexión de un cliente
+                Socket socketCliente = servidorSocket.accept();
+                System.out.println("Cliente conectado desde: " + socketCliente.getInetAddress());
+
+                // Crear un nuevo hilo para manejar la conexión del cliente
+                new ClienteHandler(socketCliente).start();
+
+            } catch (IOException e) {
+                System.out.println("Error al aceptar una conexión: " + e.getMessage());
+            }
+        }
+    }
+
+    // Clase que maneja la comunicación con un cliente
+    private class ClienteHandler extends Thread {
+        private Socket socketCliente;
+        private DataInputStream entrada;
+        private DataOutputStream salida;
+        private Konexioa konexioa;
+
+        public ClienteHandler(Socket socketCliente) {
+            this.socketCliente = socketCliente;
+        }
+
+        @Override
+        public void run() {
+            try {
+                // Crear los flujos de entrada y salida para comunicarse con el cliente
+                entrada = new DataInputStream(socketCliente.getInputStream());
+                salida = new DataOutputStream(socketCliente.getOutputStream());
+
+                // Crear la conexión con la base de datos
+                konexioa = new Konexioa();
+                Connection connection = konexioa.irekiKonexioa();
+
+                // Intercambio de datos con el cliente
+                String mensajeCliente;
+                while ((mensajeCliente = entrada.readUTF()) != null) {
+                    System.out.println("Mensaje del cliente: " + mensajeCliente);
+
+                    // Procesar la consulta y devolver la respuesta
+                    String respuesta = procesarConsulta(mensajeCliente, connection);
+                    salida.writeUTF(respuesta);
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error en la comunicación con el cliente: " + e.getMessage());
+            } finally {
+                cerrarConexion();
+            }
+        }
+
+        private String procesarConsulta(String consulta, Connection connection) {
+            StringBuilder resultado = new StringBuilder();
+
+            try {
+                // Crear la consulta SQL
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(consulta);
+
+                // Procesar los resultados de la consulta
+                while (rs.next()) {
+                    resultado.append(rs.getString(1)).append("\n"); // Asumiendo que la consulta devuelve una columna
+                }
+                rs.close();
+                statement.close();
+            } catch (SQLException e) {
+                resultado.append("Error en la consulta: ").append(e.getMessage());
+            }
+
+            return resultado.toString();
+        }
+
+        private void cerrarConexion() {
+            try {
+                if (entrada != null) entrada.close();
+                if (salida != null) salida.close();
+                if (socketCliente != null) socketCliente.close();
+                if (konexioa != null) konexioa.itxiKonexioa();
+            } catch (IOException | SQLException e) {
+                System.out.println("Error al cerrar conexiones: " + e.getMessage());
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Servidor servidor = new Servidor();
+        servidor.iniciar();
+    }
+}

@@ -1,0 +1,111 @@
+package view;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.Popup;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import controlador.Login;
+public class LoginV extends JFrame{
+
+	private static final long serialVersionUID = 1L;
+	private JFrame loginV;
+    private JTextField textFieldErabiltzailea;
+    private JPasswordField pasahitzaField;
+
+  
+
+ 
+    public LoginV()  {
+    	  loginV = new JFrame();
+          loginV.setBounds(100, 100, 600, 401);
+          loginV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          loginV.getContentPane().setLayout(null);
+
+          // Panel de fondo
+          JPanel panel = new JPanel();
+          panel.setBackground(Color.GRAY); // Fondo oscuro
+          panel.setBounds(0, 0, 584, 362);
+          loginV.getContentPane().add(panel);
+          panel.setLayout(null);
+
+          // Título estilizado
+          JLabel lblTitle = new JLabel("Login");
+          lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+          lblTitle.setForeground(new Color(162, 19, 255)); // Morado neón
+          lblTitle.setFont(new Font("Tahoma", Font.BOLD, 30));
+          lblTitle.setBounds(0, 53, 584, 50);
+          panel.add(lblTitle);
+
+          // Etiqueta para el nombre de usuario
+          JLabel lblUsername = new JLabel("Erabiltzailea:");
+          lblUsername.setForeground(Color.WHITE);
+          lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 14));
+          lblUsername.setBounds(159, 165, 80, 25);
+          panel.add(lblUsername);
+
+          textFieldErabiltzailea = new JTextField();
+          textFieldErabiltzailea.setBounds(300, 167, 180, 25);
+          textFieldErabiltzailea.setBackground(Color.DARK_GRAY);
+          textFieldErabiltzailea.setForeground(Color.WHITE);
+          textFieldErabiltzailea.setCaretColor(Color.WHITE);
+          panel.add(textFieldErabiltzailea);
+          textFieldErabiltzailea.setColumns(10);
+
+          // Etiqueta para la contraseña
+          JLabel lblPasahitza = new JLabel("Pasahitza:");
+          lblPasahitza.setForeground(Color.WHITE);
+          lblPasahitza.setFont(new Font("Tahoma", Font.PLAIN, 14));
+          lblPasahitza.setBounds(159, 215, 80, 25);
+          panel.add(lblPasahitza);
+
+          pasahitzaField = new JPasswordField();
+          pasahitzaField.setBounds(300, 217, 180, 25);
+          pasahitzaField.setBackground(Color.DARK_GRAY);
+          pasahitzaField.setForeground(Color.WHITE);
+          pasahitzaField.setCaretColor(Color.WHITE);
+          panel.add(pasahitzaField);
+
+          // Botón de inicio de sesión
+          JButton btnLogin = new JButton("Hasi saioa");
+          btnLogin.addActionListener(new ActionListener() {
+          	public void actionPerformed(ActionEvent e) {
+          		String username = textFieldErabiltzailea.getText();
+          		String password = new String(pasahitzaField.getPassword());
+          		
+          		Login login = new Login();
+          		boolean isAuthenticated = login.loginEgin(username, password);
+  				if (isAuthenticated) {
+  					MenuV menu = new MenuV();
+  					menu.setVisible(true);
+					loginV.dispose();
+  				} else {
+  				// Volver a intentar
+  				}
+          	}
+          	
+          });
+          btnLogin.setBackground(new Color(162, 119, 255)); 
+          btnLogin.setForeground(Color.WHITE);
+          btnLogin.setFont(new Font("Tahoma", Font.BOLD, 14));
+          btnLogin.setBounds(199, 277, 180, 30);
+          panel.add(btnLogin);
+      }
+}
+
+    /**
+     * Initialize the contents of the frame.
+     */
+
+      

@@ -15,33 +15,22 @@ public class RequestDispatcher {
                 handleLogin(entrada, salida);
                 break;
             case "QUERY":
-                handleQuery(entrada, salida);
                 break;
             // Puedes agregar más casos aquí si agregas más tipos de solicitudes
             default:
                 salida.writeUTF("Error: Acción desconocida.");
         }
     }
-
+    
     private void handleLogin(DataInputStream entrada, DataOutputStream salida) throws IOException {
         String username = entrada.readUTF();
         String password = entrada.readUTF();
 
-        boolean isAuthenticated = new LoginC().loginEgin(username, password);
+        String message = new LoginC().loginEgin(username, password);
 
-        if (isAuthenticated) {
-            salida.writeUTF("OK");
-        } else {
-            salida.writeUTF("Error: Usuario o contraseña incorrectos.");
-        }
+        salida.writeUTF(message); 
     }
 
-    private void handleQuery(DataInputStream entrada, DataOutputStream salida) throws IOException {
-        String query = entrada.readUTF();
 
-        // Delegar a la lógica de Consulta
-//        String resultado = new HorariosC().ejecutarConsulta(query);
 
-//        salida.writeUTF(resultado);
-    }
 }

@@ -12,9 +12,9 @@ public class LoginC {
 	Konexioa konexioa = new Konexioa();
 
 
-	public boolean loginEgin(String username, String password) {
+	public String loginEgin(String username, String password) {
 	    Connection connection = konexioa.irekiKonexioa();
-	    boolean isAuthenticated = false;
+	    String message = "Error: Usuario o contraseña incorrectos."; // Mensaje predeterminado
 
 	    if (connection != null) {
 	        String query = "SELECT password, tipo_id FROM users WHERE username = ?";
@@ -27,38 +27,30 @@ public class LoginC {
 	                String storedPassword = resultSet.getString("password");
 	                int tipoId = resultSet.getInt("tipo_id");
 
-	                //Erabiltzaile mota balidatu
 	                if (storedPassword.equals(password)) {
 	                    if (tipoId == 4) {
-	                        JOptionPane.showMessageDialog(null, "Ikasleak ezin dute erabili aplikazioa.", "Error",
-	                                JOptionPane.ERROR_MESSAGE);
+	                        message = "Ikasleak ezin dute erabili aplikazioa.";
 	                    } else if (tipoId == 3) {
-	                        System.out.println("Saioa hasi da");
-	                        JOptionPane.showMessageDialog(null, "Ongi etorri aplikaziora"+ username, "Éxito",
-	                                JOptionPane.INFORMATION_MESSAGE);
-	                        isAuthenticated = true;
+	                        message = "Ongi etorri aplikaziora " + username;
 	                    } else {
-	                        JOptionPane.showMessageDialog(null, "Erabiltzaile mota hau ez dago baimenduta.", "Error",
-	                                JOptionPane.ERROR_MESSAGE);
+	                        message = "Erabiltzaile mota hau ez dago baimenduta.";
 	                    }
-	                    
 	                } else {
-	                    JOptionPane.showMessageDialog(null, "Saio hasieran, Pasahitza okerra.", "Error",
-	                            JOptionPane.ERROR_MESSAGE);
+	                    message = "Saio hasieran, Pasahitza okerra.";
 	                }
 	            } else {
-	                JOptionPane.showMessageDialog(null, "Erabiltzailea ez da existitzen.", "Error",
-	                        JOptionPane.ERROR_MESSAGE);
+	                message = "Erabiltzailea ez da existitzen.";
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
-	            System.out.println("Errorea login egin aurretik");
-	            JOptionPane.showMessageDialog(null, "Errorea datu basean.", "Error",
-	                    JOptionPane.ERROR_MESSAGE);
+	            message = "Errorea datu basean.";
 	        }
 	    }
+
 	    konexioa.itxiKonexioa();
-	    return isAuthenticated;
+	    return message; // Ahora devuelve el mensaje de error o éxito
 	}
+
+
 
 }
