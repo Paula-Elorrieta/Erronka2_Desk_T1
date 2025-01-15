@@ -13,38 +13,52 @@ public class Login {
 
 
 	public boolean loginEgin(String username, String password) {
-		Connection connection = konexioa.irekiKonexioa();
-		boolean isAuthenticated = false;
+	    Connection connection = konexioa.irekiKonexioa();
+	    boolean isAuthenticated = false;
 
-		if (connection != null) {
-			String query = "SELECT * FROM users WHERE username = ?";
+	    if (connection != null) {
+	        String query = "SELECT password, tipo_id FROM users WHERE username = ?";
 
-			try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-				preparedStatement.setString(1, username);
-				ResultSet resultSet = preparedStatement.executeQuery();
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	            preparedStatement.setString(1, username);
+	            ResultSet resultSet = preparedStatement.executeQuery();
 
-				if (resultSet.next()) {
-					String storedPassword = resultSet.getString("password");
-					if (storedPassword.equals(password)) {
-						System.out.println("Saioa hasi da");
-						JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-						isAuthenticated = true;
-					} else {
-						JOptionPane.showMessageDialog(null, "Saio hasieran, Pasahitza okerra.", "Error",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} else {
-					
-					JOptionPane.showMessageDialog(null, "Erabiltzailea ez da existitzen.", "Error", JOptionPane.ERROR_MESSAGE);
+	            if (resultSet.next()) {
+	                String storedPassword = resultSet.getString("password");
+	                int tipoId = resultSet.getInt("tipo_id");
 
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Errorea login egin aurretik");
-				JOptionPane.showMessageDialog(null, "Error al realizar la consulta a la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-			} 
-		}
-		konexioa.itxiKonexioa();
-		return isAuthenticated;
+	                //Erabiltzaile mota balidatu
+	                if (storedPassword.equals(password)) {
+	                    if (tipoId == 4) {
+	                        JOptionPane.showMessageDialog(null, "Ikasleak ezin dute erabili aplikazioa.", "Error",
+	                                JOptionPane.ERROR_MESSAGE);
+	                    } else if (tipoId == 3) {
+	                        System.out.println("Saioa hasi da");
+	                        JOptionPane.showMessageDialog(null, "Ongi etorri aplikaziora"+ username, "Éxito",
+	                                JOptionPane.INFORMATION_MESSAGE);
+	                        isAuthenticated = true;
+	                    } else {
+	                        JOptionPane.showMessageDialog(null, "Erabiltzaile mota hau ez dago baimenduta.", "Error",
+	                                JOptionPane.ERROR_MESSAGE);
+	                    }
+	                    
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "Saio hasieran, Pasahitza okerra.", "Error",
+	                            JOptionPane.ERROR_MESSAGE);
+	                }
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Erabiltzailea ez da existitzen.", "Error",
+	                        JOptionPane.ERROR_MESSAGE);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            System.out.println("Errorea login egin aurretik");
+	            JOptionPane.showMessageDialog(null, "Errorea datu basean.", "Error",
+	                    JOptionPane.ERROR_MESSAGE);
+	        }
+	    }
+	    konexioa.itxiKonexioa();
+	    return isAuthenticated;
 	}
+
 }
