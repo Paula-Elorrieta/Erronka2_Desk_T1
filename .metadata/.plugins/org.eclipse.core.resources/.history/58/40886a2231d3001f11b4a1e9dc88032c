@@ -91,7 +91,8 @@ public class LoginV extends JFrame {
             String password = new String(pasahitzaField.getPassword());
 
             try {
-                Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);  
+                // Establecer la conexión con el servidor
+                Socket socket = new Socket("localhost", Zerbitzaria.PUERTO);
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
                 DataInputStream in = new DataInputStream(socket.getInputStream());
 
@@ -100,17 +101,20 @@ public class LoginV extends JFrame {
                 out.writeUTF(username);
                 out.writeUTF(password);
 
-                // Esperar la respuesta del servidor
+                // Recibir la respuesta del servidor
                 String respuesta = in.readUTF();
-                if (respuesta.contains("Ongi etorri")) {
-                    JOptionPane.showMessageDialog(this, respuesta, "Exito", JOptionPane.INFORMATION_MESSAGE);
+
+                // Verificar si la respuesta contiene "Error"
+                if (respuesta.contains("Error")) {
+                    JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Si no contiene "Error", entonces es un mensaje de éxito
+                    JOptionPane.showMessageDialog(this, respuesta, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                    // Abrir el menú y cerrar la ventana de login
                     MenuV menu = new MenuV();
                     menu.setVisible(true);
-                    dispose(); 
-                } else {
-                    JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
-                    textFieldErabiltzailea.setText("");
-                    pasahitzaField.setText("");
+                    dispose();
                 }
 
                 socket.close();
@@ -118,6 +122,7 @@ public class LoginV extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error de conexión con el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
 
 
         btnLogin.setBackground(new Color(162, 119, 255));

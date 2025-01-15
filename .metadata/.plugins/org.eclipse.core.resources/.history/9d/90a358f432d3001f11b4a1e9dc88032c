@@ -103,14 +103,12 @@ public class LoginV extends JFrame {
                 // Esperar la respuesta del servidor
                 String respuesta = in.readUTF();
                 if (respuesta.contains("Ongi etorri")) {
-                    JOptionPane.showMessageDialog(this, respuesta, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, respuesta, "Exito", JOptionPane.ERROR_MESSAGE);
                     MenuV menu = new MenuV();
                     menu.setVisible(true);
                     dispose(); 
                 } else {
                     JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
-                    textFieldErabiltzailea.setText("");
-                    pasahitzaField.setText("");
                 }
 
                 socket.close();

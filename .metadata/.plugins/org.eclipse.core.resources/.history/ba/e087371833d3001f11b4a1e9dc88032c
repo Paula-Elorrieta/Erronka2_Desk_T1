@@ -109,8 +109,7 @@ public class LoginV extends JFrame {
                     dispose(); 
                 } else {
                     JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
-                    textFieldErabiltzailea.setText("");
-                    pasahitzaField.setText("");
+                    
                 }
 
                 socket.close();

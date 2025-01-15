@@ -45,11 +45,14 @@ public class Zerbitzaria {
         @Override
         public void run() {
             try {
+                // Crear los flujos de entrada y salida para comunicarse con el cliente
                 entrada = new DataInputStream(socketCliente.getInputStream());
                 salida = new DataOutputStream(socketCliente.getOutputStream());
 
+                // Leer el tipo de solicitud
                 String tipoSolicitud = entrada.readUTF();
 
+                // Delegar la solicitud al Dispatcher
                 new RequestDispatcher().handleRequest(tipoSolicitud, entrada, salida);
 
             } catch (IOException e) {

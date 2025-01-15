@@ -48,7 +48,7 @@ public class LoginC {
 	    }
 
 	    konexioa.itxiKonexioa();
-	    return message; 
+	    return message; // Ahora devuelve el mensaje de error o éxito
 	}
 
 
