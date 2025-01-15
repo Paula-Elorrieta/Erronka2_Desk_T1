@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import controlador.Login;
+import controlador.LoginC;
 import java.awt.event.ActionEvent;
 
 public class HorariosV extends JFrame {

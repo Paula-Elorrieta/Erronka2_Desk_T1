@@ -6,7 +6,7 @@ import java.awt.Font;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import controlador.Login;
+import controlador.LoginC;
 
 public class BesteHorarioak extends JFrame {
 

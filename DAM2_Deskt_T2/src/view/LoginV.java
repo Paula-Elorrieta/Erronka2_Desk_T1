@@ -1,23 +1,24 @@
 package view;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
-import controlador.Login;
-
-import java.awt.event.ActionListener;
+import controlador.servidor.Zerbitzaria;
 
 public class LoginV extends JFrame {
 
@@ -84,23 +85,37 @@ public class LoginV extends JFrame {
         pasahitzaField.setCaretColor(Color.WHITE);
         panel.add(pasahitzaField);
 
-        // Botón de inicio de sesión
         JButton btnLogin = new JButton("Hasi saioa");
         btnLogin.addActionListener(e -> {
             String username = textFieldErabiltzailea.getText();
             String password = new String(pasahitzaField.getPassword());
 
-            Login login = new Login();
-            boolean isAuthenticated = login.loginEgin(username, password);
-            if (isAuthenticated) {
-                MenuV menu = new MenuV();
-                menu.setVisible(true);
-                dispose(); // Cierra la ventana de login
-            } else {
-                JOptionPane.showMessageDialog(this, "Errorea: erabiltzaile edo pasahitza okerra.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+            try {
+                Socket socket = new Socket("localhost", Zerbitzaria.PUERTO);  // Conectarse al servidor
+                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+                DataInputStream in = new DataInputStream(socket.getInputStream());
+
+                // Enviar el tipo de acción (LOGIN) y los datos
+                out.writeUTF("LOGIN");
+                out.writeUTF(username);
+                out.writeUTF(password);
+
+                // Esperar la respuesta del servidor
+                String respuesta = in.readUTF();
+                if ("OK".equals(respuesta)) {
+                    MenuV menu = new MenuV();
+                    menu.setVisible(true);
+                    dispose(); // Cierra la ventana de login
+                } else {
+                    JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                socket.close();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error de conexión con el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
 
         btnLogin.setBackground(new Color(162, 119, 255));
         btnLogin.setForeground(Color.WHITE);
