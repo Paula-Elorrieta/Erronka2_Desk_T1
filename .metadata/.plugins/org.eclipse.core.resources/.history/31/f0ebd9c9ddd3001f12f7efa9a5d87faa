@@ -1,0 +1,55 @@
+package controlador.servidor;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import controlador.HorariosC;
+import controlador.LoginC;
+import modelo.Users;
+
+public class RequestDispatcher {
+
+    public void handleRequest(String tipoSolicitud, DataInputStream entrada, DataOutputStream salida) throws IOException {
+        switch (tipoSolicitud) {
+            case "LOGIN":
+                handleLogin(entrada, salida);
+                break;
+            case "QUERY":
+                break;
+            default:
+                salida.writeUTF("Error: Acción desconocida.");
+        }
+    }
+    
+    private void handleLogin(DataInputStream entrada, DataOutputStream salida) throws IOException {
+        try {
+            // Leer las credenciales desde la entrada
+            String username = entrada.readUTF();
+            String password = entrada.readUTF();
+
+            // Procesar el inicio de sesión
+            LoginC loginControlador = new LoginC();
+            Users user = loginControlador.loginEgin(username, password);
+
+            // Evaluar el resultado del login
+            if (user != null) {
+                if (user.getTipos() == 4) {
+                    salida.writeUTF("Ikasleak ezin dute erabili aplikazioa.");
+                } else if (user.getTipos() == 3) {
+                    salida.writeUTF("Ongi etorri aplikaziora " + user.getUsername() + "!");
+                } else {
+                    salida.writeUTF("Erabiltzaile mota hau ez dago baimenduta.");
+                }
+            } else {
+                salida.writeUTF("Errorea: Erabiltzailea ez da existitzen edo pasahitza okerra.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            salida.writeUTF("Errorea datu basean edo zerbitzarian.");
+        }
+    }
+}
+
+
+}

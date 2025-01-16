@@ -1,36 +1,40 @@
 package controlador.servidor;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-import controlador.HorariosC;
 import controlador.LoginC;
+import modelo.Users;
 
 public class RequestDispatcher {
 
-    public void handleRequest(String tipoSolicitud, DataInputStream entrada, DataOutputStream salida) throws IOException {
+    public void handleRequest(String tipoSolicitud, ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
         switch (tipoSolicitud) {
             case "LOGIN":
                 handleLogin(entrada, salida);
                 break;
-            case "QUERY":
-                break;
-            // Puedes agregar más casos aquí si agregas más tipos de solicitudes
             default:
-                salida.writeUTF("Error: Acción desconocida.");
+                salida.writeObject("Error: Acción desconocida.");
         }
     }
-    
-    private void handleLogin(DataInputStream entrada, DataOutputStream salida) throws IOException {
-        String username = entrada.readUTF();
-        String password = entrada.readUTF();
 
-        String message = new LoginC().loginEgin(username, password);
+    	private void handleLogin(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    	    try {
+    	        String username = (String) entrada.readObject();     
+    	        String password = (String) entrada.readObject();       
 
-        salida.writeUTF(message); 
-    }
-
-
-
+    	        LoginC loginControlador = new LoginC();
+    	        Users user = loginControlador.login(username, password);
+    	        if (user != null) {
+    	            salida.writeObject("OK");
+    	            salida.writeObject(user);
+    	        } else {
+    	            salida.writeObject("Errorea: Erabiltzailea ez da existitzen edo pasahitza okerra.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        salida.writeObject("Errorea datu basean edo zerbitzarian.");
+    	    }
+    	}
 }

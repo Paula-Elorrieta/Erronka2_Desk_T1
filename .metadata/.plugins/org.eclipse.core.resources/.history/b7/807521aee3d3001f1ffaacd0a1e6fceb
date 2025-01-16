@@ -1,0 +1,44 @@
+package controlador.servidor;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+import com.google.gson.Gson;
+
+import controlador.LoginC;
+import modelo.Users;
+
+public class RequestDispatcher {
+
+    public void handleRequest(String tipoSolicitud, DataInputStream entrada, DataOutputStream salida) throws IOException {
+        switch (tipoSolicitud) {
+            case "LOGIN":
+                handleLogin(entrada, salida);
+                break;
+            default:
+                salida.writeUTF("Error: Acción desconocida.");
+        }
+    }
+
+    private void handleLogin(DataInputStream entrada, ObjectOutputStream salida) throws IOException {
+        try {
+            String username = entrada.readUTF();
+            String password = entrada.readUTF();
+
+            LoginC loginControlador = new LoginC();
+            Users user = loginControlador.loginEgin(username, password);
+
+            if (user != null) {
+                System.out.println("Erabiltzailea logeatu da: " + user);
+                salida.writeObject(user); // Enviar el objeto completo
+            } else {
+                salida.writeUTF("Errorea: Erabiltzailea ez da existitzen edo pasahitza okerra.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            salida.writeUTF("Errorea datu basean edo zerbitzarian.");
+        }
+    }
+}

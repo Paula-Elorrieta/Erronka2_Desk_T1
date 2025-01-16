@@ -1,0 +1,48 @@
+package controlador;
+
+import controlador.db.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+public class LoginC {
+
+    public String loginEgin(String username, String password) {
+        String message = "Error: Usuario o contraseña incorrectos."; // Mensaje predeterminado
+
+        // Obtener la sesión de Hibernate
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Construir la consulta HQL
+            String hql = "SELECT u.password, u.tipoId FROM Users u WHERE u.username = :username";
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+            query.setParameter("username", username);
+
+            // Ejecutar la consulta
+            Object[] result = query.uniqueResult();
+
+            if (result != null) {
+                String storedPassword = (String) result[0];
+                int tipoId = (Integer) result[1];
+
+                // Validar la contraseña
+                if (storedPassword.equals(password)) {
+                    if (tipoId == 4) {
+                        message = "Ikasleak ezin dute erabili aplikazioa.";
+                    } else if (tipoId == 3) {
+                        message = "Ongi etorri aplikaziora " + username;
+                    } else {
+                        message = "Erabiltzaile mota hau ez dago baimenduta.";
+                    }
+                } else {
+                    message = "Saio hasieran, Pasahitza okerra.";
+                }
+            } else {
+                message = "Erabiltzailea ez da existitzen.";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            message = "Errorea datu basean.";
+        }
+
+        return message;
+    }
+}

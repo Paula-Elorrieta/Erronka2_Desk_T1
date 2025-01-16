@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javax.swing.ImageIcon;
@@ -19,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import controlador.servidor.Zerbitzaria;
+import modelo.Users;
 
 public class LoginV extends JFrame {
 
@@ -86,38 +89,67 @@ public class LoginV extends JFrame {
         panel.add(pasahitzaField);
 
         JButton btnLogin = new JButton("Hasi saioa");
+
         btnLogin.addActionListener(e -> {
             String username = textFieldErabiltzailea.getText();
             String password = new String(pasahitzaField.getPassword());
 
+            // Validación de campos vacíos
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa tu nombre de usuario y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             try {
-                Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);  
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                DataInputStream in = new DataInputStream(socket.getInputStream());
+                // Conectar al servidor
+                Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-                // Enviar el tipo de acción (LOGIN) y los datos
-                out.writeUTF("LOGIN");
-                out.writeUTF(username);
-                out.writeUTF(password);
+                // Enviar solicitud de login
+                out.writeObject("LOGIN");
+                out.writeObject(username);
+                out.writeObject(password);
+                out.flush();
 
-                // Esperar la respuesta del servidor
-                String respuesta = in.readUTF();
-                if (respuesta.contains("Ongi etorri")) {
-                    JOptionPane.showMessageDialog(this, respuesta, "Exito", JOptionPane.INFORMATION_MESSAGE);
-                    MenuV menu = new MenuV();
-                    menu.setVisible(true);
-                    dispose(); 
-                } else {
-                    JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
-                    textFieldErabiltzailea.setText("");
-                    pasahitzaField.setText("");
+                // Leer la respuesta del servidor
+                Object respuesta = in.readObject();
+
+                if (respuesta instanceof String) {
+                    String respuestaStr = (String) respuesta;
+                    System.out.println("Respuesta del servidor: " + respuestaStr);
+                    if (respuestaStr.startsWith("OK")) {
+                        // Leer el objeto 'Users' después de la respuesta 'OK'
+                        Users user = (Users) in.readObject();
+
+                        // Validar tipo.id == 3
+                        if (user.getTipos().getId() == 3) {
+                            JOptionPane.showMessageDialog(this, "Inicio de sesión correcto.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                            dispose(); // Cerrar la ventana de login
+                            MenuV menu = new MenuV();
+                            menu.setVisible(true);
+                            
+                            System.out.println("Usuario: " + user.getUsername()); // Ejemplo de uso
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Solo los usuarios con tipo 3 pueden iniciar sesión.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, respuestaStr, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
 
-                socket.close();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error de conexión con el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
+                socket.close(); // Cerrar la conexión con el servidor
+
+            } catch (IOException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Error de conexión con el servidor: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        // Soporte para la tecla Enter en el textField y el pasahitzaField (cualquier campo de texto)
+        textFieldErabiltzailea.addActionListener(e -> btnLogin.doClick());
+        pasahitzaField.addActionListener(e -> btnLogin.doClick());
+
 
 
         btnLogin.setBackground(new Color(162, 119, 255));

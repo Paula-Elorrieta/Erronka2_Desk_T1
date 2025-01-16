@@ -1,0 +1,31 @@
+package controlador.db;
+
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.List;
+
+public class UsuarioDAO {
+
+    public List<Integer> obtenerIdsUsuarios() {
+        // Abrir una nueva sesión
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Integer> idsUsuarios = null;
+        try {
+            // Crear una consulta HQL para obtener solo los IDs de los usuarios
+            String hql = "SELECT u.id FROM Usuario u";
+            Query<Integer> query = session.createQuery(hql, Integer.class);
+
+            // Ejecutar la consulta y obtener el resultado
+            idsUsuarios = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return idsUsuarios;
+    }
+}
+

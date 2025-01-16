@@ -1,10 +1,10 @@
-#Wed Jan 15 08:07:13 CET 2025
+#Thu Jan 16 08:11:34 CET 2025
 a=finishWizard
 c=0
 cl=org.eclipse.m2e.core.ui.internal.wizards.MavenPomWizard
 cmp=usage
 ct=jbt
-d=1736924833678
+d=1737011494049
 l=Wizard class name
 s=0
 v=2.3.100
