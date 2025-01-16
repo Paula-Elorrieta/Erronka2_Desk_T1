@@ -20,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import controlador.Orokorrak.GlobalData;
 import controlador.servidor.Zerbitzaria;
 import modelo.Users;
 
@@ -114,22 +115,20 @@ public class LoginV extends JFrame {
 
                 // Leer la respuesta del servidor
                 Object respuesta = in.readObject();
-
                 if (respuesta instanceof String) {
                     String respuestaStr = (String) respuesta;
                     System.out.println("Respuesta del servidor: " + respuestaStr);
                     if (respuestaStr.startsWith("OK")) {
-                        // Leer el objeto 'Users' después de la respuesta 'OK'
                         Users user = (Users) in.readObject();
-
-                        // Validar tipo.id == 3
+                        GlobalData globalData = new GlobalData();; 
+                        globalData.logedUser = user;
                         if (user.getTipos().getId() == 3) {
                             JOptionPane.showMessageDialog(this, "Inicio de sesión correcto.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            dispose(); // Cerrar la ventana de login
+                            dispose(); 
                             MenuV menu = new MenuV();
                             menu.setVisible(true);
                             
-                            System.out.println("Usuario: " + user.getUsername()); // Ejemplo de uso
+                            System.out.println("Usuario: " + user.getUsername()); 
                         } else {
                             JOptionPane.showMessageDialog(this, "Solo los usuarios con tipo 3 pueden iniciar sesión.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -139,14 +138,13 @@ public class LoginV extends JFrame {
                     }
                 }
 
-                socket.close(); // Cerrar la conexión con el servidor
+                socket.close(); 
 
             } catch (IOException | ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Error de conexión con el servidor: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        // Soporte para la tecla Enter en el textField y el pasahitzaField (cualquier campo de texto)
         textFieldErabiltzailea.addActionListener(e -> btnLogin.doClick());
         pasahitzaField.addActionListener(e -> btnLogin.doClick());
 

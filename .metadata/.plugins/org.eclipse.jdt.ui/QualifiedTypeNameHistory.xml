@@ -3,4 +3,6 @@
     <fullyQualifiedTypeName name="freemarker.template.Configuration"/>
     <fullyQualifiedTypeName name="java.lang.Object"/>
     <fullyQualifiedTypeName name="java.io.ObjectOutputStream"/>
+    <fullyQualifiedTypeName name="controlador.Orokorrak.GlobalData"/>
+    <fullyQualifiedTypeName name="modelo.Horarios"/>
 </qualifiedTypeNameHistroy>

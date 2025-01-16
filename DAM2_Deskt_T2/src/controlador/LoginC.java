@@ -25,6 +25,7 @@ public class LoginC {
 	        query.setParameter("password", password);
 	        
 	        Users user = query.uniqueResult();
+	        System.out.println("Usuario: " + user.getHorarioses()); // Ejemplo de uso
 	        return user;
 	    } catch (Exception e) {
 	        e.printStackTrace();

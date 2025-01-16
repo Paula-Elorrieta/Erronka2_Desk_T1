@@ -1,0 +1,8 @@
+package controlador.Orokorrak;
+
+import modelo.Users;
+
+public class GlobalData {
+
+	Users logedUser = null;
+}

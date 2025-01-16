@@ -1,20 +1,24 @@
 package view;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import javax.swing.*;
+import controlador.Orokorrak.GlobalData;
+import modelo.Horarios;
+import modelo.HorariosId;
 
-import controlador.LoginC;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Set;
+
+import javax.swing.table.DefaultTableModel;
 
 public class HorariosV extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JTable tableHorarios;
+    private GlobalData globalData = new GlobalData();
 
-    public HorariosV(String profeId) {
+    public HorariosV() {
         setTitle("Horarios del Profesor");
         setBounds(100, 100, 600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,9 +41,10 @@ public class HorariosV extends JFrame {
 
         // Crear tabla para mostrar los horarios
         String[] columnNames = {"Día", "Hora", "Módulo"};
-        Object[][] data = obtenerHorarios(profeId); // Llamada a un método que obtendría los horarios del servidor
 
-        tableHorarios = new JTable(data, columnNames);
+        tableHorarios = new JTable();
+        DefaultTableModel model = new DefaultTableModel(null, columnNames);
+        tableHorarios.setModel(model);
         tableHorarios.setBounds(30, 80, 500, 200);
         tableHorarios.setBackground(Color.DARK_GRAY);
         tableHorarios.setForeground(Color.WHITE);
@@ -63,32 +68,30 @@ public class HorariosV extends JFrame {
         btnVolver.setFont(new Font("Tahoma", Font.BOLD, 14));
         btnVolver.setBounds(199, 300, 180, 30);
         panel.add(btnVolver);
+
+        obtenerHorarios();
     }
 
-    // Método simulado para obtener los horarios desde la base de datos
-    private Object[][] obtenerHorarios(String profeId) {
-        // Aquí iría la lógica para consultar la base de datos usando el profeId
-        // Simulamos algunos horarios de ejemplo:
-        return new Object[][] {
-            {"Lunes", "9:00", "Matemáticas"},
-            {"Martes", "11:00", "Física"},
-            {"Miércoles", "13:00", "Historia"},
-            {"Jueves", "15:00", "Lengua"},
-            {"Viernes", "10:00", "Química"}
-        };
-    }
+    private void obtenerHorarios() {
+    	System.out.println(globalData.logedUser.getHorarioses()); // Imprime los horarios del usuario logeado)
+        Set horarios = globalData.logedUser.getHorarioses(); 
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    // Se pasa el ID del profesor como parámetro
-                    HorariosV frame = new HorariosV("1");
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        DefaultTableModel model = (DefaultTableModel) tableHorarios.getModel();
+
+        model.setRowCount(0);
+
+        for (Object obj : horarios) {
+            Horarios horario = (Horarios) obj;  
+
+            HorariosId horarioId = horario.getId();
+
+            // Extraer el día, hora y módulo desde HorariosId
+            String dia = horarioId.getDia();
+            String hora = horarioId.getHora();
+            String modulo = String.valueOf(horarioId.getModuloId());  // Obtener el ID del módulo
+
+            // Agregar la fila a la tabla
+            model.addRow(new Object[]{dia, hora, modulo});
+        }
     }
 }

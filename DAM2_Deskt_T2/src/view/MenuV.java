@@ -37,9 +37,17 @@ public class MenuV extends JFrame {
         btnOwnSchedule.setBackground(moradoNeon);
         btnOwnSchedule.setForeground(Color.WHITE);
         panel.add(btnOwnSchedule);
-        btnOwnSchedule.addActionListener(e -> 
-            JOptionPane.showMessageDialog(this, "Nire ordutegia ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE)
-        );
+        btnOwnSchedule.addActionListener(e -> {
+            // Mostrar el mensaje
+            JOptionPane.showMessageDialog(this, "Nire ordutegia ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE);
+
+            // Cerrar la ventana actual
+            this.dispose();
+
+            // Crear y mostrar la ventana HorariosV
+            HorariosV horariosV = new HorariosV();
+            horariosV.setVisible(true);
+        });
 
         // Botón para consultar otros horarios
         JButton btnOtherSchedules = new JButton("Beste Ordutegiak Kontsultatu");
