@@ -3,10 +3,29 @@ package view;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import controlador.LoginC;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import controlador.Orokorrak.GlobalData;
+import modelo.Horarios;
+import modelo.HorariosId;
 
 public class BesteHorarioak extends JFrame {
 
@@ -65,8 +84,10 @@ public class BesteHorarioak extends JFrame {
         panel.add(btnConsultar);
 
         // Tabla para mostrar los horarios
-        String[] columnNames = {"Día", "Hora", "Módulo"};
-        tableHorarios = new JTable(new Object[][] {}, columnNames);
+        String[] columnNames = {"Hora", "L/A", "M/A", "X", "J/O", "V/O"};
+        tableHorarios = new JTable();
+        DefaultTableModel model = new DefaultTableModel(null, columnNames);
+        tableHorarios.setModel(model);
         tableHorarios.setBounds(30, 160, 500, 150);
         tableHorarios.setBackground(Color.DARK_GRAY);
         tableHorarios.setForeground(Color.WHITE);
@@ -94,31 +115,73 @@ public class BesteHorarioak extends JFrame {
 
     // Método para cargar los profesores en el JComboBox
     private void cargarProfesores() {
-        // Simulando una lista de profesores desde el servidor (esto debe hacerse con consulta a la base de datos)
-        comboBoxProfesores.addItem("1 - Juan Pérez");
-        comboBoxProfesores.addItem("2 - Ana García");
-        comboBoxProfesores.addItem("3 - Luis Fernández");
-        comboBoxProfesores.addItem("4 - Marta Rodríguez");
-        comboBoxProfesores.addItem("5 - Carlos López");
+        // Simulando la id de los profes (esto se debería cargar desde el servidor o base de datos)
+        comboBoxProfesores.addItem("1");
+        comboBoxProfesores.addItem("2");
+        comboBoxProfesores.addItem("3");
+        comboBoxProfesores.addItem("4");
+        comboBoxProfesores.addItem("5");
     }
 
     // Método para obtener los horarios del profesor seleccionado
     private Object[][] obtenerHorarios(String profeId) {
         // Lógica para consultar la base de datos con el ID del profesor
-        // Simulación de horarios para un profesor
-        return new Object[][] {
-            {"Lunes", "9:00", "Matemáticas"},
-            {"Martes", "11:00", "Física"},
-            {"Miércoles", "13:00", "Historia"},
-            {"Jueves", "15:00", "Lengua"},
-            {"Viernes", "10:00", "Química"}
-        };
+        Set<Horarios> horariosSet = obtenerHorariosPorProfesor(profeId); // Llamada al backend para obtener horarios
+        DefaultTableModel model = (DefaultTableModel) tableHorarios.getModel();
+        model.setRowCount(0); // Limpiar la tabla antes de insertar nuevos datos
+
+        Map<String, Integer> diasSemana = new LinkedHashMap<>();
+        diasSemana.put("L/A", Calendar.MONDAY);
+        diasSemana.put("M/A", Calendar.TUESDAY);
+        diasSemana.put("X", Calendar.WEDNESDAY);
+        diasSemana.put("J/O", Calendar.THURSDAY);
+        diasSemana.put("V/O", Calendar.FRIDAY);
+
+        // Crear un ArrayList para almacenar las filas
+        List<Object[]> rowList = new ArrayList<>();
+
+        // Iterar sobre las horas y los días de la semana
+        for (int i = 1; i <= 5; i++) {
+            String[] row = new String[6];
+            row[0] = String.valueOf(i);
+
+            Arrays.fill(row, 1, 6, ""); // Inicializar las celdas con cadenas vacías
+
+            for (Map.Entry<String, Integer> entry : diasSemana.entrySet()) {
+                String dia = entry.getKey();
+
+                for (Horarios horario : horariosSet) {
+                    HorariosId horarioId = horario.getId();
+                    if (horarioId.getDia().equals(dia) && Integer.parseInt(horarioId.getHora()) == i) {
+                        int columnIndex = new ArrayList<>(diasSemana.keySet()).indexOf(dia) + 1;
+                        row[columnIndex] = String.valueOf(horario.getModulos().getNombre());
+                    }
+                }
+            }
+
+            rowList.add(row); 
+        }
+
+        Object[][] result = new Object[rowList.size()][6];
+        for (int i = 0; i < rowList.size(); i++) {
+            result[i] = rowList.get(i);
+        }
+
+        return result;
     }
 
     // Método para mostrar los horarios en la tabla
     private void mostrarHorarios(Object[][] horarios) {
-        String[] columnNames = {"Día", "Hora", "Módulo"};
-        tableHorarios.setModel(new javax.swing.table.DefaultTableModel(horarios, columnNames));
+        String[] columnNames = {"Hora", "L/A", "M/A", "X", "J/O", "V/O"};
+        tableHorarios.setModel(new DefaultTableModel(horarios, columnNames));
+    }
+
+    private Set<Horarios> obtenerHorariosPorProfesor(String profeId) {
+        // Obtener los horarios del profesor desde GlobalData (simulando el acceso al backend o base de datos)
+        // Reemplaza esto por la lógica que obtenga los horarios reales
+        Set<Horarios> horariosSet = GlobalData.logedUser.getHorarioses(); 
+
+        return horariosSet; // Retorna el conjunto de horarios
     }
 
     public static void main(String[] args) {

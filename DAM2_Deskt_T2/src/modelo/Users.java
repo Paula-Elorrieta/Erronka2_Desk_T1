@@ -10,6 +10,8 @@ import java.util.Set;
  */
 public class Users implements Serializable {
 
+	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private Tipos tipos;
 	private String email;
@@ -54,6 +56,21 @@ public class Users implements Serializable {
 		this.reunionesesForProfesorId = reunionesesForProfesorId;
 		this.reunionesesForAlumnoId = reunionesesForAlumnoId;
 		this.horarioses = horarioses;
+	}
+	public Users(int id, Tipos tipos, String email, String username, String password, String nombre, String apellidos,
+			String dni, String direccion, Integer telefono1, Integer telefono2, byte[] argazkia) {
+		this.id = id;
+		this.tipos = tipos;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.dni = dni;
+		this.direccion = direccion;
+		this.telefono1 = telefono1;
+		this.telefono2 = telefono2;
+		this.argazkia = argazkia;
 	}
 
 	public int getId() {

@@ -3,8 +3,11 @@ package controlador.servidor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
+import controlador.HorariosC;
 import controlador.LoginC;
+import modelo.Horarios;
 import modelo.Users;
 
 public class RequestDispatcher {
@@ -14,6 +17,9 @@ public class RequestDispatcher {
             case "LOGIN":
                 handleLogin(entrada, salida);
                 break;
+			case "ORDUTEGIA":
+				handleGetHorarios(entrada, salida);
+				break;
             default:
                 salida.writeObject("Error: Acción desconocida.");
         }
@@ -37,4 +43,30 @@ public class RequestDispatcher {
     	        salida.writeObject("Errorea datu basean edo zerbitzarian.");
     	    }
     	}
+    	
+    	private void handleGetHorarios(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    	    try {
+    	        int userId = (int) entrada.readObject();
+    	        HorariosC horariosControlador = new HorariosC();
+    	        List<Horarios> horarios = horariosControlador.obtenerHorariosPorProfesor(userId);
+
+    	        if (horarios != null) {
+    	            salida.writeObject("OK");
+    	            salida.writeObject(horarios);
+    	        } else {
+    	            salida.writeObject("Errorea: Ezin izan dira lortu horarioak.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        salida.writeObject("Errorea datu basean edo zerbitzarian.");
+    	    } finally {
+    	        try {
+    	            salida.flush();  // Asegurarse de que el flujo esté completamente escrito
+    	        } catch (IOException ioEx) {
+    	            ioEx.printStackTrace();
+    	        }
+    	    }
+    	}
+
+    	
 }

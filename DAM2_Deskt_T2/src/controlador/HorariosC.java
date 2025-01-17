@@ -1,6 +1,8 @@
 package controlador;
 
 import modelo.Horarios;
+import modelo.Modulos;
+
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -14,23 +16,14 @@ public class HorariosC {
         try {
             // Consulta HQL para obtener los horarios de un profesor específico por su ID
             String hql = "FROM Horarios h " +
-                         "LEFT JOIN FETCH h.users " + // Carga la relación con Users (Profesor)
-                         "LEFT JOIN FETCH h.modulos " + // Carga la relación con Modulos
-                         "WHERE h.users.id = :profeId"; // Filtra por el ID del profesor
+                         "LEFT JOIN FETCH h.users " + 
+                         "LEFT JOIN FETCH h.modulos " + 
+                         "WHERE h.users.id = :profeId"; 
 
             Query<Horarios> query = session.createQuery(hql, Horarios.class);
             query.setParameter("profeId", profeId);
-
-            // Obtiene los horarios del profesor como una lista
             List<Horarios> horarios = query.list();
-            
-            // Imprimir los horarios para verificar (opcional)
-            for (Horarios horario : horarios) {
-                System.out.println("Día: " + horario.getId().getDia() +
-                                   ", Hora: " + horario.getId().getHora() +
-                                   ", Módulo ID: " + horario.getModulos().getId());
-            }
-            
+
             return horarios;
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,5 +32,10 @@ public class HorariosC {
             session.close();
         }
     }
+    
+    
+    
+
+    
 }
 

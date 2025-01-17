@@ -1,7 +1,19 @@
 package view;
 
 import javax.swing.*;
+
+import controlador.Orokorrak.GlobalData;
+import controlador.servidor.Zerbitzaria;
+import modelo.Horarios;
+
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MenuV extends JFrame {
 
@@ -37,18 +49,52 @@ public class MenuV extends JFrame {
         btnOwnSchedule.setBackground(moradoNeon);
         btnOwnSchedule.setForeground(Color.WHITE);
         panel.add(btnOwnSchedule);
+        
         btnOwnSchedule.addActionListener(e -> {
-            // Mostrar el mensaje
             JOptionPane.showMessageDialog(this, "Nire ordutegia ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE);
-
-            // Cerrar la ventana actual
             this.dispose();
 
-            // Crear y mostrar la ventana HorariosV
-            HorariosV horariosV = new HorariosV();
-            horariosV.setVisible(true);
-        });
+            try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
+                int profeId = GlobalData.logedUser.getId();
+                out.writeObject("ORDUTEGIA");
+                out.writeObject(profeId);
+                out.flush();
+
+                Object respuesta = in.readObject();
+                if (respuesta instanceof String) {
+                    String respuestaStr = (String) respuesta;
+                    System.out.println("Respuesta del servidor: " + respuestaStr);
+
+                    if (respuestaStr.startsWith("OK")) {
+                        Object horariosObj = in.readObject();
+                        if (horariosObj instanceof List) {
+                            List<Horarios> horariosList = (List<Horarios>) horariosObj;
+                            Set<Horarios> horariosSet = new HashSet<>(horariosList);
+                            GlobalData.logedUser.setHorarioses(horariosSet);
+                            HorariosV horariosV = new HorariosV();
+                            horariosV.setVisible(true);
+                            System.out.println("Horarios recibidos y actualizados en el usuario logueado.");
+                        } else {
+                            System.err.println("Error: el servidor devolvió un objeto inesperado en lugar de una lista de horarios.");
+                        }
+                    }
+                } else {
+                    System.err.println("Error: respuesta inesperada del servidor.");
+                }
+
+            } catch (IOException ioEx) {
+                System.err.println("Error de conexión o de E/S: " + ioEx.getMessage());
+                ioEx.printStackTrace();
+            } catch (ClassNotFoundException classEx) {
+                System.err.println("Error al leer la respuesta del servidor: " + classEx.getMessage());
+                classEx.printStackTrace();
+            }
+
+        });
+        
         // Botón para consultar otros horarios
         JButton btnOtherSchedules = new JButton("Beste Ordutegiak Kontsultatu");
         btnOtherSchedules.setBounds(202, 162, 200, 30);
