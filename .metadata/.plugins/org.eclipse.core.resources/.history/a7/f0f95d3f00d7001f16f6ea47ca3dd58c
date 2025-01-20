@@ -1,0 +1,69 @@
+package controlador;
+
+import modelo.Horarios;
+import modelo.Modulos;
+import modelo.Users;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import controlador.db.HibernateUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HorariosC {
+
+    public List<Horarios> obtenerHorariosPorProfesor(int profeId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "FROM Horarios h " +
+                         "LEFT JOIN FETCH h.users " + 
+                         "LEFT JOIN FETCH h.modulos " + 
+                         "WHERE h.users.id = :profeId"; 
+
+            Query<Horarios> query = session.createQuery(hql, Horarios.class);
+            query.setParameter("profeId", profeId);
+            List<Horarios> horarios = query.list();
+
+            return horarios;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+    
+//obtener todos los users tipo 3
+    
+	public List<Users> obtenerProfesores() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+	        String hql = "FROM Users u WHERE u.tipoId = 3";
+	        Query<Users> query = session.createQuery(hql, Users.class);
+			List<Users> profesores = query.list();
+			return profesores;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+	}
+	
+	public static void main(String[] args) {
+		HorariosC horariosC = new HorariosC();
+		List<Users> profesores = horariosC.obtenerProfesores();
+		for (Users profesor : profesores) {
+			System.out.println(profesor.getNombre());
+		}
+	}
+
+    
+	
+    
+
+    
+}
+

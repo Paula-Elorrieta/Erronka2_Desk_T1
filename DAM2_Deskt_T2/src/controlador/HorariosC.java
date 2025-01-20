@@ -14,7 +14,6 @@ public class HorariosC {
     public List<Horarios> obtenerHorariosPorProfesor(int profeId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-            // Consulta HQL para obtener los horarios de un profesor específico por su ID
             String hql = "FROM Horarios h " +
                          "LEFT JOIN FETCH h.users " + 
                          "LEFT JOIN FETCH h.modulos " + 
@@ -33,7 +32,28 @@ public class HorariosC {
         }
     }
     
+    public List<Horarios> obtenerTodosLosHorariosProfe() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "FROM Horarios h " +
+                         "LEFT JOIN FETCH h.users u " +
+                         "LEFT JOIN FETCH h.modulos m " +
+                         "WHERE u.tipos = 3";
+
+            Query<Horarios> query = session.createQuery(hql, Horarios.class);
+            List<Horarios> horarios = query.list();
+
+            return horarios;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
     
+
     
 
     

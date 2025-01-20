@@ -101,10 +101,13 @@ public class MenuV extends JFrame {
         btnOtherSchedules.setBackground(moradoNeon);
         btnOtherSchedules.setForeground(Color.WHITE);
         panel.add(btnOtherSchedules);
-        btnOtherSchedules.addActionListener(e -> 
-            JOptionPane.showMessageDialog(this, "Beste ordutegiak ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE)
+		btnOwnSchedule.addActionListener(e -> {
+			IrakasleenOrduakV besteHorarioak = new IrakasleenOrduakV();
+			besteHorarioak.setVisible(true);
+			dispose(); // Cerrar la ventana actual
+		}
         );
-
+ 
         // Botón para consultar reuniones
         JButton btnMeetings = new JButton("Bilerak Kontsultatu");
         btnMeetings.setBounds(202, 219, 200, 30);

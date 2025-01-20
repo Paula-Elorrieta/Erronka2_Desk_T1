@@ -1,0 +1,68 @@
+package controlador;
+
+import modelo.Horarios;
+import modelo.Modulos;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import controlador.db.HibernateUtil;
+import java.util.List;
+
+public class HorariosC {
+
+    public List<Horarios> obtenerHorariosPorProfesor(int profeId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "FROM Horarios h " +
+                         "LEFT JOIN FETCH h.users " + 
+                         "LEFT JOIN FETCH h.modulos " + 
+                         "WHERE h.users.id = :profeId"; 
+
+            Query<Horarios> query = session.createQuery(hql, Horarios.class);
+            query.setParameter("profeId", profeId);
+            List<Horarios> horarios = query.list();
+
+            return horarios;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+    
+    public List<Horarios> obtenerTodosLosHorariosProfe() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "FROM Horarios h " +
+                         "LEFT JOIN FETCH h.users u " +
+                         "LEFT JOIN FETCH h.modulos m " +
+                         "WHERE u.tipos = 3";
+
+            Query<Horarios> query = session.createQuery(hql, Horarios.class);
+            List<Horarios> horarios = query.list();
+
+            return horarios;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    
+	public static void main(String[] args) {
+		HorariosC horariosC = new HorariosC();
+		List<Horarios> horarios = horariosC.obtenerTodosLosHorariosProfe();
+		for (Horarios horario : horarios) {
+			System.out.println(horario.getUsers().getNombre() + " " + horario.getModulos().getNombre() + " "
+					+ horario.getId().getDia() + " " + horario.getId().getHora());
+		}
+	}
+    
+
+    
+}
+

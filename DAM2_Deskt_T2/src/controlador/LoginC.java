@@ -20,7 +20,7 @@ public class LoginC {
 	        Query<Users> query = session.createQuery(hql, Users.class);
 	        query.setParameter("username", username);
 	        query.setParameter("password", password);
-
+	        
 	        Users user = query.uniqueResult();
 	        return user;
 	    } catch (Exception e) {
@@ -30,6 +30,7 @@ public class LoginC {
 	        session.close();
 	    }
 	}
+
 
 	
 	

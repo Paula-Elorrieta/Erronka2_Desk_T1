@@ -20,6 +20,8 @@ public class RequestDispatcher {
 			case "ORDUTEGIA":
 				handleGetHorarios(entrada, salida);
 				break;
+			case "IRAKASLEAK":
+				handleGetIrakasleak(entrada, salida);
             default:
                 salida.writeObject("Error: Acción desconocida.");
         }
@@ -67,6 +69,28 @@ public class RequestDispatcher {
     	        }
     	    }
     	}
-
+    	
+    	private void handleGetIrakasleak(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    		try {
+    			HorariosC horariosControlador = new HorariosC();
+    			List<Horarios> irakasleak = horariosControlador.obtenerTodosLosHorariosProfe();
+    			
+    			if (irakasleak != null) {
+    				salida.writeObject("OK");
+    				salida.writeObject(irakasleak);
+    			} else {
+    				salida.writeObject("Errorea: Ezin izan dira lortu irakasleak.");
+    			}
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    			salida.writeObject("Errorea datu basean edo zerbitzarian.");
+    		} finally {
+    			try {
+    				salida.flush();
+    			} catch (IOException ioEx) {
+    				ioEx.printStackTrace();
+    	}}
+    			
+    		}
     	
 }

@@ -107,7 +107,7 @@ public class HorariosV extends JFrame {
             model.addRow(row);
         }
 
-        String[] atsedenalDiaRow = { "Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia"}; // Solo en la columna de "Atsedenaldia"
-        model.insertRow(3, atsedenalDiaRow); // Insertar en el índice 3 (entre la fila 3 y 4)
+        String[] atsedenalDiaRow = { "Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia"}; 
+        model.insertRow(3, atsedenalDiaRow);
     }
 }

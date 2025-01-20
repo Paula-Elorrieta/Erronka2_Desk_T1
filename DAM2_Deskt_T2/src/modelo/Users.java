@@ -13,7 +13,7 @@ public class Users implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private Tipos tipos;
+	public Tipos tipos;
 	private String email;
 	private String username;
 	private String password;
