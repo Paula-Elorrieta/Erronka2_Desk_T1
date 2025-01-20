@@ -1,13 +1,31 @@
 package view;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.LinkedHashMap;
 import java.util.List;
-import javax.swing.*;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import controlador.HorariosC;
+import controlador.servidor.Zerbitzaria;
 import modelo.Horarios;
 
 public class IrakasleenOrduakV extends JFrame {
@@ -23,59 +41,42 @@ public class IrakasleenOrduakV extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
-        // Panel de fondo
         JPanel panel = new JPanel();
         panel.setBackground(Color.GRAY);
         panel.setBounds(0, 0, 784, 562);
         getContentPane().add(panel);
         panel.setLayout(null);
 
-        // Título estilizado
         JLabel lblTitle = new JLabel("Selecciona un Profesor");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255));
-        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 24)); // Fuente más grande
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 24)); 
         lblTitle.setBounds(0, 20, 784, 30);
         panel.add(lblTitle);
 
-        // ComboBox para seleccionar un profesor
         comboBoxProfesores = new JComboBox<>();
-        comboBoxProfesores.setBounds(300, 70, 200, 30); // Ajustar posición y tamaño
+        comboBoxProfesores.setBounds(300, 70, 200, 30); 
         comboBoxProfesores.setBackground(Color.DARK_GRAY);
         comboBoxProfesores.setForeground(Color.WHITE);
         comboBoxProfesores.setFont(new Font("Tahoma", Font.PLAIN, 16));
         panel.add(comboBoxProfesores);
 
-        // Cargar los nombres de los profesores
         cargarProfesores();
 
-        // Botón para obtener horarios
         JButton btnConsultar = new JButton("Consultar Horarios");
-        btnConsultar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String nombreProfesor = (String) comboBoxProfesores.getSelectedItem();
-                if (nombreProfesor != null) {
-                    Integer profeId = profesorMap.get(nombreProfesor);
-                    if (profeId != null) {
-                        List<Horarios> horarios = obtenerHorariosPorProfesorId(profeId);
-                        mostrarHorarios(horarios);
-                    }
-                }
-            }
-        });
+        btnConsultar.addActionListener(this::consultarHorarios);
         btnConsultar.setBackground(new Color(162, 119, 255));
         btnConsultar.setForeground(Color.WHITE);
         btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 16));
         btnConsultar.setBounds(300, 120, 200, 30);
         panel.add(btnConsultar);
 
-        // Tabla para mostrar los horarios
         String[] columnNames = {"Hora", "L/A", "M/A", "X", "J/O", "V/O"};
         tableHorarios = new JTable();
         DefaultTableModel model = new DefaultTableModel(null, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Hacer la tabla no editable
+                return false;
             }
         };
         tableHorarios.setModel(model);
@@ -85,45 +86,84 @@ public class IrakasleenOrduakV extends JFrame {
         tableHorarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
         JScrollPane scrollPane = new JScrollPane(tableHorarios);
-        scrollPane.setBounds(30, 160, 720, 300); // Tamaño más grande
+        scrollPane.setBounds(30, 160, 720, 300);
         panel.add(scrollPane);
 
-        // Botón para volver al menú
         JButton btnVolver = new JButton("Volver al Menú");
-        btnVolver.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Volver al menú principal
-                MenuV menu = new MenuV();
-                menu.setVisible(true);
-                dispose();
-            }
+        btnVolver.addActionListener(e -> {
+            new MenuV().setVisible(true);
+            dispose();
         });
         btnVolver.setBackground(new Color(162, 119, 255));
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
-        btnVolver.setBounds(300, 500, 200, 30); // Ajustar posición y tamaño
+        btnVolver.setBounds(300, 500, 200, 30);
         panel.add(btnVolver);
     }
 
     private void cargarProfesores() {
         profesorMap = new LinkedHashMap<>();
-        HorariosC horariosC = new HorariosC();
-        List<Horarios> horarios = horariosC.obtenerTodosLosHorariosProfe();
-        if (horarios != null) {
-            for (Horarios horario : horarios) {
-                String nombreProfesor = horario.getUsers().getNombre();
-                Integer idProfesor = horario.getUsers().getId();
-                if (!profesorMap.containsKey(nombreProfesor)) {
-                    profesorMap.put(nombreProfesor, idProfesor);
-                    comboBoxProfesores.addItem(nombreProfesor);
+        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO)) {
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+            out.writeObject("IRAKASLEAK");
+            out.flush();
+
+            Object respuesta = in.readObject();
+            if (respuesta instanceof String && ((String) respuesta).startsWith("OK")) {
+                Object profesoresObj = in.readObject();
+                if (profesoresObj instanceof List) {
+                    List<Horarios> horariosList = (List<Horarios>) profesoresObj;
+                    for (Horarios horario : horariosList) {
+                        String nombreProfesor = horario.getUsers().getNombre();
+                        Integer idProfesor = horario.getUsers().getId();
+                        profesorMap.putIfAbsent(nombreProfesor, idProfesor);
+                        comboBoxProfesores.addItem(nombreProfesor);
+                    }
                 }
+            } else {
+                showErrorMessage("Error al cargar los profesores.");
             }
+
+            out.close();
+            in.close();
+        } catch (IOException | ClassNotFoundException ex) {
+            showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
         }
     }
 
-    private List<Horarios> obtenerHorariosPorProfesorId(Integer profeId) {
-        HorariosC horariosC = new HorariosC();
-        return horariosC.obtenerHorariosPorProfesor(profeId);
+    private void consultarHorarios(ActionEvent e) {
+        String nombreProfesor = (String) comboBoxProfesores.getSelectedItem();
+        if (nombreProfesor != null) {
+            Integer profeId = profesorMap.get(nombreProfesor);
+            if (profeId != null) {
+                try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO)) {
+                    ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+                    out.writeObject("IRAKASLEAK");
+                    out.writeObject(profeId);
+                    out.flush();
+
+                    Object respuesta = in.readObject();
+                    if (respuesta instanceof String && ((String) respuesta).startsWith("OK")) {
+                        Object horariosObj = in.readObject();
+                        if (horariosObj instanceof List) {
+                            List<Horarios> horariosList = (List<Horarios>) horariosObj;
+                            mostrarHorarios(horariosList);
+                        }
+                    } else {
+                        showErrorMessage("Error al obtener los horarios.");
+                    }
+
+                    out.close();
+                    in.close();
+                } catch (IOException | ClassNotFoundException ex) {
+                    showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
+                }
+            }
+        }
     }
 
     private void mostrarHorarios(List<Horarios> horarios) {
@@ -149,9 +189,23 @@ public class IrakasleenOrduakV extends JFrame {
         tableHorarios.setModel(new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; 
+                return false;
             }
         });
     }
 
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                IrakasleenOrduakV frame = new IrakasleenOrduakV();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

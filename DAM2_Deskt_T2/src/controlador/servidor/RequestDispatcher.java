@@ -37,6 +37,7 @@ public class RequestDispatcher {
     	        if (user != null) {
     	            salida.writeObject("OK");
     	            salida.writeObject(user);
+    	            salida.writeObject(user.getTipos().getId());
     	        } else {
     	            salida.writeObject("Errorea: Erabiltzailea ez da existitzen edo pasahitza okerra.");
     	        }
@@ -63,7 +64,7 @@ public class RequestDispatcher {
     	        salida.writeObject("Errorea datu basean edo zerbitzarian.");
     	    } finally {
     	        try {
-    	            salida.flush();  // Asegurarse de que el flujo esté completamente escrito
+    	            salida.flush();  
     	        } catch (IOException ioEx) {
     	            ioEx.printStackTrace();
     	        }
@@ -71,26 +72,26 @@ public class RequestDispatcher {
     	}
     	
     	private void handleGetIrakasleak(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
-    		try {
-    			HorariosC horariosControlador = new HorariosC();
-    			List<Horarios> irakasleak = horariosControlador.obtenerTodosLosHorariosProfe();
-    			
-    			if (irakasleak != null) {
-    				salida.writeObject("OK");
-    				salida.writeObject(irakasleak);
-    			} else {
-    				salida.writeObject("Errorea: Ezin izan dira lortu irakasleak.");
-    			}
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    			salida.writeObject("Errorea datu basean edo zerbitzarian.");
-    		} finally {
-    			try {
-    				salida.flush();
-    			} catch (IOException ioEx) {
-    				ioEx.printStackTrace();
-    	}}
-    			
-    		}
+    	    try {
+    	        HorariosC horariosControlador = new HorariosC();
+    	        List<Horarios> irakasleak = horariosControlador.obtenerTodosLosHorariosProfe();
+    	        
+    	        if (irakasleak != null) {
+    	            salida.writeObject("OK");
+    	            salida.writeObject(irakasleak); // Enviar la lista de horarios
+    	        } else {
+    	            salida.writeObject("Errorea: Ezin izan dira lortu irakasleak.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        salida.writeObject("Errorea datu basean edo zerbitzarian.");
+    	    } finally {
+    	        try {
+    	            salida.flush();  // Asegurarse de que el flujo esté completamente escrito
+    	        } catch (IOException ioEx) {
+    	            ioEx.printStackTrace();
+    	        }
+    	    }
+    	}
     	
 }

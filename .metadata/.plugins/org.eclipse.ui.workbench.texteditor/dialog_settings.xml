@@ -8,14 +8,14 @@
 		<item key="wrap" value="true"/>
 		<item key="incremental" value="false"/>
 		<list key="findhistory">
+			<item value="cargar"/>
+			<item value="carg"/>
 			<item value="obtenerHorario"/>
 			<item value="modulo"/>
 			<item value="row[0]"/>
 			<item value="obtener hora"/>
 			<item value="se ha"/>
 			<item value="socket"/>
-			<item value="localhost"/>
-			<item value="has"/>
 		</list>
 		<list key="replacehistory">
 		</list>
