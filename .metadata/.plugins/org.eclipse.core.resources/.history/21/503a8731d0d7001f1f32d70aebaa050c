@@ -1,0 +1,12 @@
+package view;
+
+import javax.swing.JFrame;
+
+import modelo.Reuniones;
+
+public class DetallesReunionV extends JFrame {
+
+	public DetallesReunionV(Reuniones reunion) {
+	}
+
+}

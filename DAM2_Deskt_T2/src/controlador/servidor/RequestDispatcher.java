@@ -5,9 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import controlador.BileraC;
 import controlador.HorariosC;
 import controlador.LoginC;
 import modelo.Horarios;
+import modelo.Reuniones;
 import modelo.Users;
 
 public class RequestDispatcher {
@@ -22,6 +24,10 @@ public class RequestDispatcher {
 				break;
 			case "IRAKASLEAK":
 				handleGetIrakasleak(entrada, salida);
+				break;
+			case "BILERA":
+				handleGetBilera(entrada, salida);
+				break;
             default:
                 salida.writeObject("Error: Acción desconocida.");
         }
@@ -78,7 +84,7 @@ public class RequestDispatcher {
     	        
     	        if (irakasleak != null) {
     	            salida.writeObject("OK");
-    	            salida.writeObject(irakasleak); // Enviar la lista de horarios
+    	            salida.writeObject(irakasleak); 
     	        } else {
     	            salida.writeObject("Errorea: Ezin izan dira lortu irakasleak.");
     	        }
@@ -94,4 +100,30 @@ public class RequestDispatcher {
     	    }
     	}
     	
+    	private void handleGetBilera(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    	    try {
+    	        int userId = (int) entrada.readObject();
+    	        
+    	        BileraC bilerakControlador = new BileraC();
+    	        List<Reuniones> bilera = bilerakControlador.obtenerReunionesIrakasle(userId);
+    	        
+    	        if (bilera != null) {
+    	            salida.writeObject("OK");
+    	            salida.writeObject(bilera);  
+    	        } else {
+    	            salida.writeObject("Error: No se pudieron obtener las reuniones.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        salida.writeObject("Error: No se pudo procesar la solicitud.");
+    	    } finally {
+    	        try {
+    	            salida.flush();
+    	        } catch (IOException ioEx) {
+    	            ioEx.printStackTrace();
+    	        }
+    	    }
+    	}
+
+
 }

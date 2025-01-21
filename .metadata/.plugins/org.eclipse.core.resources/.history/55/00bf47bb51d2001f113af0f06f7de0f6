@@ -1,8 +1,0 @@
-package controlador.db;
-
-public class DB {
-	
-	private static final String URL = "jdbc:mysql://localhost:3307/elorbase";
-   
-
-}

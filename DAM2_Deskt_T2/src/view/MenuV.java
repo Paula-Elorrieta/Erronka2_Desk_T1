@@ -50,7 +50,6 @@ public class MenuV extends JFrame {
         panel.add(btnOwnSchedule);
 
         btnOwnSchedule.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Nire ordutegia ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
 
             // Realizar la conexión al servidor
@@ -114,9 +113,14 @@ public class MenuV extends JFrame {
         btnMeetings.setForeground(Color.WHITE);
         panel.add(btnMeetings);
 
-        btnMeetings.addActionListener(e ->
-            JOptionPane.showMessageDialog(this, "Bilerak ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE)
-        );
+        btnMeetings.addActionListener(e ->{
+            JOptionPane.showMessageDialog(this, "Bilerak ikusten ari zara.", "Kontsulta", JOptionPane.INFORMATION_MESSAGE);
+            BileraV bilera = new BileraV();
+            bilera.setVisible(true);
+            dispose();
+            
+            
+        });
 
         // Botón para desconectar
         JButton btnLogout = new JButton("Deskonektatu");

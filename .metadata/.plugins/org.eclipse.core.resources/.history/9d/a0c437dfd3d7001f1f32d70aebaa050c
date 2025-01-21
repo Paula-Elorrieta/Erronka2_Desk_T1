@@ -1,0 +1,128 @@
+package view;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import controlador.servidor.Zerbitzaria;
+import modelo.Reuniones;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.sql.Timestamp;
+import java.util.List;
+
+public class BileraV extends JFrame {
+    private JTable table;
+    private DefaultTableModel model;
+    private JButton btnVolver;
+
+    public BileraV() {
+        setTitle("Lista de Bilerak");
+        setSize(800, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        // Configurar la tabla
+        String[] columnNames = {"Fecha", "Hora", "Estado"};
+        model = new DefaultTableModel(null, columnNames);
+        table = new JTable(model);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Botón para volver al menú principal
+        btnVolver = new JButton("Volver");
+        btnVolver.addActionListener(e -> {
+            dispose();
+            new MenuV().setVisible(true);
+        });
+        add(btnVolver, BorderLayout.SOUTH);
+
+        // Cargar las reuniones
+        cargarReuniones();
+
+        // Acción de doble clic en una fila
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    abrirDetallesReunion();
+                }
+            }
+        });
+    }
+
+ // Cargar las reuniones desde el servidor y llenar la tabla
+    private void cargarReuniones() {
+        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            out.writeObject("BILERA");
+            out.flush();
+            String respuesta = (String) in.readObject();
+            if (respuesta.startsWith("OK")) {
+                Object bileraObj = in.readObject();
+                if (bileraObj instanceof List) {
+                    List<Reuniones> bileraList = (List<Reuniones>) bileraObj;
+                    for (Reuniones bilera : bileraList) {
+                        model.addRow(new Object[]{
+                            bilera.getFecha().toLocalDateTime().toLocalDate().toString(),
+                            bilera.getEstado(),
+                            bilera.getTitulo()
+                        });
+                    }
+                } else {
+                    System.err.println("Error: respuesta inesperada del servidor.");
+                }
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+ // Abrir la vista de detalles de una reunión
+    private void abrirDetallesReunion() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            // Recuperar los valores seleccionados de la tabla
+            String fechaStr = (String) table.getValueAt(selectedRow, 0);
+            String horaStr = (String) table.getValueAt(selectedRow, 1);
+            String estado = (String) table.getValueAt(selectedRow, 2);
+
+            // Crear un objeto Reuniones y establecer sus valores
+            Reuniones reunion = new Reuniones();
+            reunion.setFecha(Timestamp.valueOf(fechaStr + " " + horaStr)); 
+            reunion.setEstado(estado);
+
+            // Cerrar la ventana actual y abrir la de detalles
+            dispose();
+            new DetallesReunionV(reunion).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una reunión para ver los detalles.", 
+                                          "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                BileraV frame = new BileraV();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}

@@ -1,0 +1,14 @@
+package view;
+
+import javax.swing.JFrame;
+
+import modelo.Reuniones;
+
+public class DetallesReunionV extends JFrame {
+
+	private static final long serialVersionUID = 2556823366480737160L;
+
+	public DetallesReunionV(Reuniones reunion) {
+	}
+
+}

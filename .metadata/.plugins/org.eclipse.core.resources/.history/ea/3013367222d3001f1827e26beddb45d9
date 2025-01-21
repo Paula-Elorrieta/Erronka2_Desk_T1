@@ -1,5 +1,0 @@
-package controlador.servidor;
-
-public class RequestDispatcher {
-
-}

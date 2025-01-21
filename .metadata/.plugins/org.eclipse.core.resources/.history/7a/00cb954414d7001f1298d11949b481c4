@@ -1,0 +1,21 @@
+package controlador;
+
+import org.hibernate.Session;
+
+import controlador.db.HibernateUtil;
+
+public class BileraC {
+	
+	
+	public void obtenerReunionesIrakasle(int profeId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    try {
+	    	String hql = "";
+	    }catch(Exception e) {
+        	e.printStackTrace();
+        	}finally {
+        		
+        	}
+
+	}
+}

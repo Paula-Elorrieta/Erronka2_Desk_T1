@@ -4,18 +4,18 @@
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="obtener"/>
+		<item key="selection" value="Bilera"/>
 		<item key="wrap" value="true"/>
 		<item key="incremental" value="false"/>
 		<list key="findhistory">
 			<item value="cargar"/>
+			<item value="Integer"/>
+			<item value="combo"/>
+			<item value="cons"/>
 			<item value="carg"/>
 			<item value="obtenerHorario"/>
 			<item value="modulo"/>
 			<item value="row[0]"/>
-			<item value="obtener hora"/>
-			<item value="se ha"/>
-			<item value="socket"/>
 		</list>
 		<list key="replacehistory">
 		</list>

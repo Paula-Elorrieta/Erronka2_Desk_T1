@@ -1,0 +1,192 @@
+package view;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+
+import controlador.servidor.Zerbitzaria;
+import modelo.Horarios;
+
+public class BilerakV extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JTable tableHorarios;
+    private JComboBox<String> comboBoxProfesores;
+    private Map<String, Integer> profesorMap;
+
+    public BilerakV() {
+        setTitle("Consultar Horarios de Profesores");
+        setBounds(100, 100, 700, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(240, 240, 240)); // Fondo claro
+        panel.setBounds(0, 0, 700, 500);
+        getContentPane().add(panel);
+
+        JLabel lblTitle = new JLabel("Consultar Horarios de Profesores");
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 22));
+        lblTitle.setForeground(new Color(44, 62, 80)); // Color oscuro
+        lblTitle.setBounds(0, 20, 700, 30);
+        panel.add(lblTitle);
+
+        JLabel lblProfesor = new JLabel("Selecciona un Profesor:");
+        lblProfesor.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblProfesor.setForeground(new Color(44, 62, 80));
+        lblProfesor.setBounds(150, 80, 200, 25);
+        panel.add(lblProfesor);
+
+        comboBoxProfesores = new JComboBox<>();
+        comboBoxProfesores.setBounds(350, 80, 200, 30);
+        comboBoxProfesores.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        comboBoxProfesores.setBackground(new Color(255, 255, 255));
+        comboBoxProfesores.setForeground(new Color(44, 62, 80));
+        panel.add(comboBoxProfesores);
+
+        cargarProfesores();
+
+        JButton btnConsultar = new JButton("Consultar");
+        btnConsultar.setBounds(275, 130, 150, 40);
+        btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnConsultar.setForeground(Color.WHITE);
+        btnConsultar.setBackground(new Color(52, 152, 219)); // Azul
+        btnConsultar.setFocusPainted(false);
+        btnConsultar.setBorder(new LineBorder(new Color(41, 128, 185), 2, true));
+        btnConsultar.addActionListener(this::consultarHorarios);
+        panel.add(btnConsultar);
+
+        tableHorarios = new JTable();
+        tableHorarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        tableHorarios.setBackground(Color.WHITE);
+        tableHorarios.setForeground(new Color(44, 62, 80));
+        tableHorarios.setRowHeight(25);
+
+        JScrollPane scrollPane = new JScrollPane(tableHorarios);
+        scrollPane.setBounds(50, 200, 600, 200);
+        scrollPane.setBackground(Color.WHITE);
+        scrollPane.setBorder(new LineBorder(new Color(149, 165, 166), 1, true));
+        panel.add(scrollPane);
+
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBounds(275, 420, 150, 40);
+        btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnVolver.setForeground(Color.WHITE);
+        btnVolver.setBackground(new Color(231, 76, 60)); // Rojo
+        btnVolver.setFocusPainted(false);
+        btnVolver.setBorder(new LineBorder(new Color(192, 57, 43), 2, true));
+        btnVolver.addActionListener(e -> dispose());
+        panel.add(btnVolver);
+    }
+
+    private void cargarProfesores() {
+        profesorMap = new TreeMap<>();
+        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+            out.writeObject("IRAKASLEAK");
+            out.flush();
+
+            Object respuesta = in.readObject();
+            if ("OK".equals(respuesta)) {
+                List<Horarios> horariosList = (List<Horarios>) in.readObject();
+                for (Horarios horario : horariosList) {
+                    String nombre = horario.getUsers().getNombre();
+                    int id = horario.getUsers().getId();
+                    if (!profesorMap.containsKey(nombre)) {
+                        profesorMap.put(nombre, id);
+                        comboBoxProfesores.addItem(nombre);
+                    }
+                }
+            } else {
+                showErrorMessage("Error al cargar los profesores.");
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            showErrorMessage("Error de conexión: " + ex.getMessage());
+        }
+    }
+
+    private void consultarHorarios(ActionEvent e) {
+        String nombreProfesor = (String) comboBoxProfesores.getSelectedItem();
+        if (nombreProfesor != null) {
+            int profeId = profesorMap.get(nombreProfesor);
+            try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+
+                out.writeObject("IRAKASLEAK");
+                out.writeObject(profeId);
+                out.flush();
+
+                Object respuesta = in.readObject();
+                if ("OK".equals(respuesta)) {
+                    List<Horarios> horariosList = (List<Horarios>) in.readObject();
+                    mostrarHorarios(horariosList);
+                } else {
+                    showErrorMessage("Error al obtener los horarios.");
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                showErrorMessage("Error de conexión: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void mostrarHorarios(List<Horarios> horarios) {
+        String[] columnNames = {"Hora", "L/A", "M/A", "X", "J/O", "V/O"};
+        Map<Integer, String[]> horarioTabla = new TreeMap<>();
+
+        for (Horarios horario : horarios) {
+            int hora = Integer.parseInt(horario.getId().getHora());
+            String dia = horario.getId().getDia();
+            String modulo = horario.getModulos().getNombre();
+
+            horarioTabla.putIfAbsent(hora, new String[6]);
+            String[] fila = horarioTabla.get(hora);
+            fila[0] = String.valueOf(hora);
+
+            Map<String, Integer> diasColumna = Map.of("L/A", 1, "M/A", 2, "X", 3, "J/O", 4, "V/O", 5);
+            if (diasColumna.containsKey(dia)) {
+                fila[diasColumna.get(dia)] = modulo;
+            }
+        }
+
+        Object[][] data = horarioTabla.values().toArray(new Object[0][6]);
+        tableHorarios.setModel(new DefaultTableModel(data, columnNames));
+    }
+
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+	public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            BilerakV bilerakV = new BilerakV();
+            bilerakV.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }}
+}

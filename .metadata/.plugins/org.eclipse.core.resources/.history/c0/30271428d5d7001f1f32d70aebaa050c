@@ -1,0 +1,61 @@
+package view;
+
+import javax.swing.JFrame;
+
+import modelo.Reuniones;
+
+public DetallesReunionV(Reuniones reunion) {
+    setTitle("Detalles de la Reunión");
+    setSize(600, 400);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+    setLayout(new BorderLayout());
+
+    // Panel de detalles
+    txtDetalles = new JTextArea();
+    txtDetalles.setEditable(false);
+    txtDetalles.setText("Detalles de la reunión:\n\n");
+    txtDetalles.append("Fecha: " + reunion.getFecha() + "\n");
+    txtDetalles.append("Estado: " + reunion.getEstado() + " / " + reunion.getEstadoEus() + "\n");
+    txtDetalles.append("Título: " + reunion.getTitulo() + "\n");
+    txtDetalles.append("Asunto: " + reunion.getAsunto() + "\n");
+    txtDetalles.append("Aula: " + reunion.getAula() + "\n");
+
+    if (reunion.getUsersByProfesorId() != null) {
+        txtDetalles.append("Profesor: " + reunion.getUsersByProfesorId().getNombre() + "\n");
+    }
+
+    if (reunion.getUsersByAlumnoId() != null) {
+        txtDetalles.append("Alumno: " + reunion.getUsersByAlumnoId().getNombre() + "\n");
+    }
+
+    add(new JScrollPane(txtDetalles), BorderLayout.CENTER);
+
+    // Botones
+    JPanel panelBotones = new JPanel();
+    btnAceptar = new JButton("Aceptar");
+    btnAceptar.addActionListener(e -> cambiarEstadoReunion(reunion, "onartuta"));
+
+    btnCancelar = new JButton("Cancelar");
+    btnCancelar.addActionListener(e -> cambiarEstadoReunion(reunion, "ezeztatuta"));
+
+    btnVolver = new JButton("Volver");
+    btnVolver.addActionListener(e -> {
+        dispose();
+        new ListaReunionesV().setVisible(true);
+    });
+
+    panelBotones.add(btnAceptar);
+    panelBotones.add(btnCancelar);
+    panelBotones.add(btnVolver);
+    add(panelBotones, BorderLayout.SOUTH);
+}
+
+// Cambiar estado de la reunión y actualizar detalles
+private void cambiarEstadoReunion(Reuniones reunion, String nuevoEstado) {
+    reunion.setEstado(nuevoEstado);
+    txtDetalles.append("\nEstado actualizado: " + nuevoEstado);
+    // Aquí puedes enviar la actualización al servidor si es necesario
+}
+}
+

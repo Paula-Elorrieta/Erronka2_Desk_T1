@@ -32,6 +32,8 @@ public class HorariosC {
         }
     }
     
+    
+    
     public List<Horarios> obtenerTodosLosHorariosProfe() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {

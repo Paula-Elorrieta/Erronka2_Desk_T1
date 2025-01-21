@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,15 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import controlador.servidor.Zerbitzaria;
@@ -33,61 +24,47 @@ public class IrakasleenOrduakV extends JFrame {
     private static final long serialVersionUID = 1L;
     private JTable tableHorarios;
     private JComboBox<String> comboBoxProfesores;
-    private Map<String, Integer> profesorMap; // Mapeo de nombre -> ID
+    private Map<String, Integer> profesorMap;
 
     public IrakasleenOrduakV() {
         setTitle("Consultar Horarios de Profesores");
-        setBounds(100, 100, 800, 600); // Tamaño más grande
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setLayout(null);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setResizable(true);
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.GRAY);
-        panel.setBounds(0, 0, 784, 562);
         getContentPane().add(panel);
-        panel.setLayout(null);
 
         JLabel lblTitle = new JLabel("Selecciona un Profesor");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255));
-        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 24)); 
-        lblTitle.setBounds(0, 20, 784, 30);
-        panel.add(lblTitle);
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 24));
 
         comboBoxProfesores = new JComboBox<>();
-        comboBoxProfesores.setBounds(300, 70, 200, 30); 
         comboBoxProfesores.setBackground(Color.DARK_GRAY);
         comboBoxProfesores.setForeground(Color.WHITE);
         comboBoxProfesores.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        panel.add(comboBoxProfesores);
-
-        cargarProfesores();
 
         JButton btnConsultar = new JButton("Consultar Horarios");
         btnConsultar.addActionListener(this::consultarHorarios);
         btnConsultar.setBackground(new Color(162, 119, 255));
         btnConsultar.setForeground(Color.WHITE);
         btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 16));
-        btnConsultar.setBounds(300, 120, 200, 30);
-        panel.add(btnConsultar);
 
-        String[] columnNames = {"Hora", "L/A", "M/A", "X", "J/O", "V/O"};
         tableHorarios = new JTable();
-        DefaultTableModel model = new DefaultTableModel(null, columnNames) {
+        tableHorarios.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Hora", "L/A", "M/A", "X", "J/O", "V/O"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-        };
-        tableHorarios.setModel(model);
-        tableHorarios.setBounds(30, 160, 700, 300);
+        });
         tableHorarios.setBackground(Color.DARK_GRAY);
         tableHorarios.setForeground(Color.WHITE);
         tableHorarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
         JScrollPane scrollPane = new JScrollPane(tableHorarios);
-        scrollPane.setBounds(30, 160, 720, 300);
-        panel.add(scrollPane);
 
         JButton btnVolver = new JButton("Volver al Menú");
         btnVolver.addActionListener(e -> {
@@ -97,15 +74,38 @@ public class IrakasleenOrduakV extends JFrame {
         btnVolver.setBackground(new Color(162, 119, 255));
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
-        btnVolver.setBounds(300, 500, 200, 30);
-        panel.add(btnVolver);
+
+        GroupLayout layout = new GroupLayout(panel);
+        panel.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(comboBoxProfesores, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnConsultar, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVolver, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+        );
+
+        layout.setVerticalGroup(
+            layout.createSequentialGroup()
+                .addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboBoxProfesores, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnConsultar, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addComponent(btnVolver, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        );
+
+        cargarProfesores();
     }
 
     private void cargarProfesores() {
         profesorMap = new LinkedHashMap<>();
-        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO)) {
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
             out.writeObject("IRAKASLEAK");
             out.flush();
@@ -117,17 +117,17 @@ public class IrakasleenOrduakV extends JFrame {
                     List<Horarios> horariosList = (List<Horarios>) profesoresObj;
                     for (Horarios horario : horariosList) {
                         String nombreProfesor = horario.getUsers().getNombre();
-                        Integer idProfesor = horario.getUsers().getId();
-                        profesorMap.putIfAbsent(nombreProfesor, idProfesor);
-                        comboBoxProfesores.addItem(nombreProfesor);
+                        int idProfesor = horario.getUsers().getId();
+
+                        if (!profesorMap.containsKey(nombreProfesor)) {
+                            profesorMap.put(nombreProfesor, idProfesor);
+                            comboBoxProfesores.addItem(nombreProfesor);
+                        }
                     }
                 }
             } else {
                 showErrorMessage("Error al cargar los profesores.");
             }
-
-            out.close();
-            in.close();
         } catch (IOException | ClassNotFoundException ex) {
             showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
         }
@@ -136,32 +136,27 @@ public class IrakasleenOrduakV extends JFrame {
     private void consultarHorarios(ActionEvent e) {
         String nombreProfesor = (String) comboBoxProfesores.getSelectedItem();
         if (nombreProfesor != null) {
-            Integer profeId = profesorMap.get(nombreProfesor);
-            if (profeId != null) {
-                try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO)) {
-                    ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            int profeId = profesorMap.get(nombreProfesor);
+            try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-                    out.writeObject("IRAKASLEAK");
-                    out.writeObject(profeId);
-                    out.flush();
+                out.writeObject("IRAKASLEAK");
+                out.writeObject(profeId);
+                out.flush();
 
-                    Object respuesta = in.readObject();
-                    if (respuesta instanceof String && ((String) respuesta).startsWith("OK")) {
-                        Object horariosObj = in.readObject();
-                        if (horariosObj instanceof List) {
-                            List<Horarios> horariosList = (List<Horarios>) horariosObj;
-                            mostrarHorarios(horariosList);
-                        }
-                    } else {
-                        showErrorMessage("Error al obtener los horarios.");
+                Object respuesta = in.readObject();
+                if (respuesta instanceof String && ((String) respuesta).startsWith("OK")) {
+                    Object horariosObj = in.readObject();
+                    if (horariosObj instanceof List) {
+                        List<Horarios> horariosList = (List<Horarios>) horariosObj;
+                        mostrarHorarios(horariosList);
                     }
-
-                    out.close();
-                    in.close();
-                } catch (IOException | ClassNotFoundException ex) {
-                    showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
+                } else {
+                    showErrorMessage("Error al obtener los horarios.");
                 }
+            } catch (IOException | ClassNotFoundException ex) {
+                showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
             }
         }
     }
