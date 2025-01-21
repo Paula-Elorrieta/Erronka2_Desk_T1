@@ -7,6 +7,7 @@ import java.util.List;
 
 import controlador.HorariosC;
 import controlador.LoginC;
+import controlador.MailC;
 import modelo.Horarios;
 import modelo.Users;
 
@@ -22,6 +23,10 @@ public class RequestDispatcher {
 				break;
 			case "IRAKASLEAK":
 				handleGetIrakasleak(entrada, salida);
+				break;
+			case "ALDATUPASS":
+				handleAldatuPass(entrada, salida);
+				break;
             default:
                 salida.writeObject("Error: Acción desconocida.");
         }
@@ -89,8 +94,43 @@ public class RequestDispatcher {
     				salida.flush();
     			} catch (IOException ioEx) {
     				ioEx.printStackTrace();
-    	}}
-    			
+    			}
     		}
+    			
+    	}
     	
+		private void handleAldatuPass(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+			try {
+				String username = (String) entrada.readObject();
+
+				LoginC loginControlador = new LoginC();
+    	        Users user = loginControlador.getUser(username);
+				
+    	        // Send the email with the new password
+				MailC mailControler = new MailC();
+				String encryptedPass = mailControler.sendMail(user.getEmail());
+				user.setPassword(encryptedPass);
+				
+				//System.out.println("Pasahitza enkriptatua: " + mailControler.encrypt("1234"));
+				
+				// Update the user in the database
+				boolean passIsUpdated = loginControlador.updatePass(user.getUsername(), encryptedPass);
+
+				// Komprobatu ea pasahitza aldatu den ondo eta enkriptazio zuzena den
+				if (encryptedPass != "Error" && passIsUpdated) {
+					salida.writeObject("OK");
+				} else {
+					salida.writeObject("Errorea: Ezin izan da pasahitza aldatu.");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				salida.writeObject("Errorea datu basean edo zerbitzarian.");
+			} finally {
+				try {
+					salida.flush();
+				} catch (IOException ioEx) {
+					ioEx.printStackTrace();
+				}
+			}
+		}
 }
