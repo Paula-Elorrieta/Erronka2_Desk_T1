@@ -90,7 +90,7 @@ public class BileraV extends JFrame {
         add(panelDetalles, BorderLayout.EAST);
 
         // Cargar algunas reuniones (esto es solo un ejemplo)
-        cargarReuniones();
+//        cargarReuniones();
 
         // Acción para cuando se selecciona una reunión
         table.getSelectionModel().addListSelectionListener(e -> mostrarDetallesReunion());
@@ -119,41 +119,41 @@ public class BileraV extends JFrame {
         });
     }
 
-    private void cargarReuniones() {
-        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
-             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-
-            out.writeObject("BILERA");
-            out.writeObjet(GlobalData.logedUser.getId());
-            out.flush(); 
-
-            String respuesta = (String) in.readObject();
-            if ("OK".equals(respuesta)) {
-                List<Reuniones> reuniones = (List<Reuniones>) in.readObject();
-                for (Reuniones reunion : reuniones) {
-                    // Añadir cada reunión a la tabla
-                    model.addRow(new Object[]{
-                            reunion.getFecha().toLocalDateTime().toLocalDate().toString(),
-                            reunion.getFecha().toLocalDateTime().toLocalTime().toString(),
-                            reunion.getEstado(),
-                            "Ver detalles"
-                    });
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al obtener reuniones del servidor.", 
-                                              "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error de conexión con el servidor.", 
-                                          "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al procesar la respuesta del servidor.", 
-                                          "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    private void cargarReuniones() {
+//        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+//             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+//             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+//
+//            out.writeObject("BILERA");
+//            out.writeObjet(GlobalData.logedUser.getId());
+//            out.flush(); 
+//
+//            String respuesta = (String) in.readObject();
+//            if ("OK".equals(respuesta)) {
+//                List<Reuniones> reuniones = (List<Reuniones>) in.readObject();
+//                for (Reuniones reunion : reuniones) {
+//                    // Añadir cada reunión a la tabla
+//                    model.addRow(new Object[]{
+//                            reunion.getFecha().toLocalDateTime().toLocalDate().toString(),
+//                            reunion.getFecha().toLocalDateTime().toLocalTime().toString(),
+//                            reunion.getEstado(),
+//                            "Ver detalles"
+//                    });
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Error al obtener reuniones del servidor.", 
+//                                              "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Error de conexión con el servidor.", 
+//                                          "Error", JOptionPane.ERROR_MESSAGE);
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Error al procesar la respuesta del servidor.", 
+//                                          "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 
     private void mostrarDetallesReunion() {
         int selectedRow = table.getSelectedRow();
