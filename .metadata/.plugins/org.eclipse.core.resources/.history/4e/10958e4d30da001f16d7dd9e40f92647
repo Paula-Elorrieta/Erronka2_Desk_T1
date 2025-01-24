@@ -1,0 +1,41 @@
+package controlador;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import controlador.db.HibernateUtil;
+import modelo.Reuniones;
+
+public class BileraC {
+	
+	
+	public List<Reuniones> obtenerReunionesIrakasle(int profeId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    try {
+	        // Cambiar a un parámetro nombrado en la consulta HQL
+	        String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE u.id = :profeId";
+	        Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
+	        query.setParameter("profeId", profeId); // Configurar el parámetro nombrado
+
+	        List<Reuniones> reuniones = query.list(); // Ejecutar la consulta
+	        return reuniones;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    } finally {
+	        session.close(); // Asegurar que la sesión se cierre
+	    }
+	}
+
+	
+	public static void main(String[] args) {
+		BileraC bilera = new BileraC();
+		List<Reuniones> reuniones = bilera.obtenerReunionesIrakasle(4);
+		for (Reuniones reunion : reuniones) {
+			System.out.println(reunion.getFecha());
+		}
+	}
+
+}

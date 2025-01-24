@@ -1,8 +1,0 @@
-package controlador.Orokorrak;
-
-import modelo.Users;
-
-public class Staticoak {
-
-	Users logedUser = null;
-}

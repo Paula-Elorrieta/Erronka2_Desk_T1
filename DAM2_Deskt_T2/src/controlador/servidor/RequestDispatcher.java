@@ -28,17 +28,37 @@ public class RequestDispatcher {
 				break;
 			case "BILERA":
 				handleGetBilera(entrada, salida);
-
+				break;
 			case "ALDATUPASS":
 				handleAldatuPass(entrada, salida);
-
+				break;
+			case "BILERA_UPDATE":
+				handleBileraUpdate(entrada, salida);
 				break;
             default:
                 salida.writeObject("Error: Acción desconocida.");
         }
     }
 
-    	private void handleLogin(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    	private void handleBileraUpdate(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    		            try {
+    		            	    Reuniones reunion = (Reuniones) entrada.readObject();
+        		                BileraC bilerakControlador = new BileraC();
+        		                bilerakControlador.updateReunion(reunion);
+        		                salida.writeObject("OK");
+        		            } catch (Exception e) {
+        		                e.printStackTrace();
+        		                salida.writeObject("Error: No se pudo procesar la solicitud.");
+        		            } finally {
+        		                try {
+        		                    salida.flush();
+        		                } catch (IOException ioEx) {
+        		                    ioEx.printStackTrace();
+        		                }
+        		              }				
+	}
+
+		private void handleLogin(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
     	    try {
     	        String username = (String) entrada.readObject();     
     	        String password = (String) entrada.readObject();       
@@ -145,7 +165,7 @@ public class RequestDispatcher {
 				String encryptedPass = mailControler.sendMail(user.getEmail());
 				user.setPassword(encryptedPass);
 				
-				//System.out.println("Pasahitza enkriptatua: " + mailControler.encrypt("1234"));
+				System.out.println("Pasahitza enkriptatua: " + mailControler.encrypt("1234"));
 				
 				// Update the user in the database
 				boolean passIsUpdated = loginControlador.updatePass(user.getUsername(), encryptedPass);

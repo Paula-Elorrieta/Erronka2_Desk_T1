@@ -13,6 +13,7 @@ public class LoginC {
 		MailC mail = new MailC();
 		try {
 			password = mail.encrypt(password);
+			System.out.println("Pass encriptada: " + password);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

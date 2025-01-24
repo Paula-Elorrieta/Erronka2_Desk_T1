@@ -93,8 +93,6 @@ public class LoginV extends JFrame {
         JButton btnLogin = new JButton("Hasi saioa");
 
         btnLogin.addActionListener(e -> {
-        	textFieldErabiltzailea.setText("maitane");
-        	pasahitzaField.setText("1234");
             String username = textFieldErabiltzailea.getText();
             String password = new String(pasahitzaField.getPassword());
 
@@ -145,9 +143,7 @@ public class LoginV extends JFrame {
 
             } catch (IOException | ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Error de conexión con el servidor: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (HeadlessException e1) {
-				// TODO Auto-generated catch block
-				
+            } catch (HeadlessException e1) {				
 			}
         }
         );

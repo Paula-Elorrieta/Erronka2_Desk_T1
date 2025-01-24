@@ -1,0 +1,222 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
+public class BileraV extends JFrame {
+    private JTable table;
+    private JButton btnAceptar, btnCancelar, btnVolver;
+    private JTextArea txtDetalles;
+    private DefaultTableModel model;
+
+    public BileraV() {
+        setTitle("Vista de Bilerak");
+        setSize(800, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        // Configuración de la tabla
+        String[] columnNames = {"Fecha", "Hora", "Estado", "Acción"};
+        model = new DefaultTableModel(null, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Deshabilitar edición de celdas
+            }
+        };
+
+        table = new JTable(model);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setBackground(Color.DARK_GRAY);
+        table.setForeground(Color.WHITE);
+        table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        table.setRowHeight(25);
+
+        // Aplica el renderer de colores según el estado
+        table.setDefaultRenderer(Object.class, new EstadoRenderer());
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Panel de botones
+        JPanel panelAcciones = new JPanel();
+        panelAcciones.setLayout(new FlowLayout());
+        panelAcciones.setBackground(Color.GRAY);
+
+        btnAceptar = new JButton("Aceptar");
+        btnAceptar.setBackground(new Color(162, 119, 255));
+        btnAceptar.setForeground(Color.WHITE);
+        btnAceptar.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+        btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBackground(new Color(255, 69, 0));
+        btnCancelar.setForeground(Color.WHITE);
+        btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+        btnVolver = new JButton("Volver");
+        btnVolver.setBackground(new Color(162, 119, 255));
+        btnVolver.setForeground(Color.WHITE);
+        btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+        panelAcciones.add(btnAceptar);
+        panelAcciones.add(btnCancelar);
+        panelAcciones.add(btnVolver);
+
+        add(panelAcciones, BorderLayout.SOUTH);
+
+        // Panel de detalles
+        JPanel panelDetalles = new JPanel();
+        panelDetalles.setLayout(new BorderLayout());
+        panelDetalles.setBackground(Color.GRAY);
+
+        txtDetalles = new JTextArea();
+        txtDetalles.setEditable(false);
+        txtDetalles.setBackground(Color.DARK_GRAY);
+        txtDetalles.setForeground(Color.WHITE);
+        txtDetalles.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        panelDetalles.add(new JScrollPane(txtDetalles), BorderLayout.CENTER);
+        add(panelDetalles, BorderLayout.EAST);
+
+        // Cargar reuniones
+        cargarReuniones();
+
+        // Listener para selección en la tabla
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    detallesReunion(); // Doble clic para ver detalles
+                }
+            }
+        });
+
+        btnAceptar.addActionListener(e -> cambiarEstadoReunion("aceptada"));
+        btnCancelar.addActionListener(e -> cambiarEstadoReunion("denegada"));
+        btnVolver.addActionListener(e -> {
+            dispose();
+            new MenuV().setVisible(true);
+        });
+    }
+
+    private void cargarReuniones() {
+        try {
+            // Simula la carga de reuniones
+            List<Reuniones> reuniones = List.of(
+                    new Reuniones("2025-01-24", "10:00", "pendiente"),
+                    new Reuniones("2025-01-25", "12:00", "conflicto"),
+                    new Reuniones("2025-01-26", "14:00", "aceptada"),
+                    new Reuniones("2025-01-27", "16:00", "denegada")
+            );
+
+            for (Reuniones reunion : reuniones) {
+                model.addRow(new Object[]{
+                        reunion.getFecha(),
+                        reunion.getHora(),
+                        reunion.getEstado(),
+                        "Ver detalles"
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar reuniones.", 
+                                          "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void detallesReunion() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Detalles de la reunión seleccionada:\n\n" +
+                            "Fecha: " + table.getValueAt(selectedRow, 0) + "\n" +
+                            "Hora: " + table.getValueAt(selectedRow, 1) + "\n" +
+                            "Estado: " + table.getValueAt(selectedRow, 2),
+                    "Detalles de la reunión",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void cambiarEstadoReunion(String nuevoEstado) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            table.setValueAt(nuevoEstado, selectedRow, 2);
+            mostrarDetallesReunion();
+        }
+    }
+
+    private void mostrarDetallesReunion() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            String estado = (String) table.getValueAt(selectedRow, 2);
+            txtDetalles.setText("Detalles de la reunión seleccionada:\n\n");
+            txtDetalles.append("Fecha: " + table.getValueAt(selectedRow, 0) + "\n");
+            txtDetalles.append("Hora: " + table.getValueAt(selectedRow, 1) + "\n");
+            txtDetalles.append("Estado: " + estado + "\n");
+        }
+    }
+
+    public static void main(String[] args) {
+        BileraV bileraV = new BileraV();
+        bileraV.setVisible(true);
+    }
+}
+
+// Clase modelo para simular reuniones
+class Reuniones {
+    private final String fecha;
+    private final String hora;
+    private final String estado;
+
+    public Reuniones(String fecha, String hora, String estado) {
+        this.fecha = fecha;
+        this.hora = hora;
+        this.estado = estado;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+}
+
+// Renderer personalizado para el color de las filas
+class EstadoRenderer extends DefaultTableCellRenderer {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        String estado = (String) table.getValueAt(row, 2); // Estado en la columna 2
+        switch (estado.toLowerCase()) {
+            case "pendiente":
+                c.setBackground(new Color(255, 165, 0)); // Naranja
+                break;
+            case "conflicto":
+                c.setBackground(Color.GRAY); // Gris
+                break;
+            case "aceptada":
+                c.setBackground(new Color(144, 238, 144)); // Verde claro
+                break;
+            case "denegada":
+                c.setBackground(new Color(255, 69, 0)); // Rojo
+                break;
+            default:
+                c.setBackground(Color.WHITE); // Blanco por defecto
+                break;
+        }
+
+        c.setForeground(Color.BLACK); // Texto negro
+        return c;
+    }
+}

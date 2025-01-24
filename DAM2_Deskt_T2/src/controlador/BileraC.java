@@ -3,6 +3,7 @@ package controlador;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import controlador.db.HibernateUtil;
@@ -12,17 +13,48 @@ public class BileraC {
 	
 	
 	public List<Reuniones> obtenerReunionesIrakasle(int profeId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    try {
+	        String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE u.id = :profeId";
+	        Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
+	        query.setParameter("profeId", profeId); 
+
+	        List<Reuniones> reuniones = query.list();
+	        return reuniones;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    } finally {
+	        session.close(); 
+	    }
+	}
+	
+	public List<Reuniones> obtenerReunionesIkasle(int alumnoId) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId WHERE r.usersByProfesorId.id ="+ 4;
+			String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByAlumnoId u WHERE u.id = :alumnoId";
 			Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
-			query.setParameter("profeId", 4);
-			List<Reuniones> reuniones = query.list();
+			query.setParameter("alumnoId", alumnoId);
 
+			List<Reuniones> reuniones = query.list();
 			return reuniones;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			session.close();
+		}
+	}
+
+	public void updateReunion(Reuniones reunion) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			session.update(reunion);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
 		} finally {
 			session.close();
 		}

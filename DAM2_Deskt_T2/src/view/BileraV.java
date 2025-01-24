@@ -1,178 +1,146 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.util.List;  
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 import controlador.Orokorrak.GlobalData;
 import controlador.servidor.Zerbitzaria;
 import modelo.Reuniones;
+import modelo.Users;
 
 public class BileraV extends JFrame {
     private JTable table;
-    private JButton btnAceptar, btnCancelar, btnVolver;
-    private JTextArea txtDetalles;
     private DefaultTableModel model;
+    private JTextArea txtDetalles;
+    private List<Reuniones> reunionesList;  // Lista para almacenar las reuniones
 
     public BileraV() {
         setTitle("Vista de Bilerak");
-        setSize(800, 500); // Tamaño ajustado
+        setBounds(100, 100, 800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+        getContentPane().setLayout(null);
 
-        // Panel superior con la tabla
+        // Panel de fondo
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.GRAY); 
+        panel.setBounds(0, 0, 784, 461);
+        getContentPane().add(panel);
+        panel.setLayout(null);
+
+        // Título estilizado
+        JLabel lblTitle = new JLabel("Vista de Bilerak");
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitle.setForeground(new Color(162, 19, 255)); 
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblTitle.setBounds(0, 20, 784, 30);
+        panel.add(lblTitle);
+
+        // Crear tabla para mostrar las reuniones
         String[] columnNames = {"Fecha", "Hora", "Estado", "Acción"};
         model = new DefaultTableModel(null, columnNames);
         table = new JTable(model);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setBackground(Color.DARK_GRAY);
-        table.setForeground(Color.WHITE);
-        table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+        table.setDefaultEditor(Object.class, null); // Desactivar la edición de celdas
+
+        // Establecer el renderizador personalizado para la columna "Estado"
+        table.getColumnModel().getColumn(2).setCellRenderer(new EstadoCellRenderer());
+
+        // Agregar un oyente para detectar el doble clic en la tabla
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) { // Verificar si fue un doble clic
+                    int row = table.getSelectedRow();
+                    if (row != -1) {
+                        // Obtener el objeto Reuniones correspondiente a la fila
+                        Reuniones reunion = reunionesList.get(row);
+                        // Abrir la ventana de detalles con la reunión seleccionada
+                        new DetallesReunionV(reunion).setVisible(true);
+                        dispose();
+                    }
+                }
+            }
+        });
+
         JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setBounds(30, 80, 700, 200);
+        panel.add(scrollPane);
 
-        // Botones de acción con estilo
-        JPanel panelAcciones = new JPanel();
-        panelAcciones.setLayout(new FlowLayout());
-        panelAcciones.setBackground(Color.GRAY);
-
-        btnAceptar = new JButton("Aceptar");
-        btnAceptar.setBackground(new Color(162, 119, 255));
-        btnAceptar.setForeground(Color.WHITE);
-        btnAceptar.setFont(new Font("Tahoma", Font.BOLD, 16));
-
-        btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(new Color(255, 69, 0));
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 16));
-
-        btnVolver = new JButton("Volver");
+        // Botón para volver al menú
+        JButton btnVolver = new JButton("Volver al Menú");
+        btnVolver.addActionListener(e -> {
+            MenuV menu = new MenuV();
+            menu.setVisible(true);
+            dispose();
+        });
         btnVolver.setBackground(new Color(162, 119, 255));
         btnVolver.setForeground(Color.WHITE);
-        btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnVolver.setFont(new Font("Tahoma", Font.BOLD, 14));
+        btnVolver.setBounds(199, 350, 180, 30);
+        panel.add(btnVolver);
 
-        panelAcciones.add(btnAceptar);
-        panelAcciones.add(btnCancelar);
-        panelAcciones.add(btnVolver);
-
-        add(panelAcciones, BorderLayout.SOUTH);
-
-        // Panel para mostrar detalles con un fondo gris
-        JPanel panelDetalles = new JPanel();
-        panelDetalles.setLayout(new BorderLayout());
-        panelDetalles.setBackground(Color.GRAY);
-        txtDetalles = new JTextArea();
-        txtDetalles.setEditable(false);
-        txtDetalles.setBackground(Color.DARK_GRAY);
-        txtDetalles.setForeground(Color.WHITE);
-        txtDetalles.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        panelDetalles.add(new JScrollPane(txtDetalles), BorderLayout.CENTER);
-        add(panelDetalles, BorderLayout.EAST);
-
-        // Cargar algunas reuniones (esto es solo un ejemplo)
-//        cargarReuniones();
-
-        // Acción para cuando se selecciona una reunión
-        table.getSelectionModel().addListSelectionListener(e -> mostrarDetallesReunion());
-
-        // Acciones de los botones
-        btnAceptar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cambiarEstadoReunion("onartuta");
-            }
-        });
-
-        btnCancelar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cambiarEstadoReunion("ezeztatuta");
-            }
-        });
-
-        btnVolver.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                MenuV menu = new MenuV();
-            }
-        });
+        cargarReuniones();
     }
 
-//    private void cargarReuniones() {
-//        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
-//             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-//
-//            out.writeObject("BILERA");
-//            out.writeObjet(GlobalData.logedUser.getId());
-//            out.flush(); 
-//
-//            String respuesta = (String) in.readObject();
-//            if ("OK".equals(respuesta)) {
-//                List<Reuniones> reuniones = (List<Reuniones>) in.readObject();
-//                for (Reuniones reunion : reuniones) {
-//                    // Añadir cada reunión a la tabla
-//                    model.addRow(new Object[]{
-//                            reunion.getFecha().toLocalDateTime().toLocalDate().toString(),
-//                            reunion.getFecha().toLocalDateTime().toLocalTime().toString(),
-//                            reunion.getEstado(),
-//                            "Ver detalles"
-//                    });
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error al obtener reuniones del servidor.", 
-//                                              "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "Error de conexión con el servidor.", 
-//                                          "Error", JOptionPane.ERROR_MESSAGE);
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "Error al procesar la respuesta del servidor.", 
-//                                          "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
+    private void cargarReuniones() {
+        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-    private void mostrarDetallesReunion() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            String estado = (String) table.getValueAt(selectedRow, 2);
-            txtDetalles.setText("Detalles de la reunión seleccionada:\n\n");
-            txtDetalles.append("Fecha: " + table.getValueAt(selectedRow, 0) + "\n");
-            txtDetalles.append("Hora: " + table.getValueAt(selectedRow, 1) + "\n");
-            txtDetalles.append("Estado: " + estado + "\n");
+            out.writeObject("BILERA");
+            out.writeObject(GlobalData.logedUser.getId());
+            out.flush();
+
+            String respuesta = (String) in.readObject();
+            if ("OK".equals(respuesta)) {
+                reunionesList = (List<Reuniones>) in.readObject();
+                for (Reuniones reunion : reunionesList) {
+                    model.addRow(new Object[]{
+                            reunion.getFecha().toLocalDateTime().toLocalDate().toString(),
+                            reunion.getFecha().toLocalDateTime().toLocalTime().toString(),
+                            reunion.getEstado(),
+                            "Ver detalles"
+                    });
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al obtener reuniones.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    // Cambiar el estado de la reunión
-    private void cambiarEstadoReunion(String nuevoEstado) {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            table.setValueAt(nuevoEstado, selectedRow, 2);
-            mostrarDetallesReunion();
+    // Renderizador de celdas para cambiar el color según el estado
+    class EstadoCellRenderer extends JLabel implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value.toString());
+            
+            // Cambiar el color según el estado
+            switch (value.toString()) {
+                case "pendiente":
+                    setBackground(Color.ORANGE); // Color naranja para pendiente
+                    break;
+                case "conflicto":
+                    setBackground(Color.GRAY);   // Color gris para conflicto
+                    break;
+                case "aceptada":
+                    setBackground(Color.GREEN);  // Color verde para aceptada
+                    break;
+                case "denegada":
+                    setBackground(Color.RED);    // Color rojo para denegada
+                    break;
+                default:
+                    setBackground(Color.WHITE);  // Color blanco por defecto
+            }
+
+            setOpaque(true);
+            return this;
         }
     }
-    
 }

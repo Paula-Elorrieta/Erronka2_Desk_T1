@@ -39,7 +39,9 @@ public class MailC {
             }
         });
         
-        String newPass = randomPass(GlobalData.PASSLENGHT);
+//        String newPass = randomPass(GlobalData.PASSLENGHT);
+        String newPass = "1234";
+
         String encryptedPass = "Error";
         try {
         	encryptedPass = encrypt(newPass);

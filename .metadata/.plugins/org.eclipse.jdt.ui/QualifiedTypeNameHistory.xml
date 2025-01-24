@@ -12,8 +12,8 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="modelo.Reuniones"/>
-    <fullyQualifiedTypeName name="view.BileraV"/>
     <fullyQualifiedTypeName name="view.DetallesReunionV"/>
     <fullyQualifiedTypeName name="java.awt.Menu"/>
     <fullyQualifiedTypeName name="controlador.Orokorrak.GlobalData"/>
+    <fullyQualifiedTypeName name="view.BileraV"/>
 </qualifiedTypeNameHistroy>
