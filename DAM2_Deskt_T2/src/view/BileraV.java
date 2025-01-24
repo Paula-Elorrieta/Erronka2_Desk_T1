@@ -46,20 +46,16 @@ public class BileraV extends JFrame {
         model = new DefaultTableModel(null, columnNames);
         table = new JTable(model);
 
-        table.setDefaultEditor(Object.class, null); // Desactivar la edición de celdas
+        table.setDefaultEditor(Object.class, null); 
 
-        // Establecer el renderizador personalizado para la columna "Estado"
         table.getColumnModel().getColumn(2).setCellRenderer(new EstadoCellRenderer());
 
-        // Agregar un oyente para detectar el doble clic en la tabla
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) { // Verificar si fue un doble clic
+                if (evt.getClickCount() == 2) { 
                     int row = table.getSelectedRow();
                     if (row != -1) {
-                        // Obtener el objeto Reuniones correspondiente a la fila
                         Reuniones reunion = reunionesList.get(row);
-                        // Abrir la ventana de detalles con la reunión seleccionada
                         new DetallesReunionV(reunion).setVisible(true);
                         dispose();
                     }
@@ -88,7 +84,7 @@ public class BileraV extends JFrame {
     }
 
     private void cargarReuniones() {
-        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+        try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
@@ -104,7 +100,9 @@ public class BileraV extends JFrame {
                             reunion.getFecha().toLocalDateTime().toLocalDate().toString(),
                             reunion.getFecha().toLocalDateTime().toLocalTime().toString(),
                             reunion.getEstado(),
-                            "Ver detalles"
+                            reunion.getIdCentro(),
+                            reunion.getEstado().equals("pendiente") ? "Ver detalles" : ""
+                            
                     });
                 }
             } else {

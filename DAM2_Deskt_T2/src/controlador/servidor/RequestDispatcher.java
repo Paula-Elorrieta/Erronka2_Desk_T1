@@ -7,9 +7,11 @@ import java.util.List;
 
 import controlador.BileraC;
 import controlador.HorariosC;
+import controlador.IkastetxeakC;
 import controlador.LoginC;
 import controlador.MailC;
 import modelo.Horarios;
+import modelo.Ikastetxeak;
 import modelo.Reuniones;
 import modelo.Users;
 
@@ -35,12 +37,18 @@ public class RequestDispatcher {
 			case "BILERA_UPDATE":
 				handleBileraUpdate(entrada, salida);
 				break;
+			case "IKASTETXEAK":
+				handleGetIkastetxeak(entrada, salida);
+				break;
             default:
                 salida.writeObject("Error: Acción desconocida.");
         }
     }
 
-    	private void handleBileraUpdate(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+
+
+
+		private void handleBileraUpdate(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
     		            try {
     		            	    Reuniones reunion = (Reuniones) entrada.readObject();
         		                BileraC bilerakControlador = new BileraC();
@@ -58,23 +66,28 @@ public class RequestDispatcher {
         		              }				
 	}
 
-		private void handleLogin(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+    	private void handleLogin(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
     	    try {
-    	        String username = (String) entrada.readObject();     
-    	        String password = (String) entrada.readObject();       
+    	        String username = (String) entrada.readObject();
+    	        String password = (String) entrada.readObject();
 
-    	        LoginC loginControlador = new LoginC();
-    	        Users user = loginControlador.login(username, password);
+    	        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+    	            salida.writeObject("Error: Nombre de usuario o contraseña vacíos.");
+    	            return;
+    	        }
+
+    	        LoginC loginController = new LoginC();
+    	        Users user = loginController.login(username, password);
+
     	        if (user != null) {
     	            salida.writeObject("OK");
     	            salida.writeObject(user);
-    	            salida.writeObject(user.getTipos().getId());
     	        } else {
-    	            salida.writeObject("Errorea: Erabiltzailea ez da existitzen edo pasahitza okerra.");
+    	            salida.writeObject("Error: Usuario o contraseña incorrectos.");
     	        }
     	    } catch (Exception e) {
     	        e.printStackTrace();
-    	        salida.writeObject("Errorea datu basean edo zerbitzarian.");
+    	        salida.writeObject("Error en el servidor.");
     	    }
     	}
     	
@@ -187,4 +200,40 @@ public class RequestDispatcher {
 				}
 			}
 		}
+
+
+
+		private void handleGetIkastetxeak(ObjectInputStream entrada, ObjectOutputStream salida) {
+		    try {
+		        IkastetxeakC ikastetxeakC = new IkastetxeakC();
+
+		        // Leer el ID del centro enviado por el cliente
+		        String idCentro = (String) entrada.readObject();
+
+		        // Obtener la lista de Ikastetxeak por ID
+		        List<Ikastetxeak> ikastetxeak = ikastetxeakC.obtenerIkastetxeakPorID(idCentro);
+
+		        if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
+		            salida.writeObject("OK"); // Respuesta de éxito
+		            salida.writeObject(ikastetxeak); // Enviar lista de Ikastetxeak
+		        } else {
+		            salida.writeObject("Error: No se encontraron centros educativos para el ID proporcionado.");
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        try {
+		            salida.writeObject("Error: No se pudo procesar la solicitud.");
+		        } catch (IOException ioEx) {
+		            ioEx.printStackTrace();
+		        }
+		    } finally {
+		        try {
+		            salida.flush(); // Asegúrate de que los datos se envíen correctamente
+		        } catch (IOException ioEx) {
+		            ioEx.printStackTrace();
+		        }
+		    }
+		}
+
+
 }

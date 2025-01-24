@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Image;
@@ -26,6 +27,7 @@ import controlador.servidor.Zerbitzaria;
 import modelo.Users;
 
 public class LoginV extends JFrame {
+    JButton btnLogin = new JButton("Hasi saioa");
 
     private static final long serialVersionUID = 1L;
     private JTextField textFieldErabiltzailea;
@@ -90,63 +92,52 @@ public class LoginV extends JFrame {
         pasahitzaField.setCaretColor(Color.WHITE);
         panel.add(pasahitzaField);
 
-        JButton btnLogin = new JButton("Hasi saioa");
+        btnLogin = new JButton("Hasi saioa");
 
         btnLogin.addActionListener(e -> {
-            String username = textFieldErabiltzailea.getText();
-            String password = new String(pasahitzaField.getPassword());
+        	 btnLogin.setEnabled(false); // Desactiva el botón mientras se procesa
+        	    setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-            // Validación de campos vacíos
-            if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingresa tu nombre de usuario y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        	    String username = textFieldErabiltzailea.getText();
+        	    String password = new String(pasahitzaField.getPassword());
 
-            try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO)) {
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        	    if (username.isEmpty() || password.isEmpty()) {
+        	        JOptionPane.showMessageDialog(this, "Por favor, ingresa tu nombre de usuario y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
+        	        resetButtonAndCursor();
+        	        return;
+        	    }
 
-                // Enviar solicitud de login
-                out.writeObject("LOGIN");
-                out.writeObject(username);
-                out.writeObject(password);
-                out.flush();
+        	    try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
+        	         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        	         ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-                // Leer la respuesta del servidor
-                Object respuesta = in.readObject();
-                if (respuesta instanceof String) {
-                    String respuestaStr = (String) respuesta;
-                    System.out.println("Respuesta del servidor: " + respuestaStr);
-                    if (respuestaStr.startsWith("OK")) {
-                        Users user = (Users) in.readObject();
-                        GlobalData globalData = new GlobalData();; 
-                        globalData.logedUser = user;
-                         out.close();
-                         in.close();
-                        socket.close();
-                        if (user.getTipos().getId() == 3) {
-                            JOptionPane.showMessageDialog(this, "Inicio de sesión correcto.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            dispose(); 
-                            MenuV menu = new MenuV();
-                            menu.setVisible(true);
-                           
-                            System.out.println("Usuario: " + user.getUsername()); 
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Solo los usuarios con tipo 3 pueden iniciar sesión.", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+        	        out.writeObject("LOGIN");
+        	        out.writeObject(username);
+        	        out.writeObject(password);
+        	        out.flush();
 
-                    } else {
-                        JOptionPane.showMessageDialog(this, respuestaStr, "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-                socket.close();
+        	        String respuesta = (String) in.readObject();
+        	        if ("OK".equals(respuesta)) {
+        	            Users user = (Users) in.readObject();
+        	            GlobalData.logedUser = user;
 
-            } catch (IOException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Error de conexión con el servidor: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (HeadlessException e1) {				
-			}
-        }
-        );
+        	            if (user.getTipos().getId() == 3) {
+        	                JOptionPane.showMessageDialog(this, "Inicio de sesión correcto.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        	                dispose();
+        	                new MenuV().setVisible(true);
+        	            } else {
+        	                JOptionPane.showMessageDialog(this, "Solo los usuarios con tipo 3 pueden iniciar sesión.", "Error", JOptionPane.ERROR_MESSAGE);
+        	            }
+        	        } else {
+        	            JOptionPane.showMessageDialog(this, respuesta, "Error", JOptionPane.ERROR_MESSAGE);
+        	        }
+        	    } catch (IOException | ClassNotFoundException ex) {
+        	        JOptionPane.showMessageDialog(this, "Error de conexión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        	    } finally {
+        	        resetButtonAndCursor();
+        	    }
+        	});
+        
 
         textFieldErabiltzailea.addActionListener(e -> btnLogin.doClick());
         pasahitzaField.addActionListener(e -> btnLogin.doClick());
@@ -158,5 +149,9 @@ public class LoginV extends JFrame {
         btnLogin.setFont(new Font("Tahoma", Font.BOLD, 14));
         btnLogin.setBounds(199, 277, 180, 30);
         panel.add(btnLogin);
+    }
+    private void resetButtonAndCursor() {
+        btnLogin.setEnabled(true);
+        setCursor(Cursor.getDefaultCursor());
     }
 }

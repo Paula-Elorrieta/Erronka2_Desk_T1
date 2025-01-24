@@ -53,7 +53,7 @@ public class MenuV extends JFrame {
             this.dispose();
 
             // Realizar la conexión al servidor
-            try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+            try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                  ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
