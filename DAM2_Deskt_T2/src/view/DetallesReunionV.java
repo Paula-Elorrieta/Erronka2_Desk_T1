@@ -20,19 +20,18 @@ public class DetallesReunionV extends JFrame {
     private JButton btnOnartu, btnEzeztatu, btnItzuli;
 
     public DetallesReunionV(Reuniones reunion) {
-        setTitle("Detalles de la Reunión");
+    	setTitle("Bileraren Xehetasunak");
         setBounds(100, 100, 600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.GRAY);
-        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); // Márgenes internos
+        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); 
         add(mainPanel, BorderLayout.CENTER);
 
         // Título estilizado
-        JLabel lblTitle = new JLabel("Detalles de la Reunión", SwingConstants.CENTER);
+        JLabel lblTitle = new JLabel("Bileraren Xehetasunak", SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255));
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 22));
         lblTitle.setBorder(new EmptyBorder(10, 0, 10, 0)); // Espacio inferior
@@ -41,7 +40,7 @@ public class DetallesReunionV extends JFrame {
         // Panel de detalles
         JPanel detailsPanel = new JPanel(new BorderLayout());
         detailsPanel.setBackground(Color.WHITE);
-        detailsPanel.setBorder(new LineBorder(new Color(162, 119, 255), 2, true)); // Borde con color y esquinas redondeadas
+        detailsPanel.setBorder(new LineBorder(new Color(162, 119, 255), 2, true)); 
         mainPanel.add(detailsPanel, BorderLayout.CENTER);
 
         txtDetalles = new JTextArea();
@@ -49,30 +48,27 @@ public class DetallesReunionV extends JFrame {
         txtDetalles.setFont(new Font("Tahoma", Font.PLAIN, 14));
         txtDetalles.setLineWrap(true);
         txtDetalles.setWrapStyleWord(true);
-        txtDetalles.setBorder(new EmptyBorder(10, 10, 10, 10)); // Márgenes internos
-        txtDetalles.setText(lortuBilerarenXehetasunak(reunion)); // Llenar el texto
+        txtDetalles.setBorder(new EmptyBorder(10, 10, 10, 10)); 
+        txtDetalles.setText(lortuBilerarenXehetasunak(reunion)); 
 
         JScrollPane scrollPane = new JScrollPane(txtDetalles);
         detailsPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel de botones
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10)); // Espaciado entre botones
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10)); 
         buttonPanel.setBackground(Color.GRAY);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Botón Aceptar
         btnOnartu = sortuBotoia("Aceptar", new Color(162, 119, 255), e -> onartuBilera(reunion));
         buttonPanel.add(btnOnartu);
 
-        // Botón Cancelar
         btnEzeztatu = sortuBotoia("Denegar", Color.RED, e -> ezeztatuBilera(reunion));
         buttonPanel.add(btnEzeztatu);
+        
         if (reunion.getEstado().equalsIgnoreCase("aceptada") || 
             reunion.getEstado().equalsIgnoreCase("denegada")) {
             btnEzeztatu.setEnabled(false); 
             btnOnartu.setEnabled(false);
         }
-        // Botón Volver
         btnItzuli = sortuBotoia("itzuli", new Color(162, 119, 255), e -> itzuli());
         buttonPanel.add(btnItzuli);
     }
@@ -106,12 +102,10 @@ public class DetallesReunionV extends JFrame {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-            // Enviar solicitud al servidor
             out.writeObject("IKASTETXEAK");
             out.flush();
             out.writeObject(idCentro);
 
-            // Leer la respuesta del servidor
             String status = (String) in.readObject();
             if ("OK".equals(status)) {
                 List<Ikastetxeak> centros = (List<Ikastetxeak>) in.readObject();
@@ -124,21 +118,20 @@ public class DetallesReunionV extends JFrame {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,
-                    "Error al obtener los datos del centro: " + e.getMessage(),
-                    "Error",
+                    "Errore bat egon da ikastetxeko datuak lortzean: " + e.getMessage(),
+                    "Errorea",
                     JOptionPane.ERROR_MESSAGE);
         }
 
         return null;
     }
-
     private JButton sortuBotoia(String texto, Color color, java.awt.event.ActionListener action) {
         JButton boton = new JButton(texto);
         boton.setBackground(color);
         boton.setForeground(Color.WHITE);
         boton.setFont(new Font("Tahoma", Font.BOLD, 14));
         boton.addActionListener(action);
-        boton.setFocusPainted(false); // Quitar el borde de foco
+        boton.setFocusPainted(false); 
         return boton;
     }
 
@@ -150,7 +143,7 @@ public class DetallesReunionV extends JFrame {
             reunion.setEstadoEus("onartuta");
             out.writeObject("BILERA_UPDATE");
             out.writeObject(reunion);
-            JOptionPane.showMessageDialog(null, "Reunión aceptada correctamente", "Aceptar Reunión",
+            JOptionPane.showMessageDialog(null, "Bilera onartu da behar bezala", "Bilera Onartu",
                     JOptionPane.INFORMATION_MESSAGE);
             dispose();
             new BileraV().setVisible(true);
@@ -167,7 +160,7 @@ public class DetallesReunionV extends JFrame {
             reunion.setEstadoEus("ezeztatuta");
             out.writeObject("BILERA_UPDATE");
             out.writeObject(reunion);
-            JOptionPane.showMessageDialog(null, "Reunión cancelada correctamente", "Cancelar Reunión",
+            JOptionPane.showMessageDialog(null, "Bilera bertan behera utzi da behar bezala", "Bilera Bertan Behera Utzi",
                     JOptionPane.INFORMATION_MESSAGE);
             dispose();
             new BileraV().setVisible(true);

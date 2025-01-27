@@ -10,4 +10,6 @@ public class GlobalData {
 	public static final int PASSLENGHT = 16;
 	public static final String SECRET_KEY = "manzanilla24183v";
 	public static final String ZERBITZARIA_IP = "10.5.104.41";
+    public static final int PUERTO = 5000; 
+
 }

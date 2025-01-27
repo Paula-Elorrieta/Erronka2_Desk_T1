@@ -120,6 +120,7 @@ public class LoginV extends JFrame {
         	        if ("OK".equals(respuesta)) {
         	            Users user = (Users) in.readObject();
         	            GlobalData.logedUser = user;
+        	            System.out.println("Usuario conectado: " + user.getNombre() + " " + user.getApellidos() + " (" + user.getUsername() + ")");
 
         	            if (user.getTipos().getId() == 3) {
         	                JOptionPane.showMessageDialog(this, "Inicio de sesión correcto.", "Éxito", JOptionPane.INFORMATION_MESSAGE);

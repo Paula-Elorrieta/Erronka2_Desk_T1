@@ -11,7 +11,7 @@ import java.util.List;
 
 public class HorariosC {
 
-    public List<Horarios> obtenerHorariosPorProfesor(int profeId) {
+    public List<Horarios> irakasleOrdutegiakLortu(int profeId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             String hql = "FROM Horarios h " +
@@ -34,7 +34,7 @@ public class HorariosC {
     
     
     
-    public List<Horarios> obtenerTodosLosHorariosProfe() {
+    public List<Horarios> irakasleOrdutegiGuztiakLortu() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             String hql = "FROM Horarios h " +

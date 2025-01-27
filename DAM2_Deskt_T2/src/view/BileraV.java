@@ -15,13 +15,13 @@ import modelo.Reuniones;
 import modelo.Users;
 
 public class BileraV extends JFrame {
-    private JTable table;
+	private static final long serialVersionUID = 1L;
+	private JTable table;
     private DefaultTableModel model;
-    private JTextArea txtDetalles;
     private List<Reuniones> reunionesList;  // Lista para almacenar las reuniones
 
     public BileraV() {
-        setTitle("Vista de Bilerak");
+        setTitle("Bileren Ikuspegia");
         setBounds(100, 100, 800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -34,7 +34,7 @@ public class BileraV extends JFrame {
         panel.setLayout(null);
 
         // Título estilizado
-        JLabel lblTitle = new JLabel("Vista de Bilerak");
+        JLabel lblTitle = new JLabel("Bileren Ikuspegia");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255)); 
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -42,7 +42,7 @@ public class BileraV extends JFrame {
         panel.add(lblTitle);
 
         // Crear tabla para mostrar las reuniones
-        String[] columnNames = {"Fecha", "Hora", "Estado", "Acción"};
+        String[] columnNames = {"Data", "Ordua", "Estatua", "Ekintza"};
         model = new DefaultTableModel(null, columnNames);
         table = new JTable(model);
 
@@ -67,8 +67,7 @@ public class BileraV extends JFrame {
         scrollPane.setBounds(30, 80, 700, 200);
         panel.add(scrollPane);
 
-        // Botón para volver al menú
-        JButton btnVolver = new JButton("Volver al Menú");
+        JButton btnVolver = new JButton("Menura Itzuli");
         btnVolver.addActionListener(e -> {
             MenuV menu = new MenuV();
             menu.setVisible(true);
@@ -80,10 +79,11 @@ public class BileraV extends JFrame {
         btnVolver.setBounds(199, 350, 180, 30);
         panel.add(btnVolver);
 
-        cargarReuniones();
+        BilerakKargatu();
     }
 
-    private void cargarReuniones() {
+    
+    private void BilerakKargatu() {
         try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
@@ -92,8 +92,8 @@ public class BileraV extends JFrame {
             out.writeObject(GlobalData.logedUser.getId());
             out.flush();
 
-            String respuesta = (String) in.readObject();
-            if ("OK".equals(respuesta)) {
+            String erantzuna = (String) in.readObject();
+            if ("OK".equals(erantzuna)) {
                 reunionesList = (List<Reuniones>) in.readObject();
                 for (Reuniones reunion : reunionesList) {
                     model.addRow(new Object[]{
@@ -113,28 +113,26 @@ public class BileraV extends JFrame {
         }
     }
 
-    // Renderizador de celdas para cambiar el color según el estado
     class EstadoCellRenderer extends JLabel implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             setText(value.toString());
             
-            // Cambiar el color según el estado
             switch (value.toString()) {
                 case "pendiente":
-                    setBackground(Color.ORANGE); // Color naranja para pendiente
+                    setBackground(Color.ORANGE); 
                     break;
                 case "conflicto":
-                    setBackground(Color.GRAY);   // Color gris para conflicto
+                    setBackground(Color.GRAY);   
                     break;
                 case "aceptada":
-                    setBackground(Color.GREEN);  // Color verde para aceptada
+                    setBackground(Color.GREEN);  
                     break;
                 case "denegada":
-                    setBackground(Color.RED);    // Color rojo para denegada
+                    setBackground(Color.RED);   
                     break;
                 default:
-                    setBackground(Color.WHITE);  // Color blanco por defecto
+                    setBackground(Color.WHITE);  
             }
 
             setOpaque(true);

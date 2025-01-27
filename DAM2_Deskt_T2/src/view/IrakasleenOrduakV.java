@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import controlador.Orokorrak.GlobalData;
 import controlador.servidor.Zerbitzaria;
 import modelo.Horarios;
 
@@ -27,7 +28,7 @@ public class IrakasleenOrduakV extends JFrame {
     private Map<String, Integer> profesorMap;
 
     public IrakasleenOrduakV() {
-        setTitle("Consultar Horarios de Profesores");
+    	setTitle("Irakasleen Ordutegiak Kontsultatu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -37,7 +38,7 @@ public class IrakasleenOrduakV extends JFrame {
         panel.setBackground(Color.GRAY);
         getContentPane().add(panel);
 
-        JLabel lblTitle = new JLabel("Selecciona un Profesor");
+        JLabel lblTitle = new JLabel("Hautatu irakaslearen izena");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255));
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -47,7 +48,7 @@ public class IrakasleenOrduakV extends JFrame {
         comboBoxProfesores.setForeground(Color.WHITE);
         comboBoxProfesores.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-        JButton btnConsultar = new JButton("Consultar Horarios");
+        JButton btnConsultar = new JButton("Ordutegiak Kontsultatu");
         btnConsultar.addActionListener(this::consultarHorarios);
         btnConsultar.setBackground(new Color(162, 119, 255));
         btnConsultar.setForeground(Color.WHITE);
@@ -66,7 +67,7 @@ public class IrakasleenOrduakV extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(tableHorarios);
 
-        JButton btnVolver = new JButton("Volver al Menú");
+        JButton btnVolver = new JButton("Menura Itzuli");
         btnVolver.addActionListener(e -> {
             new MenuV().setVisible(true);
             dispose();
@@ -103,7 +104,7 @@ public class IrakasleenOrduakV extends JFrame {
 
     private void cargarProfesores() {
         profesorMap = new LinkedHashMap<>();
-        try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+        try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
@@ -126,10 +127,10 @@ public class IrakasleenOrduakV extends JFrame {
                     }
                 }
             } else {
-                showErrorMessage("Error al cargar los profesores.");
+                showErrorMessage("Errorea irakasleak kargatzean.");
             }
         } catch (IOException | ClassNotFoundException ex) {
-            showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
+            showErrorMessage("Konexio errorea zerbitzariarekin:" + ex.getMessage());
         }
     }
 
@@ -137,7 +138,7 @@ public class IrakasleenOrduakV extends JFrame {
         String nombreProfesor = (String) comboBoxProfesores.getSelectedItem();
         if (nombreProfesor != null) {
             int profeId = profesorMap.get(nombreProfesor);
-            try (Socket socket = new Socket("10.5.104.41", Zerbitzaria.PUERTO);
+            try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                  ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
@@ -153,10 +154,10 @@ public class IrakasleenOrduakV extends JFrame {
                         mostrarHorarios(horariosList);
                     }
                 } else {
-                    showErrorMessage("Error al obtener los horarios.");
+                	showErrorMessage("Errore bat egon da ordutegiak lortzean.");
                 }
             } catch (IOException | ClassNotFoundException ex) {
-                showErrorMessage("Error de conexión con el servidor: " + ex.getMessage());
+            	showErrorMessage("Konexio errorea zerbitzariarekin: " + ex.getMessage());
             }
         }
     }
@@ -190,7 +191,7 @@ public class IrakasleenOrduakV extends JFrame {
     }
 
     private void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, "Errorea", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void main(String[] args) {

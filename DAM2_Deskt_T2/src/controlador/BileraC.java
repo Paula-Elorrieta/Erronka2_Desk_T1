@@ -12,7 +12,7 @@ import modelo.Reuniones;
 public class BileraC {
 	
 	
-	public List<Reuniones> obtenerReunionesIrakasle(int profeId) {
+	public List<Reuniones> irakasleBilerakLortu(int profeId) {
 	    Session session = HibernateUtil.getSessionFactory().openSession();
 	    try {
 	        String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE u.id = :profeId";
@@ -29,7 +29,7 @@ public class BileraC {
 	    }
 	}
 	
-	public List<Reuniones> obtenerReunionesIkasle(int alumnoId) {
+	public List<Reuniones> ikasleBilerakLortu(int alumnoId) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByAlumnoId u WHERE u.id = :alumnoId";

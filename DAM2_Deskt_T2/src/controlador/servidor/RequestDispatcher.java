@@ -72,7 +72,7 @@ public class RequestDispatcher {
     	        String password = (String) entrada.readObject();
 
     	        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-    	            salida.writeObject("Error: Nombre de usuario o contraseña vacíos.");
+    	            salida.writeObject("Errorea: Nombre de usuario o contrase�a vacios.");
     	            return;
     	        }
 
@@ -82,8 +82,10 @@ public class RequestDispatcher {
     	        if (user != null) {
     	            salida.writeObject("OK");
     	            salida.writeObject(user);
+    	            salida.writeObject(user.getTipos().getId());
+
     	        } else {
-    	            salida.writeObject("Error: Usuario o contraseña incorrectos.");
+    	            salida.writeObject("Error: Usuario o contrase�a incorrectos.");
     	        }
     	    } catch (Exception e) {
     	        e.printStackTrace();
@@ -95,7 +97,7 @@ public class RequestDispatcher {
     	    try {
     	        int userId = (int) entrada.readObject();
     	        HorariosC horariosControlador = new HorariosC();
-    	        List<Horarios> horarios = horariosControlador.obtenerHorariosPorProfesor(userId);
+    	        List<Horarios> horarios = horariosControlador.irakasleOrdutegiakLortu(userId);
 
     	        if (horarios != null) {
     	            salida.writeObject("OK");
@@ -119,7 +121,7 @@ public class RequestDispatcher {
 
     	    try {
     	        HorariosC horariosControlador = new HorariosC();
-    	        List<Horarios> irakasleak = horariosControlador.obtenerTodosLosHorariosProfe();
+    	        List<Horarios> irakasleak = horariosControlador.irakasleOrdutegiGuztiakLortu();
     	        
     	        if (irakasleak != null) {
     	            salida.writeObject("OK");
@@ -144,7 +146,7 @@ public class RequestDispatcher {
     	        int userId = (int) entrada.readObject();
     	        
     	        BileraC bilerakControlador = new BileraC();
-    	        List<Reuniones> bilera = bilerakControlador.obtenerReunionesIrakasle(userId);
+    	        List<Reuniones> bilera = bilerakControlador.irakasleBilerakLortu(userId);
     	        
     	        if (bilera != null) {
     	            salida.writeObject("OK");
@@ -211,7 +213,7 @@ public class RequestDispatcher {
 		        String idCentro = (String) entrada.readObject();
 
 		        // Obtener la lista de Ikastetxeak por ID
-		        List<Ikastetxeak> ikastetxeak = ikastetxeakC.obtenerIkastetxeakPorID(idCentro);
+		        List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortuIDz(idCentro);
 
 		        if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
 		            salida.writeObject("OK"); // Respuesta de éxito

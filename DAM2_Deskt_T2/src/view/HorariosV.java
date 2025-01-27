@@ -18,7 +18,7 @@ public class HorariosV extends JFrame {
     private Set<Horarios> horarios;
 
     public HorariosV() {
-        setTitle("Horarios del Profesor");
+    	setTitle("Irakaslearen Ordutegiak");
         setBounds(100, 100, 800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -31,7 +31,7 @@ public class HorariosV extends JFrame {
         panel.setLayout(null);
 
         // Título estilizado
-        JLabel lblTitle = new JLabel("Horarios del Profesor");
+        JLabel lblTitle = new JLabel("Irakaslearen Ordutegiak");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255)); 
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -39,7 +39,7 @@ public class HorariosV extends JFrame {
         panel.add(lblTitle);
 
         // Crear tabla para mostrar los horarios
-        String[] columnNames = {"Hora", "L/A", "M/A", "X", "J/O", "V/O"};
+        String[] columnNames = {"Orduak", "L/A", "M/A", "X", "J/O", "V/O"};
 
         tableHorarios = new JTable();
         DefaultTableModel model = new DefaultTableModel(null, columnNames);
@@ -53,8 +53,7 @@ public class HorariosV extends JFrame {
         scrollPane.setBounds(30, 80, 700, 200);
         panel.add(scrollPane);
 
-        // Botón para volver al menú
-        JButton btnVolver = new JButton("Volver al Menú");
+        JButton btnVolver = new JButton("Menura Itzuli");
         btnVolver.addActionListener(e -> {
             MenuV menu = new MenuV();
             menu.setVisible(true);
@@ -77,13 +76,12 @@ public class HorariosV extends JFrame {
 
         model.setRowCount(0);
 
-        // Mapeo de días de la semana (de lunes a viernes)
-        Map<String, Integer> diasSemana = new LinkedHashMap<>();
-        diasSemana.put("L/A", Calendar.MONDAY);  
-        diasSemana.put("M/A", Calendar.TUESDAY); 
-        diasSemana.put("X", Calendar.WEDNESDAY); 
-        diasSemana.put("J/O", Calendar.THURSDAY); 
-        diasSemana.put("V/O", Calendar.FRIDAY);  
+        Map<String, Integer> astekoEgunak = new LinkedHashMap<>();
+        astekoEgunak.put("L/A", Calendar.MONDAY);  
+        astekoEgunak.put("M/A", Calendar.TUESDAY); 
+        astekoEgunak.put("X", Calendar.WEDNESDAY); 
+        astekoEgunak.put("J/O", Calendar.THURSDAY); 
+        astekoEgunak.put("V/O", Calendar.FRIDAY);  
 
         // Iterar por las horas del día (1 a 5)
         for (int i = 1; i <= 5; i++) {
@@ -92,13 +90,13 @@ public class HorariosV extends JFrame {
 
             Arrays.fill(row, 1, 6, "");
 
-            for (Map.Entry<String, Integer> entry : diasSemana.entrySet()) {
+            for (Map.Entry<String, Integer> entry : astekoEgunak.entrySet()) {
                 String dia = entry.getKey();
 
                 for (Horarios horario : horarios) {
                     HorariosId horarioId = horario.getId();
                     if (horarioId.getDia().equals(dia) && Integer.parseInt(horarioId.getHora()) == i) {
-                        int columnIndex = new ArrayList<>(diasSemana.keySet()).indexOf(dia) + 1;
+                        int columnIndex = new ArrayList<>(astekoEgunak.keySet()).indexOf(dia) + 1;
                         row[columnIndex] = String.valueOf(horario.getModulos().getNombre());
                     }
                 }

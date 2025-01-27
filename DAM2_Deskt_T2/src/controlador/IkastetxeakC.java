@@ -13,7 +13,7 @@ import modelo.Ikastetxeak;
 
 public class IkastetxeakC {
 
-	public List<Ikastetxeak> obtenerIkastetxeakPorID(String idCentro) {
+	public List<Ikastetxeak> ikastetxeakLortuIDz(String idCentro) {
 	    Gson gson = new Gson();
 	    List<Ikastetxeak> ikastetxeak = null;
 
@@ -33,14 +33,6 @@ public class IkastetxeakC {
 	    }
 	    return null;
 	}
-
-	public static void main(String[] args) {
-		IkastetxeakC ikastetxeakC = new IkastetxeakC();
-		List<Ikastetxeak> ikastetxeak = ikastetxeakC.obtenerIkastetxeakPorID("15112");
-		System.out.println(ikastetxeak);
-	}
-
-
 
 }
 
