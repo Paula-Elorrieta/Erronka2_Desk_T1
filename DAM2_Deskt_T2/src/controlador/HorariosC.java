@@ -11,26 +11,37 @@ import java.util.List;
 
 public class HorariosC {
 
-    public List<Horarios> irakasleOrdutegiakLortu(int profeId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            String hql = "FROM Horarios h " +
-                         "LEFT JOIN FETCH h.users " + 
-                         "LEFT JOIN FETCH h.modulos " + 
-                         "WHERE h.users.id = :profeId"; 
+	public List<Horarios> irakasleOrdutegiakLortu(int profeId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    try {
+	        String hql = "FROM Horarios h " +
+	                     "LEFT JOIN FETCH h.users " + 
+	                     "LEFT JOIN FETCH h.modulos " + 
+	                     "WHERE h.users.id = :profeId"; 
 
-            Query<Horarios> query = session.createQuery(hql, Horarios.class);
-            query.setParameter("profeId", profeId);
-            List<Horarios> horarios = query.list();
+	        Query<Horarios> query = session.createQuery(hql, Horarios.class);
+	        query.setParameter("profeId", profeId);
+	        List<Horarios> horarios = query.list();
+	        
+	        for (Horarios horario : horarios) {
+	            System.out.println("Horario: " + horario);
+	            if (horario.getUsers() != null) {
+	                System.out.println("Usuario: " + horario.getUsers().getNombre());
+	            }
+	            if (horario.getModulos() != null) {
+	                System.out.println("Módulo: " + horario.getModulos().getNombre());
+	            }
+	        }
+	        
+	        return horarios;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    } finally {
+	        session.close();
+	    }
+	}
 
-            return horarios;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
-    }
     
     
     
@@ -53,6 +64,11 @@ public class HorariosC {
             session.close();
         }
     }
+    
+	public static void main(String[] args) {
+		HorariosC horariosControlador = new HorariosC();
+		List<Horarios> horarios = horariosControlador.irakasleOrdutegiakLortu(4);
+	}
 
     
 
