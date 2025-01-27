@@ -17,10 +17,10 @@ import java.util.List;
 
 public class DetallesReunionV extends JFrame {
     private JTextArea txtDetalles;
-    private JButton btnAceptar, btnCancelar, btnVolver;
+    private JButton btnOnartu, btnEzeztatu, btnItzuli;
 
     public DetallesReunionV(Reuniones reunion) {
-        setTitle("Detalles de la Reuni贸n");
+        setTitle("Detalles de la Reuni髇");
         setBounds(100, 100, 600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -28,11 +28,11 @@ public class DetallesReunionV extends JFrame {
         // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.GRAY);
-        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); // M谩rgenes internos
+        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15)); // M醨genes internos
         add(mainPanel, BorderLayout.CENTER);
 
-        // T铆tulo estilizado
-        JLabel lblTitle = new JLabel("Detalles de la Reuni贸n", SwingConstants.CENTER);
+        // T韙ulo estilizado
+        JLabel lblTitle = new JLabel("Detalles de la Reuni髇", SwingConstants.CENTER);
         lblTitle.setForeground(new Color(162, 19, 255));
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 22));
         lblTitle.setBorder(new EmptyBorder(10, 0, 10, 0)); // Espacio inferior
@@ -49,8 +49,8 @@ public class DetallesReunionV extends JFrame {
         txtDetalles.setFont(new Font("Tahoma", Font.PLAIN, 14));
         txtDetalles.setLineWrap(true);
         txtDetalles.setWrapStyleWord(true);
-        txtDetalles.setBorder(new EmptyBorder(10, 10, 10, 10)); // M谩rgenes internos
-        txtDetalles.setText(obtenerDetallesReunion(reunion)); // Llenar el texto
+        txtDetalles.setBorder(new EmptyBorder(10, 10, 10, 10)); // M醨genes internos
+        txtDetalles.setText(lortuBilerarenXehetasunak(reunion)); // Llenar el texto
 
         JScrollPane scrollPane = new JScrollPane(txtDetalles);
         detailsPanel.add(scrollPane, BorderLayout.CENTER);
@@ -60,44 +60,48 @@ public class DetallesReunionV extends JFrame {
         buttonPanel.setBackground(Color.GRAY);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Bot贸n Aceptar
-        btnAceptar = crearBoton("Aceptar", new Color(162, 119, 255), e -> aceptarReunion(reunion));
-        buttonPanel.add(btnAceptar);
+        // Bot髇 Aceptar
+        btnOnartu = sortuBotoia("Aceptar", new Color(162, 119, 255), e -> onartuBilera(reunion));
+        buttonPanel.add(btnOnartu);
 
-        // Bot贸n Cancelar
-        btnCancelar = crearBoton("Denegar", Color.RED, e -> cancelarReunion(reunion));
-        buttonPanel.add(btnCancelar);
-
-        // Bot贸n Volver
-        btnVolver = crearBoton("Volver", new Color(162, 119, 255), e -> volver());
-        buttonPanel.add(btnVolver);
+        // Bot髇 Cancelar
+        btnEzeztatu = sortuBotoia("Denegar", Color.RED, e -> ezeztatuBilera(reunion));
+        buttonPanel.add(btnEzeztatu);
+        if (reunion.getEstado().equalsIgnoreCase("aceptada") || 
+            reunion.getEstado().equalsIgnoreCase("denegada")) {
+            btnEzeztatu.setEnabled(false); 
+            btnOnartu.setEnabled(false);
+        }
+        // Bot髇 Volver
+        btnItzuli = sortuBotoia("itzuli", new Color(162, 119, 255), e -> itzuli());
+        buttonPanel.add(btnItzuli);
     }
 
-    private String obtenerDetallesReunion(Reuniones reunion) {
-        StringBuilder detalles = new StringBuilder();
-        detalles.append("Fecha: ").append(reunion.getFecha()).append("\n");
-        detalles.append("Hora: ").append(reunion.getAula()).append("\n");
-        detalles.append("Estado: ").append(reunion.getEstado()).append("\n\n");
+    private String lortuBilerarenXehetasunak(Reuniones bilera) {
+        StringBuilder xehetasunak = new StringBuilder();
+        xehetasunak.append("Data: ").append(bilera.getFecha()).append("\n");
+        xehetasunak.append("Ordua: ").append(bilera.getAula()).append("\n");
+        xehetasunak.append("Egoera: ").append(bilera.getEstado()).append("\n\n");
 
-        Ikastetxeak centro = obtenerCentroPorId(reunion.getIdCentro());
+        Ikastetxeak ikastetxea = lortuIkastetxeaIdz(bilera.getIdCentro());
 
-        if (centro != null) {
-            detalles.append("Detalles del Centro:\n");
-            detalles.append("Nombre: ").append(centro.getNOM()).append("\n");
-            detalles.append("Municipio: ").append(centro.getDMUNIC()).append("\n");
-            detalles.append("Direcci贸n: ").append(centro.getDOMI()).append("\n");
-            detalles.append("C贸digo Postal: ").append(centro.getCPOS()).append("\n");
-            detalles.append("Tel茅fono: ").append(centro.getTEL1()).append("\n");
-            detalles.append("Email: ").append(centro.getEMAIL()).append("\n");
-            detalles.append("P谩gina Web: ").append(centro.getPAGINA()).append("\n");
+        if (ikastetxea != null) {
+            xehetasunak.append("Ikastetxearen xehetasunak:\n");
+            xehetasunak.append("Izena: ").append(ikastetxea.getNOM()).append("\n");
+            xehetasunak.append("Udalerria: ").append(ikastetxea.getDMUNIC()).append("\n");
+            xehetasunak.append("Helbidea: ").append(ikastetxea.getDOMI()).append("\n");
+            xehetasunak.append("Posta Kodea: ").append(ikastetxea.getCPOS()).append("\n");
+            xehetasunak.append("Telefonoa: ").append(ikastetxea.getTEL1()).append("\n");
+            xehetasunak.append("Emaila: ").append(ikastetxea.getEMAIL()).append("\n");
+            xehetasunak.append("Webgunea: ").append(ikastetxea.getPAGINA()).append("\n");
         } else {
-            detalles.append("Centro no encontrado.\n");
+            xehetasunak.append("Ikastetxea ez da aurkitu.\n");
         }
 
-        return detalles.toString();
+        return xehetasunak.toString();
     }
 
-    private Ikastetxeak obtenerCentroPorId(String idCentro) {
+    private Ikastetxeak lortuIkastetxeaIdz(String idCentro) {
         try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO)) {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -128,7 +132,7 @@ public class DetallesReunionV extends JFrame {
         return null;
     }
 
-    private JButton crearBoton(String texto, Color color, java.awt.event.ActionListener action) {
+    private JButton sortuBotoia(String texto, Color color, java.awt.event.ActionListener action) {
         JButton boton = new JButton(texto);
         boton.setBackground(color);
         boton.setForeground(Color.WHITE);
@@ -138,14 +142,15 @@ public class DetallesReunionV extends JFrame {
         return boton;
     }
 
-    private void aceptarReunion(Reuniones reunion) {
+    private void onartuBilera(Reuniones reunion) {
         try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO)) {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             reunion.setEstado("aceptada");
+            reunion.setEstadoEus("onartuta");
             out.writeObject("BILERA_UPDATE");
             out.writeObject(reunion);
-            JOptionPane.showMessageDialog(null, "Reuni贸n aceptada correctamente", "Aceptar Reuni贸n",
+            JOptionPane.showMessageDialog(null, "Reuni髇 aceptada correctamente", "Aceptar Reuni髇",
                     JOptionPane.INFORMATION_MESSAGE);
             dispose();
             new BileraV().setVisible(true);
@@ -154,14 +159,15 @@ public class DetallesReunionV extends JFrame {
         }
     }
 
-    private void cancelarReunion(Reuniones reunion) {
+    private void ezeztatuBilera(Reuniones reunion) {
         try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO)) {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             reunion.setEstado("Denegada");
+            reunion.setEstadoEus("ezeztatuta");
             out.writeObject("BILERA_UPDATE");
             out.writeObject(reunion);
-            JOptionPane.showMessageDialog(null, "Reuni贸n cancelada correctamente", "Cancelar Reuni贸n",
+            JOptionPane.showMessageDialog(null, "Reuni髇 cancelada correctamente", "Cancelar Reuni髇",
                     JOptionPane.INFORMATION_MESSAGE);
             dispose();
             new BileraV().setVisible(true);
@@ -170,7 +176,7 @@ public class DetallesReunionV extends JFrame {
         }
     }
 
-    private void volver() {
+    private void itzuli() {
         dispose();
         new BileraV().setVisible(true);
     }

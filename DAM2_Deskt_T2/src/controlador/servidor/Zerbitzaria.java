@@ -45,10 +45,9 @@ public class Zerbitzaria {
                 entrada = new ObjectInputStream(socketCliente.getInputStream());
                 salida = new ObjectOutputStream(socketCliente.getOutputStream());
 
-                // Leer el objeto (puede ser cualquier objeto serializado)
                 Object objetoRecibido = entrada.readObject();
 
-                // Aquí se imprime el objeto que se recibe
+                // Aqui se imprime el objeto que se recibe
                 if (objetoRecibido != null) {
                     System.out.println("Objeto recibido: " + objetoRecibido);
                 } else {
