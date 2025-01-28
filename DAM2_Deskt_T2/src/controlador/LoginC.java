@@ -1,11 +1,14 @@
 package controlador;
 
-import modelo.Users;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import controlador.db.HibernateUtil;
+import modelo.Matriculaciones;
+import modelo.Users;
 
 public class LoginC {
 
@@ -17,50 +20,48 @@ public class LoginC {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	    Session session = HibernateUtil.getSessionFactory().openSession();
-	    try {
-	        // Seleccionar solo los campos básicos de la clase Users
-	        String hql = "SELECT new Users(u.id, u.tipos, u.email, u.username, u.password, " +
-	                     "u.nombre, u.apellidos, u.dni, u.direccion, u.telefono1, u.telefono2, u.argazkia) " +
-	                     "FROM Users u " +
-	                     "WHERE u.username = :username AND u.password = :password";
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			// Seleccionar solo los campos bï¿½sicos de la clase Users
+			String hql = "SELECT new Users(u.id, u.tipos, u.email, u.username, u.password, "
+					+ "u.nombre, u.apellidos, u.dni, u.direccion, u.telefono1, u.telefono2, u.argazkia) "
+					+ "FROM Users u " + "WHERE u.username = :username AND u.password = :password";
 
-	        Query<Users> query = session.createQuery(hql, Users.class);
-	        query.setParameter("username", username);
-	        query.setParameter("password", password);
-	        
-	        Users user = query.uniqueResult();
-	        return user;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
-	    } finally {
-	        session.close();
-	    }
+			Query<Users> query = session.createQuery(hql, Users.class);
+			query.setParameter("username", username);
+			query.setParameter("password", password);
+
+			Users user = query.uniqueResult();
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
 	}
-	
+
 	public Users getUser(String username) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-	    try {
-	        // Seleccionar solo los campos básicos de la clase Users
-	        String hql = "SELECT new Users(u.id, u.tipos, u.email, u.username, u.password, " +
-	                     "u.nombre, u.apellidos, u.dni, u.direccion, u.telefono1, u.telefono2, u.argazkia) " +
-	                     "FROM Users u " +
-	                     "WHERE u.username = :username";
+		try {
+			// Seleccionar solo los campos bï¿½sicos de la clase Users
+			String hql = "SELECT new Users(u.id, u.tipos, u.email, u.username, u.password, "
+					+ "u.nombre, u.apellidos, u.dni, u.direccion, u.telefono1, u.telefono2, u.argazkia) "
+					+ "FROM Users u " + "WHERE u.username = :username";
 
-	        Query<Users> query = session.createQuery(hql, Users.class);
-	        query.setParameter("username", username);
-	        
-	        Users user = query.uniqueResult();
-	        return user;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
-	    } finally {
-	        session.close();
-	    }
+			Query<Users> query = session.createQuery(hql, Users.class);
+			query.setParameter("username", username);
+
+			Users user = query.uniqueResult();
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
 	}
-	
+
 	public boolean updatePassEncript(String user, String pass) {
 		MailC mail = new MailC();
 		try {
@@ -70,13 +71,13 @@ public class LoginC {
 		}
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-            String hql = "UPDATE Users u SET u.password = :pass WHERE u.username = :user";
-   
-            Query query = session.createQuery(hql);
-            query.setParameter("pass", pass);
-            query.setParameter("user", user);
-            query.executeUpdate();
-            
+			String hql = "UPDATE Users u SET u.password = :pass WHERE u.username = :user";
+
+			Query query = session.createQuery(hql);
+			query.setParameter("pass", pass);
+			query.setParameter("user", user);
+			query.executeUpdate();
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,23 +86,22 @@ public class LoginC {
 			session.close();
 		}
 	}
-	
-	
+
 	public boolean updatePass(String user, String pass) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		Transaction transaction = null; 
+		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-            String hql = "UPDATE Users u SET u.password = :pass WHERE u.username = :user";
-            
-            Query query = session.createQuery(hql);
-            query.setParameter("pass", pass);
-            query.setParameter("user", user);
-            
-            query.executeUpdate();
+			String hql = "UPDATE Users u SET u.password = :pass WHERE u.username = :user";
 
-            transaction.commit();
-            
+			Query query = session.createQuery(hql);
+			query.setParameter("pass", pass);
+			query.setParameter("user", user);
+
+			query.executeUpdate();
+
+			transaction.commit();
+
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,23 @@ public class LoginC {
 		}
 	}
 
+	public List<Matriculaciones> getMatriculaciones(int userId) {
+	    Session session = HibernateUtil.getSessionFactory().openSession();
+	    
+	    
+		try {
+			String hql = "FROM Matriculaciones m " + "LEFT JOIN FETCH m.users u " + "LEFT JOIN FETCH m.ciclos c "
+					+ "WHERE m.users.id = :userId";
+			Query<Matriculaciones> query = session.createQuery(hql, Matriculaciones.class);
+			query.setParameter("userId", userId);
+			return query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
 
-	
-	
+	}
+
 }

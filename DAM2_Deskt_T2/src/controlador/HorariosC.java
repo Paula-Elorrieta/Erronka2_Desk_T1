@@ -22,17 +22,7 @@ public class HorariosC {
 	        Query<Horarios> query = session.createQuery(hql, Horarios.class);
 	        query.setParameter("profeId", profeId);
 	        List<Horarios> horarios = query.list();
-	        
-	        for (Horarios horario : horarios) {
-	            System.out.println("Horario: " + horario);
-	            if (horario.getUsers() != null) {
-	                System.out.println("Usuario: " + horario.getUsers().getNombre());
-	            }
-	            if (horario.getModulos() != null) {
-	                System.out.println("Módulo: " + horario.getModulos().getNombre());
-	            }
-	        }
-	        
+	            
 	        return horarios;
 	    } catch (Exception e) {
 	        e.printStackTrace();
