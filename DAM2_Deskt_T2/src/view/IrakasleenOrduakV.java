@@ -138,11 +138,12 @@ public class IrakasleenOrduakV extends JFrame {
         String nombreProfesor = (String) comboBoxProfesores.getSelectedItem();
         if (nombreProfesor != null) {
             int profeId = profesorMap.get(nombreProfesor);
+            System.out.println("Profesor seleccionado: " + nombreProfesor + " (ID: " + profeId + ")");
             try (Socket socket = new Socket(GlobalData.ZERBITZARIA_IP, Zerbitzaria.PUERTO);
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                  ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-                out.writeObject("IRAKASLEAK");
+                out.writeObject("ORDUTEGIA");
                 out.writeObject(profeId);
                 out.flush();
 

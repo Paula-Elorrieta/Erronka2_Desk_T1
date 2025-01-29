@@ -50,12 +50,60 @@ public class RequestDispatcher {
 		case "IKASTETXEAK":
 			handleGetIkastetxeak(entrada, salida);
 			break;
-		case "MATRICULACIONES":
+		case "MATRIKULAK":
 			handleGetMatriculaciones(entrada, salida);
 			break;
+		case "IKASLEORDUTEGIA":
+			handleGetHorariosIkasle(entrada, salida);
 		default:
 			salida.writeObject("Error: Acción desconocida.");
 		}
+	}
+
+	private void handleGetHorariosIkasle(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+		try {
+			HorariosC horariosControlador = new HorariosC();
+			int userId = (int) entrada.readObject();
+			List<Horarios> horarios = horariosControlador.alumnoHorariosLortu(userId);
+			if (horarios != null) {
+				salida.writeObject("OK");
+				salida.writeObject(horarios);
+				ArrayList<Modulos> modulos = new ArrayList<>();
+				ArrayList<Ciclos> ciclos = new ArrayList<>();
+				ArrayList<Users> users = new ArrayList<>();
+				ArrayList<Matriculaciones> matriculaciones = new ArrayList<>();
+				ArrayList<MatriculacionesId> ids = new ArrayList<>();
+				for (Horarios horario : horarios) {
+					Modulos modulo = horario.getModulos();
+					Ciclos ciclo = modulo.getCiclos();
+					Users user = horario.getUsers();
+					Matriculaciones matriculacion = (Matriculaciones) ciclo.getMatriculacioneses().iterator().next();
+					MatriculacionesId id = matriculacion.getId();
+					modulos.add(modulo);
+					ciclos.add(ciclo);
+					users.add(user);
+					matriculaciones.add(matriculacion);
+					ids.add(id);
+				}
+				salida.writeObject(modulos);
+				salida.writeObject(ciclos);
+				salida.writeObject(users);
+				salida.writeObject(matriculaciones);
+				salida.writeObject(ids);
+				salida.flush();
+			} else {
+				salida.writeObject("Error: No se pudieron obtener los horarios.");
+			}
+			
+		} catch (Exception e) {
+            e.printStackTrace();
+            salida.writeObject("Error: No se pudo procesar la solicitud.");
+        } finally {
+            try {
+                salida.flush();
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+            }}
 	}
 
 	private void handleBileraUpdate(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
@@ -276,7 +324,9 @@ public class RequestDispatcher {
 			LoginC loginControlador = new LoginC();
 			List<Matriculaciones> matriculaciones = loginControlador.getMatriculaciones(userId);
 			
-
+			for (Matriculaciones matriculacion : matriculaciones) {
+				System.out.println(matriculacion.getId());
+			}
 			if (matriculaciones != null) {
 				salida.writeObject("OK");
 				salida.writeObject(matriculaciones);
@@ -298,7 +348,8 @@ public class RequestDispatcher {
 				salida.writeObject(ciclos);
 				salida.writeObject(users);
 				salida.writeObject(ids);
-				
+				salida.flush(); 
+
 				
 			} else {
 				salida.writeObject("Error: No se pudieron obtener las matriculaciones.");
