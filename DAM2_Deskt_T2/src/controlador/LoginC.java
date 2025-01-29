@@ -1,12 +1,15 @@
 package controlador;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import controlador.db.HibernateUtil;
+import modelo.Horarios;
 import modelo.Matriculaciones;
 import modelo.Users;
 
@@ -112,9 +115,8 @@ public class LoginC {
 	}
 
 	public List<Matriculaciones> getMatriculaciones(int userId) {
-	    Session session = HibernateUtil.getSessionFactory().openSession();
-	    
-	    
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
 		try {
 			String hql = "FROM Matriculaciones m " + "LEFT JOIN FETCH m.users u " + "LEFT JOIN FETCH m.ciclos c "
 					+ "WHERE m.users.id = :userId";
@@ -127,7 +129,68 @@ public class LoginC {
 		} finally {
 			session.close();
 		}
+	}
 
+	public List<Users> getIkasleakByIrakasle(int id) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		ArrayList<Users> ikasleak = new ArrayList<Users>();
+
+		try {
+			String hql = "FROM Horarios h " + "JOIN FETCH h.modulos m " + "JOIN FETCH m.ciclos c "
+					+ "JOIN FETCH c.matriculacioneses mtr " + "JOIN FETCH mtr.users ika " + "JOIN FETCH h.users irak "
+					+ "WHERE irak.id = :profeId GROUP BY h.users, mtr.users ";
+			Query query = session.createQuery(hql);
+			query.setParameter("profeId", id);
+			List<Horarios> results = query.list();
+
+			for (Horarios horario : results) {
+				Set<Matriculaciones> m = horario.getModulos().getCiclos().getMatriculacioneses();
+				for (Matriculaciones matriculaciones : m) {
+					ikasleak.add(matriculaciones.getUsers());
+				}
+			}
+
+			return ikasleak;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+
+	}
+	
+	public List<Users> getIraskasleByIkasle(int id) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		ArrayList<Users> irakasleak = new ArrayList<Users>();
+
+		try {
+			String hql = "FROM Horarios h " + "JOIN FETCH h.modulos m " + "JOIN FETCH m.ciclos c "
+					+ "JOIN FETCH c.matriculacioneses mtr "
+					+ "JOIN FETCH mtr.users ika " + "JOIN FETCH h.users irak "
+					+ "WHERE ika.id = :alumnoId GROUP BY h.users, mtr.users ";
+			Query query = session.createQuery(hql);
+			query.setParameter("alumnoId", id);
+			List<Horarios> results = query.list();
+
+			for (Horarios horario : results) {
+				irakasleak.add(horario.getUsers());
+				System.out.println(horario.getUsers().getNombre());
+			}
+
+			return irakasleak;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+
+	}
+
+	public static void main(String[] args) {
+		LoginC login = new LoginC();
+		login.getIraskasleByIkasle(3);
 	}
 
 }

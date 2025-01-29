@@ -55,9 +55,70 @@ public class RequestDispatcher {
 			break;
 		case "IKASLEORDUTEGIA":
 			handleGetHorariosIkasle(entrada, salida);
+		case "IKASLEZERRENDA":
+			handleGetIkasleakByIrakasleak(entrada, salida);
+			break;
+		case "IRAKASLEZERRENDA":
+			handleGetIrakasleakByIkasleak(entrada, salida);
+			break;
 		default:
 			salida.writeObject("Error: Acción desconocida.");
 		}
+	}
+
+	private void handleGetIrakasleakByIkasleak(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+
+		try {
+			LoginC loginControlador = new LoginC();
+			int ikasleId = (int) entrada.readObject();
+			List<Users> irakasleak = loginControlador.getIraskasleByIkasle(ikasleId);
+
+			if (irakasleak != null) {
+				salida.writeObject("OK");
+				salida.writeObject(irakasleak);
+			} else {
+				salida.writeObject("Error: No se pudieron obtener los profesores.");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			salida.writeObject("Error: No se pudo procesar la solicitud.");
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
+
+	}
+
+	private void handleGetIkasleakByIrakasleak(ObjectInputStream entrada, ObjectOutputStream salida)
+			throws IOException {
+		try {
+
+			LoginC loginControlador = new LoginC();
+			int iraskaleId = (int) entrada.readObject();
+
+			List<Users> ikasleak = loginControlador.getIkasleakByIrakasle(iraskaleId);
+			if (ikasleak != null) {
+				salida.writeObject("OK");
+				salida.writeObject(ikasleak);
+			} else {
+				salida.writeObject("Error: No se pudieron obtener los alumnos.");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			salida.writeObject("Error: No se pudo procesar la solicitud.");
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
+
 	}
 
 	private void handleGetHorariosIkasle(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
@@ -94,16 +155,17 @@ public class RequestDispatcher {
 			} else {
 				salida.writeObject("Error: No se pudieron obtener los horarios.");
 			}
-			
+
 		} catch (Exception e) {
-            e.printStackTrace();
-            salida.writeObject("Error: No se pudo procesar la solicitud.");
-        } finally {
-            try {
-                salida.flush();
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
-            }}
+			e.printStackTrace();
+			salida.writeObject("Error: No se pudo procesar la solicitud.");
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
 	}
 
 	private void handleBileraUpdate(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
@@ -323,18 +385,18 @@ public class RequestDispatcher {
 
 			LoginC loginControlador = new LoginC();
 			List<Matriculaciones> matriculaciones = loginControlador.getMatriculaciones(userId);
-			
+
 			for (Matriculaciones matriculacion : matriculaciones) {
 				System.out.println(matriculacion.getId());
 			}
 			if (matriculaciones != null) {
 				salida.writeObject("OK");
 				salida.writeObject(matriculaciones);
-				
+
 				ArrayList<Ciclos> ciclos = new ArrayList<>();
 				ArrayList<Users> users = new ArrayList<>();
 				ArrayList<MatriculacionesId> ids = new ArrayList<>();
-				
+
 				for (Matriculaciones matriculacion : matriculaciones) {
 					Ciclos ciclo = matriculacion.getCiclos();
 					Users user = matriculacion.getUsers();
@@ -344,13 +406,12 @@ public class RequestDispatcher {
 					users.add(user);
 					ids.add(id);
 				}
-				
+
 				salida.writeObject(ciclos);
 				salida.writeObject(users);
 				salida.writeObject(ids);
-				salida.flush(); 
+				salida.flush();
 
-				
 			} else {
 				salida.writeObject("Error: No se pudieron obtener las matriculaciones.");
 			}
