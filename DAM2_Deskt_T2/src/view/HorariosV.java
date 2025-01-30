@@ -5,8 +5,9 @@ import modelo.Horarios;
 import modelo.HorariosId;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.*;
 
@@ -18,22 +19,22 @@ public class HorariosV extends JFrame {
     private Set<Horarios> horarios;
 
     public HorariosV() {
-    	setTitle("Irakaslearen Ordutegiak");
+        setTitle("Irakaslearen Ordutegiak");
         setBounds(100, 100, 800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
         // Panel de fondo
         JPanel panel = new JPanel();
-        panel.setBackground(Color.GRAY); 
+        panel.setBackground(Color.GRAY);
         panel.setBounds(0, 0, 784, 461);
         getContentPane().add(panel);
         panel.setLayout(null);
 
-        // TÃ­tulo estilizado
+        // Título estilizado
         JLabel lblTitle = new JLabel("Irakaslearen Ordutegiak");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitle.setForeground(new Color(162, 19, 255)); 
+        lblTitle.setForeground(new Color(162, 19, 255));
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 20));
         lblTitle.setBounds(0, 20, 784, 30);
         panel.add(lblTitle);
@@ -42,15 +43,35 @@ public class HorariosV extends JFrame {
         String[] columnNames = {"Orduak", "L/A", "M/A", "X", "J/O", "V/O"};
 
         tableHorarios = new JTable();
-        DefaultTableModel model = new DefaultTableModel(null, columnNames);
+        DefaultTableModel model = new DefaultTableModel(null, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hacer que las celdas no sean editables
+            }
+        };
         tableHorarios.setModel(model);
-        tableHorarios.setBounds(30, 80, 700, 200);
+        tableHorarios.setRowHeight(40); // Aumentar el alto de las filas
         tableHorarios.setBackground(Color.DARK_GRAY);
         tableHorarios.setForeground(Color.WHITE);
         tableHorarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        tableHorarios.setGridColor(Color.LIGHT_GRAY);
+        tableHorarios.setShowGrid(true);
+
+        // Centrar el texto en las celdas
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < tableHorarios.getColumnCount(); i++) {
+            tableHorarios.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Personalizar el encabezado de la tabla
+        JTableHeader header = tableHorarios.getTableHeader();
+        header.setBackground(new Color(162, 119, 255));
+        header.setForeground(Color.WHITE);
+        header.setFont(new Font("Tahoma", Font.BOLD, 16));
 
         JScrollPane scrollPane = new JScrollPane(tableHorarios);
-        scrollPane.setBounds(30, 80, 700, 200);
+        scrollPane.setBounds(30, 77, 700, 268);
         panel.add(scrollPane);
 
         JButton btnVolver = new JButton("Menura Itzuli");
@@ -62,28 +83,27 @@ public class HorariosV extends JFrame {
         btnVolver.setBackground(new Color(162, 119, 255));
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btnVolver.setBounds(199, 350, 180, 30);
+        btnVolver.setBounds(275, 387, 180, 30);
         panel.add(btnVolver);
 
         obtenerHorarios();
-        
     }
 
     private void obtenerHorarios() {
-        horarios = GlobalData.logedUser.getHorarioses(); 
+        horarios = GlobalData.logedUser.getHorarioses();
 
         DefaultTableModel model = (DefaultTableModel) tableHorarios.getModel();
 
         model.setRowCount(0);
 
         Map<String, Integer> astekoEgunak = new LinkedHashMap<>();
-        astekoEgunak.put("L/A", Calendar.MONDAY);  
-        astekoEgunak.put("M/A", Calendar.TUESDAY); 
-        astekoEgunak.put("X", Calendar.WEDNESDAY); 
-        astekoEgunak.put("J/O", Calendar.THURSDAY); 
-        astekoEgunak.put("V/O", Calendar.FRIDAY);  
+        astekoEgunak.put("L/A", Calendar.MONDAY);
+        astekoEgunak.put("M/A", Calendar.TUESDAY);
+        astekoEgunak.put("X", Calendar.WEDNESDAY);
+        astekoEgunak.put("J/O", Calendar.THURSDAY);
+        astekoEgunak.put("V/O", Calendar.FRIDAY);
 
-        // Iterar por las horas del dÃ­a (1 a 5)
+        // Iterar por las horas del día (1 a 5)
         for (int i = 1; i <= 5; i++) {
             String[] row = new String[6];
             row[0] = String.valueOf(i);
@@ -105,7 +125,18 @@ public class HorariosV extends JFrame {
             model.addRow(row);
         }
 
-        String[] atsedenalDiaRow = { "Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia","Atsedenaldia"}; 
+        String[] atsedenalDiaRow = {"Atsedenaldia", "Atsedenaldia", "Atsedenaldia", "Atsedenaldia", "Atsedenaldia", "Atsedenaldia"};
         model.insertRow(3, atsedenalDiaRow);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                HorariosV frame = new HorariosV();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

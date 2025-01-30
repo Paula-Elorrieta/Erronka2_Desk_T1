@@ -68,7 +68,9 @@ public class HorariosC {
 	        Query<Horarios> query = session.createQuery(hql, Horarios.class);
 	        query.setParameter("alumnoId", alumnoId);
 
-	        // Ejecutar la consulta y obtener los resultados
+			for (Horarios horarios : query.list()) {
+				System.out.println(horarios.getId().getHora());
+			}
 	        List<Horarios> horariosList = query.list();
 	        return horariosList;
 

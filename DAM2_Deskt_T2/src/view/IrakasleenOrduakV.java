@@ -13,12 +13,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import controlador.Orokorrak.GlobalData;
 import controlador.servidor.Zerbitzaria;
 import modelo.Horarios;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.BorderLayout;
 
 public class IrakasleenOrduakV extends JFrame {
 
@@ -28,7 +42,7 @@ public class IrakasleenOrduakV extends JFrame {
     private Map<String, Integer> profesorMap;
 
     public IrakasleenOrduakV() {
-    	setTitle("Irakasleen Ordutegiak Kontsultatu");
+        setTitle("Irakasleen Ordutegiak Kontsultatu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -36,7 +50,7 @@ public class IrakasleenOrduakV extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.GRAY);
-        getContentPane().add(panel);
+        getContentPane().add(panel, BorderLayout.NORTH);
 
         JLabel lblTitle = new JLabel("Hautatu irakaslearen izena");
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -61,9 +75,25 @@ public class IrakasleenOrduakV extends JFrame {
                 return false;
             }
         });
+        tableHorarios.setRowHeight(40); // Aumentar el alto de las filas
         tableHorarios.setBackground(Color.DARK_GRAY);
         tableHorarios.setForeground(Color.WHITE);
         tableHorarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        tableHorarios.setGridColor(Color.LIGHT_GRAY);
+        tableHorarios.setShowGrid(true);
+
+        // Centrar el texto en las celdas
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < tableHorarios.getColumnCount(); i++) {
+            tableHorarios.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Personalizar el encabezado de la tabla
+        JTableHeader header = tableHorarios.getTableHeader();
+        header.setBackground(new Color(162, 119, 255));
+        header.setForeground(Color.WHITE);
+        header.setFont(new Font("Tahoma", Font.BOLD, 16));
 
         JScrollPane scrollPane = new JScrollPane(tableHorarios);
 
@@ -77,27 +107,29 @@ public class IrakasleenOrduakV extends JFrame {
         btnVolver.setFont(new Font("Tahoma", Font.BOLD, 16));
 
         GroupLayout layout = new GroupLayout(panel);
+        layout.setHorizontalGroup(
+        	layout.createParallelGroup(Alignment.CENTER)
+        		.addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
+        		.addComponent(comboBoxProfesores, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+        		.addComponent(btnConsultar, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+        		.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
+        		.addComponent(btnVolver, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        			.addComponent(comboBoxProfesores, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        			.addComponent(btnConsultar, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
+        			.addGap(44)
+        			.addComponent(btnVolver, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap(93, Short.MAX_VALUE))
+        );
         panel.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
-
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(lblTitle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(comboBoxProfesores, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnConsultar, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnVolver, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-        );
-
-        layout.setVerticalGroup(
-            layout.createSequentialGroup()
-                .addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                .addComponent(comboBoxProfesores, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-                .addComponent(btnConsultar, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-                .addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                .addComponent(btnVolver, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-        );
 
         cargarProfesores();
     }
@@ -155,10 +187,10 @@ public class IrakasleenOrduakV extends JFrame {
                         mostrarHorarios(horariosList);
                     }
                 } else {
-                	showErrorMessage("Errore bat egon da ordutegiak lortzean.");
+                    showErrorMessage("Errore bat egon da ordutegiak lortzean.");
                 }
             } catch (IOException | ClassNotFoundException ex) {
-            	showErrorMessage("Konexio errorea zerbitzariarekin: " + ex.getMessage());
+                showErrorMessage("Konexio errorea zerbitzariarekin: " + ex.getMessage());
             }
         }
     }

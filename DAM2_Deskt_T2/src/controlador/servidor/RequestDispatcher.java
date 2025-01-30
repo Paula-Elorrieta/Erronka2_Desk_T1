@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+
 import controlador.BileraC;
 import controlador.HorariosC;
 import controlador.IkastetxeakC;
@@ -145,6 +147,7 @@ public class RequestDispatcher {
 					users.add(user);
 					matriculaciones.add(matriculacion);
 					ids.add(id);
+					
 				}
 				salida.writeObject(modulos);
 				salida.writeObject(ciclos);
@@ -155,7 +158,6 @@ public class RequestDispatcher {
 			} else {
 				salida.writeObject("Error: No se pudieron obtener los horarios.");
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			salida.writeObject("Error: No se pudo procesar la solicitud.");
@@ -281,29 +283,36 @@ public class RequestDispatcher {
 	}
 
 	private void handleGetBilera(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
-		try {
-			int userId = (int) entrada.readObject();
+        try {
+            int userId = (int) entrada.readObject();
 
-			BileraC bilerakControlador = new BileraC();
-			List<Reuniones> bilera = bilerakControlador.irakasleBilerakLortu(userId);
+            BileraC bilerakControlador = new BileraC();
+            List<Reuniones> bilerak = bilerakControlador.irakasleBilerakLortu(userId);
 
-			if (bilera != null) {
-				salida.writeObject("OK");
-				salida.writeObject(bilera);
-			} else {
-				salida.writeObject("Error: No se pudieron obtener las reuniones.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
-		} finally {
-			try {
-				salida.flush();
-			} catch (IOException ioEx) {
-				ioEx.printStackTrace();
-			}
-		}
-	}
+            if (bilerak != null) {
+                salida.writeObject("OK");
+                salida.writeObject(bilerak);
+
+                ArrayList<Users> ikasleak = new ArrayList<>();
+                for (Reuniones reunion : bilerak) {
+                    ikasleak.add(reunion.getUsersByAlumnoId());
+                }
+                salida.writeObject(ikasleak);
+                salida.flush();
+            } else {
+                salida.writeObject("Error: No se pudieron obtener las reuniones.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            salida.writeObject("Error: No se pudo procesar la solicitud.");
+        } finally {
+            try {
+                salida.flush();
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+            }
+        }
+    }
 
 	private void handleGetBileraIkasle(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
 		try {
