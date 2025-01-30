@@ -147,7 +147,6 @@ public class RequestDispatcher {
 					users.add(user);
 					matriculaciones.add(matriculacion);
 					ids.add(id);
-					
 				}
 				salida.writeObject(modulos);
 				salida.writeObject(ciclos);
