@@ -3,6 +3,7 @@ package controlador;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -52,41 +53,37 @@ public class HorariosC {
 		}
 	}
 
-
-
 	public List<Horarios> alumnoHorariosLortu(int alumnoId) {
-	    Session session = HibernateUtil.getSessionFactory().openSession();
-	    try {
-	        String hql = "FROM Horarios h " +
-	                     "JOIN FETCH h.modulos m " +
-	                     "JOIN FETCH m.ciclos c " +
-	                     "JOIN FETCH c.matriculacioneses mtr " +
-	                     "JOIN FETCH mtr.users u " +
-	                     "WHERE u.id = :alumnoId";
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<Horarios> horariosList = new ArrayList<>();
+		try {
+			String hql = "SELECT MIN(m.nombre), h " + "FROM Horarios h " + "JOIN FETCH h.modulos m "
+					+ "JOIN FETCH m.ciclos c " + "JOIN FETCH c.matriculacioneses mtr " + "JOIN FETCH mtr.users u "
+					+ "WHERE u.id = :alumnoId " + "GROUP BY h.id.dia, h.id.hora";
+			;
 
-	      
-	        Query<Horarios> query = session.createQuery(hql, Horarios.class);
-	        query.setParameter("alumnoId", alumnoId);
+			Query<Object[]> query = session.createQuery(hql);
+			query.setParameter("alumnoId", alumnoId);
+			List<Object[]> result = query.list();
 
-			for (Horarios horarios : query.list()) {
-				System.out.println(horarios.getId().getHora());
+			for (Object[] row : result) {
+				String moduloNombre = (String) row[0]; // El valor MIN(m.nombre)
+				Horarios horario = (Horarios) row[1]; // La entidad Horarios
+				Hibernate.initialize(horario.getModulos());
+				Hibernate.initialize(horario.getUsers());
+
+				horariosList.add(horario);
 			}
-	        List<Horarios> horariosList = query.list();
-	        return horariosList;
 
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        session.close();
-	    }
+			return horariosList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return null;
 	}
 
-
-
-
-	
 	public static void main(String[] args) {
 		HorariosC horariosControlador = new HorariosC();
 		List<Horarios> horarios = horariosControlador.alumnoHorariosLortu(3);

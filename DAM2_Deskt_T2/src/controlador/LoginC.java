@@ -159,15 +159,14 @@ public class LoginC {
 		}
 
 	}
-	
+
 	public List<Users> getIraskasleByIkasle(int id) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		ArrayList<Users> irakasleak = new ArrayList<Users>();
 
 		try {
 			String hql = "FROM Horarios h " + "JOIN FETCH h.modulos m " + "JOIN FETCH m.ciclos c "
-					+ "JOIN FETCH c.matriculacioneses mtr "
-					+ "JOIN FETCH mtr.users ika " + "JOIN FETCH h.users irak "
+					+ "JOIN FETCH c.matriculacioneses mtr " + "JOIN FETCH mtr.users ika " + "JOIN FETCH h.users irak "
 					+ "WHERE ika.id = :alumnoId GROUP BY h.users, mtr.users ";
 			Query query = session.createQuery(hql);
 			query.setParameter("alumnoId", id);
@@ -185,12 +184,25 @@ public class LoginC {
 		} finally {
 			session.close();
 		}
+	}
 
+	public List<Users> getUsersGuztiak() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "FROM Users u JOIN FETCH u.tipos";
+			Query<Users> query = session.createQuery(hql, Users.class);
+			return query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
 	}
 
 	public static void main(String[] args) {
 		LoginC login = new LoginC();
-		login.getIraskasleByIkasle(3);
+		login.getUsersGuztiak();
 	}
 
 }

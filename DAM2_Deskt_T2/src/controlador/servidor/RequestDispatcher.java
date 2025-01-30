@@ -21,6 +21,7 @@ import modelo.Matriculaciones;
 import modelo.MatriculacionesId;
 import modelo.Modulos;
 import modelo.Reuniones;
+import modelo.Tipos;
 import modelo.Users;
 
 public class RequestDispatcher {
@@ -63,12 +64,44 @@ public class RequestDispatcher {
 		case "IRAKASLEZERRENDA":
 			handleGetIrakasleakByIkasleak(entrada, salida);
 			break;
+		case "GETUSERS":
+			handleGetUsers(entrada, salida);
+			break;
 		default:
 			salida.writeObject("Error: Acción desconocida.");
 		}
 	}
 
-	private void handleGetIrakasleakByIkasleak(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+	private void handleGetUsers(ObjectInputStream entrada, ObjectOutputStream salida) {
+
+		try {
+			LoginC loginControlador = new LoginC();
+			List<Users> users = loginControlador.getUsersGuztiak();
+			if (users != null) {
+				salida.writeObject("OK");
+				salida.writeObject(users);
+			} else {
+				salida.writeObject("Error: No se pudieron obtener los usuarios.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				salida.writeObject("Error: No se pudo procesar la solicitud.");
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
+
+	}
+
+	private void handleGetIrakasleakByIkasleak(ObjectInputStream entrada, ObjectOutputStream salida)
+			throws IOException {
 
 		try {
 			LoginC loginControlador = new LoginC();
@@ -135,24 +168,27 @@ public class RequestDispatcher {
 				ArrayList<Ciclos> ciclos = new ArrayList<>();
 				ArrayList<Users> users = new ArrayList<>();
 				ArrayList<Matriculaciones> matriculaciones = new ArrayList<>();
-				ArrayList<MatriculacionesId> ids = new ArrayList<>();
+				ArrayList<MatriculacionesId> mids = new ArrayList<>();
+				ArrayList<HorariosId> hId = new ArrayList<>();
 				for (Horarios horario : horarios) {
 					Modulos modulo = horario.getModulos();
 					Ciclos ciclo = modulo.getCiclos();
 					Users user = horario.getUsers();
 					Matriculaciones matriculacion = (Matriculaciones) ciclo.getMatriculacioneses().iterator().next();
-					MatriculacionesId id = matriculacion.getId();
+					MatriculacionesId mid = matriculacion.getId();
 					modulos.add(modulo);
 					ciclos.add(ciclo);
 					users.add(user);
 					matriculaciones.add(matriculacion);
-					ids.add(id);
+					mids.add(mid);
+					hId.add(horario.getId());
 				}
 				salida.writeObject(modulos);
 				salida.writeObject(ciclos);
 				salida.writeObject(users);
 				salida.writeObject(matriculaciones);
-				salida.writeObject(ids);
+				salida.writeObject(mids);
+				salida.writeObject(hId);
 				salida.flush();
 			} else {
 				salida.writeObject("Error: No se pudieron obtener los horarios.");
@@ -282,36 +318,37 @@ public class RequestDispatcher {
 	}
 
 	private void handleGetBilera(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
-        try {
-            int userId = (int) entrada.readObject();
+		try {
+			int userId = (int) entrada.readObject();
 
-            BileraC bilerakControlador = new BileraC();
-            List<Reuniones> bilerak = bilerakControlador.irakasleBilerakLortu(userId);
+			BileraC bilerakControlador = new BileraC();
+			List<Reuniones> bilerak = bilerakControlador.irakasleBilerakLortu(userId);
 
-            if (bilerak != null) {
-                salida.writeObject("OK");
-                salida.writeObject(bilerak);
+			if (bilerak != null) {
+				salida.writeObject("OK");
+				salida.writeObject(bilerak);
 
-                ArrayList<Users> ikasleak = new ArrayList<>();
-                for (Reuniones reunion : bilerak) {
-                    ikasleak.add(reunion.getUsersByAlumnoId());
-                }
-                salida.writeObject(ikasleak);
-                salida.flush();
-            } else {
-                salida.writeObject("Error: No se pudieron obtener las reuniones.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            salida.writeObject("Error: No se pudo procesar la solicitud.");
-        } finally {
-            try {
-                salida.flush();
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
-            }
-        }
-    }
+				ArrayList<Users> ikasleak = new ArrayList<>();
+				for (Reuniones reunion : bilerak) {
+					ikasleak.add(reunion.getUsersByAlumnoId());
+				}
+
+				salida.writeObject(ikasleak);
+				salida.flush();
+			} else {
+				salida.writeObject("Error: No se pudieron obtener las reuniones.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			salida.writeObject("Error: No se pudo procesar la solicitud.");
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
+	}
 
 	private void handleGetBileraIkasle(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
 		try {
@@ -319,18 +356,14 @@ public class RequestDispatcher {
 
 			BileraC bilerakControlador = new BileraC();
 			List<Reuniones> bilerak = bilerakControlador.ikasleBilerakLortu(userId);
-			ArrayList<Users> irakasleak = new ArrayList<>();
 
 			if (bilerak != null) {
 				salida.writeObject("OK");
 				salida.writeObject(bilerak);
 
+				ArrayList<Users> irakasleak = new ArrayList<>();
 				for (Reuniones reunion : bilerak) {
-					Users profesor = new Users();
-					profesor = reunion.getUsersByProfesorId();
-
-					irakasleak.add(profesor);
-
+					irakasleak.add(reunion.getUsersByProfesorId());
 				}
 
 				salida.writeObject(irakasleak);

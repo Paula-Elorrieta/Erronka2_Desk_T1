@@ -13,54 +13,62 @@ import modelo.Reuniones;
 public class BileraC {
 
 	public List<Reuniones> irakasleBilerakLortu(int profeId) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE u.id = :profeId";
-            Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
-            query.setParameter("profeId", profeId);
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE r.usersByProfesorId.id = :profeId";
+			Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
+			query.setParameter("profeId", profeId);
 
-            List<Reuniones> reuniones = query.list();
+			List<Reuniones> reuniones = query.list();
 
-            for (Reuniones reunion : reuniones) {
-                Hibernate.initialize(reunion.getUsersByProfesorId());
-                Hibernate.initialize(reunion.getUsersByAlumnoId());
-            }
+			// Inicializar relaciones para evitar problemas de Lazy Loading
+			for (Reuniones reunion : reuniones) {
+				Hibernate.initialize(reunion.getUsersByAlumnoId().getTipos());
+				Hibernate.initialize(reunion.getUsersByProfesorId().getTipos());
+			}
 
-            return reuniones;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+			return reuniones;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close(); // Se cierra la sesión después de inicializar las relaciones
+		}
+	}
 
-        } finally {
-            session.close();
-        }
-    }
-    public List<Reuniones> ikasleBilerakLortu(int alumnoId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE r.usersByAlumnoId.id = :alumnoId";
-            Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
-            query.setParameter("alumnoId", alumnoId);
+	public List<Reuniones> ikasleBilerakLortu(int alumnoId) {
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			String hql = "FROM Reuniones r LEFT JOIN FETCH r.usersByProfesorId u WHERE r.usersByAlumnoId.id = :alumnoId";
+			Query<Reuniones> query = session.createQuery(hql, Reuniones.class);
+			query.setParameter("alumnoId", alumnoId);
 
-            List<Reuniones> reuniones = query.list();
-            return reuniones;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+			List<Reuniones> reuniones = query.list();
 
-    public void updateReunion(Reuniones reunion) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        try {
-            session.update(reunion);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
+			// Inicializar relaciones para evitar problemas de Lazy Loading
+			for (Reuniones reunion : reuniones) {
+				Hibernate.initialize(reunion.getUsersByAlumnoId());
+				Hibernate.initialize(reunion.getUsersByProfesorId());
+			}
+
+			return reuniones;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void updateReunion(Reuniones reunion) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			session.update(reunion);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
 
 }

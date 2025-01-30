@@ -3,7 +3,7 @@ package modelo;
 import java.io.Serializable;
 
 public class Ikastetxeak implements Serializable {
-    private static final long serialVersionUID = 1L; // Versión de la clase para mantener compatibilidad en la serialización
+    private static final long serialVersionUID = 1L; 
     
     private String CCEN;
     private String NOM;
@@ -18,7 +18,6 @@ public class Ikastetxeak implements Serializable {
     private double LATITUD;
     private double LONGITUD;
 
-    // Getters y setters
     public String getCCEN() {
         return CCEN;
     }
