@@ -70,5 +70,19 @@ public class BileraC {
 			session.close();
 		}
 	}
+	
+	public void sortuBilera(Reuniones reunion) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			session.save(reunion);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
 
 }

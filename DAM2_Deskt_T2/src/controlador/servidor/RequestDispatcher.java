@@ -50,8 +50,14 @@ public class RequestDispatcher {
 		case "BILERA_UPDATE":
 			handleBileraUpdate(entrada, salida);
 			break;
+		case "BILERA_SORTU":
+			handleBileraSortu(entrada, salida);
+			break;
 		case "IKASTETXEAK":
 			handleGetIkastetxeak(entrada, salida);
+			break;
+		case "ALLIKASTETXEAK":
+			handleGetAllIkastetxeak(entrada, salida);
 			break;
 		case "MATRIKULAK":
 			handleGetMatriculaciones(entrada, salida);
@@ -78,8 +84,18 @@ public class RequestDispatcher {
 			LoginC loginControlador = new LoginC();
 			List<Users> users = loginControlador.getUsersGuztiak();
 			if (users != null) {
+				ArrayList<Tipos> tipos = new ArrayList<>();
+				for (Users user : users) {
+					tipos.add(user.getTipos());
+					System.out.println(user.getNombre());
+					System.out.println(user.getTipos().getId());
+				}
 				salida.writeObject("OK");
 				salida.writeObject(users);
+				salida.writeObject(tipos);
+				
+				
+				
 			} else {
 				salida.writeObject("Error: No se pudieron obtener los usuarios.");
 			}
@@ -500,5 +516,52 @@ public class RequestDispatcher {
 			}
 		}
 	}
+	
+	private void handleGetAllIkastetxeak(ObjectInputStream entrada, ObjectOutputStream salida) {
+	    try {
+	        IkastetxeakC ikastetxeakC = new IkastetxeakC();
+
+	        // Obtener la lista completa de Ikastetxeak
+	        List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortu();
+
+	        if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
+	            salida.writeObject("OK"); // Respuesta de éxito
+	            salida.writeObject(ikastetxeak); // Enviar lista completa
+	        } else {
+	            salida.writeObject("ERROR: No se encontraron centros educativos.");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        try {
+	            salida.writeObject("ERROR: No se pudo procesar la solicitud.");
+	        } catch (IOException ioEx) {
+	            ioEx.printStackTrace();
+	        }
+	    } finally {
+	        try {
+	            salida.flush(); // Asegurar que los datos se envían correctamente
+	        } catch (IOException ioEx) {
+	            ioEx.printStackTrace();
+	        }
+	    }
+	}
+	
+	private void handleBileraSortu(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
+		try {
+			Reuniones reunion = (Reuniones) entrada.readObject();
+			BileraC bileraControlador = new BileraC();
+			bileraControlador.sortuBilera(reunion);
+			salida.writeObject("OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
+	}
+
 
 }

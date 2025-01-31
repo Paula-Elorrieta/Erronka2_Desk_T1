@@ -33,6 +33,31 @@ public class IkastetxeakC {
 	    }
 	    return null;
 	}
+	
+	public List<Ikastetxeak> ikastetxeakLortu() {
+		Gson gson = new Gson();
+		List<Ikastetxeak> ikastetxeak = null;
+
+		try (FileReader reader = new FileReader("src/ikastetxeak.json")) {
+			JsonObject rootObject = gson.fromJson(reader, JsonObject.class);
+
+			JsonArray ikastetxeakArray = rootObject.getAsJsonArray("IKASTETXEAK");
+
+			ikastetxeak = gson.fromJson(ikastetxeakArray, new TypeToken<List<Ikastetxeak>>() {
+			}.getType());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ikastetxeak;
+	}
+	
+	public static void main(String[] args) {
+		IkastetxeakC ikastetxeakC = new IkastetxeakC();
+		List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortu();
+		for (Ikastetxeak centro : ikastetxeak) {
+            System.out.println(centro.getNOM());
+		}
+	}
 
 }
 
