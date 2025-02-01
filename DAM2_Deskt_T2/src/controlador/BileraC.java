@@ -21,7 +21,6 @@ public class BileraC {
 
 			List<Reuniones> reuniones = query.list();
 
-			// Inicializar relaciones para evitar problemas de Lazy Loading
 			for (Reuniones reunion : reuniones) {
 				Hibernate.initialize(reunion.getUsersByAlumnoId().getTipos());
 				Hibernate.initialize(reunion.getUsersByProfesorId().getTipos());
@@ -32,7 +31,7 @@ public class BileraC {
 			e.printStackTrace();
 			return null;
 		} finally {
-			session.close(); // Se cierra la sesión después de inicializar las relaciones
+			session.close(); 
 		}
 	}
 
@@ -62,6 +61,30 @@ public class BileraC {
 		Transaction tx = session.beginTransaction();
 		try {
 			session.update(reunion);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	
+	public void updateReunionAndroid(int id, String estadoEus, String estado) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		
+		System.out.println("id: " + id);
+		System.out.println("estadoEus: " + estadoEus);
+		System.out.println("estado: " + estado);
+		
+		try {
+			String hql = "UPDATE Reuniones r SET r.estadoEus = :estadoEus, r.estado = :estado WHERE r.idReunion = :id";
+			Query query = session.createQuery(hql);
+			query.setParameter("estadoEus", estadoEus);
+			query.setParameter("estado", estado);
+			query.setParameter("id", id);
+			query.executeUpdate();
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();

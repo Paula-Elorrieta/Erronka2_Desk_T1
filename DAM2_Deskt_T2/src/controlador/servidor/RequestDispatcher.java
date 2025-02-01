@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Base64;
 
 import org.hibernate.Hibernate;
 
@@ -50,6 +51,9 @@ public class RequestDispatcher {
 		case "BILERA_UPDATE":
 			handleBileraUpdate(entrada, salida);
 			break;
+		case "BILERA_UPDATE_ANDROID":
+			handleBileraUpdateAndroid(entrada, salida);
+			break;
 		case "BILERA_SORTU":
 			handleBileraSortu(entrada, salida);
 			break;
@@ -64,6 +68,7 @@ public class RequestDispatcher {
 			break;
 		case "IKASLEORDUTEGIA":
 			handleGetHorariosIkasle(entrada, salida);
+			break;
 		case "IKASLEZERRENDA":
 			handleGetIkasleakByIrakasleak(entrada, salida);
 			break;
@@ -76,6 +81,33 @@ public class RequestDispatcher {
 		default:
 			salida.writeObject("Error: Acción desconocida.");
 		}
+	}
+
+	private void handleBileraUpdateAndroid(ObjectInputStream entrada, ObjectOutputStream salida) {
+	    try {
+	    	
+	    	int id = (int) entrada.readObject();
+	    	String estadoEus = (String) entrada.readObject();
+	    	String estado = (String) entrada.readObject();
+	    	
+	    	
+            BileraC bilerakControlador = new BileraC();
+            bilerakControlador.updateReunionAndroid(id, estadoEus, estado);
+            salida.writeObject("OK");
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                salida.writeObject("Error: No se pudo procesar la solicitud.");
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+            }
+        } finally {
+            try {
+                salida.flush();
+            } catch (IOException ioEx) {
+				ioEx.printStackTrace();
+            }
+        }
 	}
 
 	private void handleGetUsers(ObjectInputStream entrada, ObjectOutputStream salida) {
@@ -93,9 +125,7 @@ public class RequestDispatcher {
 				salida.writeObject("OK");
 				salida.writeObject(users);
 				salida.writeObject(tipos);
-				
-				
-				
+
 			} else {
 				salida.writeObject("Error: No se pudieron obtener los usuarios.");
 			}
@@ -326,7 +356,7 @@ public class RequestDispatcher {
 			salida.writeObject("Errorea datu basean edo zerbitzarian.");
 		} finally {
 			try {
-				salida.flush(); // Asegurarse de que el flujo esté completamente escrito
+				salida.flush();
 			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
 			}
@@ -346,7 +376,14 @@ public class RequestDispatcher {
 
 				ArrayList<Users> ikasleak = new ArrayList<>();
 				for (Reuniones reunion : bilerak) {
-					ikasleak.add(reunion.getUsersByAlumnoId());
+					Users alumno = reunion.getUsersByAlumnoId();
+
+					if (alumno != null && alumno.getArgazkia() != null) {
+						alumno.setImagenBase64(convertirImagenABase64(alumno.getArgazkia()));
+						alumno.setArgazkia(null);
+					}
+
+					ikasleak.add(alumno);
 				}
 
 				salida.writeObject(ikasleak);
@@ -516,36 +553,36 @@ public class RequestDispatcher {
 			}
 		}
 	}
-	
+
 	private void handleGetAllIkastetxeak(ObjectInputStream entrada, ObjectOutputStream salida) {
-	    try {
-	        IkastetxeakC ikastetxeakC = new IkastetxeakC();
+		try {
+			IkastetxeakC ikastetxeakC = new IkastetxeakC();
 
-	        // Obtener la lista completa de Ikastetxeak
-	        List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortu();
+			// Obtener la lista completa de Ikastetxeak
+			List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortu();
 
-	        if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
-	            salida.writeObject("OK"); // Respuesta de éxito
-	            salida.writeObject(ikastetxeak); // Enviar lista completa
-	        } else {
-	            salida.writeObject("ERROR: No se encontraron centros educativos.");
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        try {
-	            salida.writeObject("ERROR: No se pudo procesar la solicitud.");
-	        } catch (IOException ioEx) {
-	            ioEx.printStackTrace();
-	        }
-	    } finally {
-	        try {
-	            salida.flush(); // Asegurar que los datos se envían correctamente
-	        } catch (IOException ioEx) {
-	            ioEx.printStackTrace();
-	        }
-	    }
+			if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
+				salida.writeObject("OK"); // Respuesta de éxito
+				salida.writeObject(ikastetxeak); // Enviar lista completa
+			} else {
+				salida.writeObject("ERROR: No se encontraron centros educativos.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				salida.writeObject("ERROR: No se pudo procesar la solicitud.");
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		} finally {
+			try {
+				salida.flush(); // Asegurar que los datos se envían correctamente
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
 	}
-	
+
 	private void handleBileraSortu(ObjectInputStream entrada, ObjectOutputStream salida) throws IOException {
 		try {
 			Reuniones reunion = (Reuniones) entrada.readObject();
@@ -563,5 +600,11 @@ public class RequestDispatcher {
 		}
 	}
 
+	private String convertirImagenABase64(byte[] imagenBytes) {
+		if (imagenBytes == null || imagenBytes.length == 0) {
+			return null;
+		}
+		return Base64.getEncoder().encodeToString(imagenBytes);
+	}
 
 }
