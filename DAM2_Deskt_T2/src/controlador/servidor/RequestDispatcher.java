@@ -81,9 +81,44 @@ public class RequestDispatcher {
 		case "GETUSERS":
 			handleGetUsers(entrada, salida);
 			break;
+		case "EMAILBILERA":
+			handleEmailBilera(entrada, salida);
+			break;
 		default:
 			salida.writeObject("Error: Acción desconocida.");
 		}
+	}
+
+	private void handleEmailBilera(ObjectInputStream entrada, ObjectOutputStream salida) {
+		try {
+            String email = (String) entrada.readObject();
+            String asunto = (String) entrada.readObject();
+            Timestamp data = (Timestamp) entrada.readObject();
+            String lekua = (String) entrada.readObject();
+
+            MailC mailControlador = new MailC();
+            boolean emailEnviado = mailControlador.bilerakNotifikazioa(email, asunto, data, lekua);
+
+            if (emailEnviado) {
+                salida.writeObject("OK");	
+            } else {
+                salida.writeObject("Error: No se pudo enviar el correo.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                salida.writeObject("Error: No se pudo procesar la solicitud.");
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+            }
+        } finally {
+            try {
+                salida.flush();
+            } catch (IOException ioEx) {
+				ioEx.printStackTrace();
+        	}	
+		
+    	}
 	}
 
 	private void handleBileraUpdateAndroid(ObjectInputStream entrada, ObjectOutputStream salida) {
