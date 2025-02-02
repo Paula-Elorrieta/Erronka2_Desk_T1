@@ -1,13 +1,13 @@
 package controlador.servidor;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Base64;
-
-import org.hibernate.Hibernate;
 
 import controlador.BileraC;
 import controlador.HorariosC;
@@ -56,6 +56,9 @@ public class RequestDispatcher {
 			break;
 		case "BILERA_SORTU":
 			handleBileraSortu(entrada, salida);
+			break;
+		case "BILERA_SORTU_ANDROID":
+			handleBileraSortuAndroid(entrada, salida);
 			break;
 		case "IKASTETXEAK":
 			handleGetIkastetxeak(entrada, salida);
@@ -599,6 +602,76 @@ public class RequestDispatcher {
 			}
 		}
 	}
+	private void handleBileraSortuAndroid(ObjectInputStream entrada, ObjectOutputStream salida) {
+	    try {
+
+	    	Integer idReunion = (Integer) entrada.readObject();
+			System.out.println("ID de la reunión: " + idReunion);
+
+			// Leer los objetos de la entrada
+
+	        Users profesor = (Users) entrada.readObject();
+	        Users alumno = (Users) entrada.readObject();
+	        String estado = (String) entrada.readObject();
+	        String estadoEus = (String) entrada.readObject();
+	        String idCentro = (String) entrada.readObject();
+	        String titulo = (String) entrada.readObject();
+	        String asunto = (String) entrada.readObject();
+	        String aula = (String) entrada.readObject();
+	        Timestamp fecha = (Timestamp) entrada.readObject();
+
+	        // Validar si algún valor es nulo y reemplazarlo si es necesario
+	        idReunion = (idReunion != null) ? idReunion : 0;
+	        profesor = (profesor != null) ? profesor : new Users();
+	        alumno = (alumno != null) ? alumno : new Users();
+	        estado = (estado != null) ? estado : "";
+	        estadoEus = (estadoEus != null) ? estadoEus : "";
+	        idCentro = (idCentro != null) ? idCentro : "";
+	        titulo = (titulo != null) ? titulo : "";
+	        asunto = (asunto != null) ? asunto : "";
+	        aula = (aula != null) ? aula : "";
+	        fecha = (fecha != null) ? fecha : new Timestamp(System.currentTimeMillis());
+
+	        // Crear la reunión con los valores recibidos
+	        Reuniones reunion = new Reuniones();
+	        reunion.setIdReunion(idReunion);
+	        reunion.setUsersByProfesorId(profesor);
+	        reunion.setUsersByAlumnoId(alumno);
+	        reunion.setEstado(estado);
+	        reunion.setEstadoEus(estadoEus);
+	        reunion.setIdCentro(idCentro);
+	        reunion.setTitulo(titulo);
+	        reunion.setAsunto(asunto);
+	        reunion.setAula(aula);
+	        reunion.setFecha(fecha);
+
+	        // Procesar la reunión (guardarla en base de datos o realizar la acción correspondiente)
+	        BileraC bileraControlador = new BileraC();
+	        bileraControlador.sortuBilera(reunion);
+
+	        // Enviar confirmación al cliente
+	        salida.writeObject("OK");
+	        salida.flush();
+
+	    } catch (EOFException eofEx) {
+	        System.err.println("EOFException: La conexión se cerró antes de recibir todos los datos.");
+	        eofEx.printStackTrace();
+	    } catch (ClassNotFoundException cnfEx) {
+	        System.err.println("Error de deserialización: " + cnfEx.getMessage());
+	        cnfEx.printStackTrace();
+	    } catch (IOException ioEx) {
+	        System.err.println("Error de entrada/salida: " + ioEx.getMessage());
+	        ioEx.printStackTrace();
+	    } catch (Exception e) {
+	        System.err.println("Error inesperado: " + e.getMessage());
+	        e.printStackTrace();
+	        }
+	    }
+
+
+
+
+
 
 	private String convertirImagenABase64(byte[] imagenBytes) {
 		if (imagenBytes == null || imagenBytes.length == 0) {
