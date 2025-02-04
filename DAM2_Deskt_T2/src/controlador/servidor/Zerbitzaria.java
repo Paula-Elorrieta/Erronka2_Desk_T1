@@ -11,9 +11,9 @@ public class Zerbitzaria {
     public Zerbitzaria() {
         try {
             servidorSocket = new ServerSocket(PUERTO);
-            System.out.println("Servidor iniciado en el puerto " + PUERTO);
+            System.out.println("Zerbitzaria irekitan portuan: " + PUERTO);
         } catch (IOException e) {
-            System.out.println("Error al iniciar el servidor: " + e.getMessage());
+            System.out.println("Errorea zerbitzaria irekitzean: " + e.getMessage());
         }
     }
 
@@ -21,11 +21,11 @@ public class Zerbitzaria {
         while (true) {
             try {
                 Socket socketCliente = servidorSocket.accept();
-                System.out.println("Cliente conectado desde: " + socketCliente.getInetAddress());
+                System.out.println("Bezeroa konektatuta: " + socketCliente.getInetAddress());
                 new ClienteHandler(socketCliente).start();
 
             } catch (IOException e) {
-                System.out.println("Error al aceptar una conexión: " + e.getMessage());
+                System.out.println("Errorea konexioan egiterakoan: " + e.getMessage());
             }
         }
     }
@@ -44,30 +44,17 @@ public class Zerbitzaria {
             try {
                 entrada = new ObjectInputStream(socketCliente.getInputStream());
                 salida = new ObjectOutputStream(socketCliente.getOutputStream());
-
                 Object objetoRecibido = entrada.readObject();
 
-                // Aqui se imprime el objeto que se recibe
-                if (objetoRecibido != null) {
-                    System.out.println("Objeto recibido: " + objetoRecibido);
-                } else {
-                    System.out.println("El objeto recibido es null");
-                }
-
-                // Si el objeto es un tipo esperado, puedes hacer un cast y visualizar sus datos
                 if (objetoRecibido instanceof String) {
                     String mensaje = (String) objetoRecibido;
-                    System.out.println("Mensaje recibido como String: " + mensaje);
-                } else {
-                    // Si esperas otro tipo de objeto, puedes hacer algo similar con él
-                    System.out.println("Objeto recibido de tipo: " + objetoRecibido.getClass().getName());
-                }
+                    System.out.println("Mezua: " + mensaje);
+                } 
 
-                // Procesar la solicitud con el RequestDispatcher
                 new RequestDispatcher().handleRequest((String) objetoRecibido, entrada, salida);
 
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error en la comunicación con el cliente: " + e.getMessage());
+                System.out.println("Errorea komunikazioan: " + e.getMessage());
             } finally {
                 cerrarConexion();
             }
@@ -80,7 +67,7 @@ public class Zerbitzaria {
                 if (salida != null) salida.close();
                 if (socketCliente != null) socketCliente.close();
             } catch (IOException e) {
-                System.out.println("Error al cerrar conexiones: " + e.getMessage());
+                System.out.println("Errorea bezeroeekin: " + e.getMessage());
             }
         }
     }

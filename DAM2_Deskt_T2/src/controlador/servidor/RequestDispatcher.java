@@ -85,67 +85,65 @@ public class RequestDispatcher {
 			handleEmailBilera(entrada, salida);
 			break;
 		default:
-			salida.writeObject("Error: Acción desconocida.");
+			salida.writeObject("Errorea.");
 		}
 	}
 
 	private void handleEmailBilera(ObjectInputStream entrada, ObjectOutputStream salida) {
 		try {
-            String email = (String) entrada.readObject();
-            String asunto = (String) entrada.readObject();
-            Timestamp data = (Timestamp) entrada.readObject();
-            String lekua = (String) entrada.readObject();
+			String email = (String) entrada.readObject();
+			String asunto = (String) entrada.readObject();
+			Timestamp data = (Timestamp) entrada.readObject();
+			String lekua = (String) entrada.readObject();
 
-            MailC mailControlador = new MailC();
-            boolean emailEnviado = mailControlador.bilerakNotifikazioa(email, asunto, data, lekua);
+			MailC mailControlador = new MailC();
+			boolean emailEnviado = mailControlador.bilerakNotifikazioa(email, asunto, data, lekua);
 
-            if (emailEnviado) {
-                salida.writeObject("OK");	
-            } else {
-                salida.writeObject("Error: No se pudo enviar el correo.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                salida.writeObject("Error: No se pudo procesar la solicitud.");
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
-            }
-        } finally {
-            try {
-                salida.flush();
-            } catch (IOException ioEx) {
+			if (emailEnviado) {
+				salida.writeObject("OK");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				salida.writeObject("Errorea: ezin da objetua bidali.");
+			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
-        	}	
-		
-    	}
+			}
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+
+		}
 	}
 
 	private void handleBileraUpdateAndroid(ObjectInputStream entrada, ObjectOutputStream salida) {
-	    try {
-	    	
-	    	int id = (int) entrada.readObject();
-	    	String estadoEus = (String) entrada.readObject();
-	    	String estado = (String) entrada.readObject();
-	    	
-	    	
-            BileraC bilerakControlador = new BileraC();
-            bilerakControlador.updateReunionAndroid(id, estadoEus, estado);
-            salida.writeObject("OK");
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                salida.writeObject("Error: No se pudo procesar la solicitud.");
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
-            }
-        } finally {
-            try {
-                salida.flush();
-            } catch (IOException ioEx) {
+		try {
+
+			int id = (int) entrada.readObject();
+			String estadoEus = (String) entrada.readObject();
+			String estado = (String) entrada.readObject();
+
+			BileraC bilerakControlador = new BileraC();
+			bilerakControlador.updateReunionAndroid(id, estadoEus, estado);
+			salida.writeObject("OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				salida.writeObject("Errorea: ezin da objetua bidali.");
+			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
-            }
-        }
+			}
+		} finally {
+			try {
+				salida.flush();
+			} catch (IOException ioEx) {
+				ioEx.printStackTrace();
+			}
+		}
 	}
 
 	private void handleGetUsers(ObjectInputStream entrada, ObjectOutputStream salida) {
@@ -165,12 +163,12 @@ public class RequestDispatcher {
 				salida.writeObject(tipos);
 
 			} else {
-				salida.writeObject("Error: No se pudieron obtener los usuarios.");
+				salida.writeObject("Errorea: Ezin izan dira lortu erabiltzaileak.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
-				salida.writeObject("Error: No se pudo procesar la solicitud.");
+				salida.writeObject("Errorea: ezin da objetua bidali.");
 			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
 			}
@@ -196,12 +194,12 @@ public class RequestDispatcher {
 				salida.writeObject("OK");
 				salida.writeObject(irakasleak);
 			} else {
-				salida.writeObject("Error: No se pudieron obtener los profesores.");
+				salida.writeObject("Errorea: Ezin izan dira lortu irakasleak.");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+			salida.writeObject("Errorea: ezin da objetua bidali.");
 		} finally {
 			try {
 				salida.flush();
@@ -224,12 +222,12 @@ public class RequestDispatcher {
 				salida.writeObject("OK");
 				salida.writeObject(ikasleak);
 			} else {
-				salida.writeObject("Error: No se pudieron obtener los alumnos.");
+				salida.writeObject("Errorea: Ezin izan dira lortu ikasleak.");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+			salida.writeObject("Errorea: ezin da objetua bidali.");
 		} finally {
 			try {
 				salida.flush();
@@ -279,7 +277,7 @@ public class RequestDispatcher {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+            salida.writeObject("Errorea: ezin da objetua bidali.");
 		} finally {
 			try {
 				salida.flush();
@@ -297,7 +295,7 @@ public class RequestDispatcher {
 			salida.writeObject("OK");
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+            salida.writeObject("Errorea: ezin da objetua bidali.");
 		} finally {
 			try {
 				salida.flush();
@@ -637,76 +635,73 @@ public class RequestDispatcher {
 			}
 		}
 	}
-	private void handleBileraSortuAndroid(ObjectInputStream entrada, ObjectOutputStream salida) {
-	    try {
 
-	    	Integer idReunion = (Integer) entrada.readObject();
+	private void handleBileraSortuAndroid(ObjectInputStream entrada, ObjectOutputStream salida) {
+		try {
+
+			Integer idReunion = (Integer) entrada.readObject();
 			System.out.println("ID de la reunión: " + idReunion);
 
 			// Leer los objetos de la entrada
 
-	        Users profesor = (Users) entrada.readObject();
-	        Users alumno = (Users) entrada.readObject();
-	        String estado = (String) entrada.readObject();
-	        String estadoEus = (String) entrada.readObject();
-	        String idCentro = (String) entrada.readObject();
-	        String titulo = (String) entrada.readObject();
-	        String asunto = (String) entrada.readObject();
-	        String aula = (String) entrada.readObject();
-	        Timestamp fecha = (Timestamp) entrada.readObject();
+			Users profesor = (Users) entrada.readObject();
+			Users alumno = (Users) entrada.readObject();
+			String estado = (String) entrada.readObject();
+			String estadoEus = (String) entrada.readObject();
+			String idCentro = (String) entrada.readObject();
+			String titulo = (String) entrada.readObject();
+			String asunto = (String) entrada.readObject();
+			String aula = (String) entrada.readObject();
+			Timestamp fecha = (Timestamp) entrada.readObject();
 
-	        // Validar si algún valor es nulo y reemplazarlo si es necesario
-	        idReunion = (idReunion != null) ? idReunion : 0;
-	        profesor = (profesor != null) ? profesor : new Users();
-	        alumno = (alumno != null) ? alumno : new Users();
-	        estado = (estado != null) ? estado : "";
-	        estadoEus = (estadoEus != null) ? estadoEus : "";
-	        idCentro = (idCentro != null) ? idCentro : "";
-	        titulo = (titulo != null) ? titulo : "";
-	        asunto = (asunto != null) ? asunto : "";
-	        aula = (aula != null) ? aula : "";
-	        fecha = (fecha != null) ? fecha : new Timestamp(System.currentTimeMillis());
+			// Validar si algún valor es nulo y reemplazarlo si es necesario
+			idReunion = (idReunion != null) ? idReunion : 0;
+			profesor = (profesor != null) ? profesor : new Users();
+			alumno = (alumno != null) ? alumno : new Users();
+			estado = (estado != null) ? estado : "";
+			estadoEus = (estadoEus != null) ? estadoEus : "";
+			idCentro = (idCentro != null) ? idCentro : "";
+			titulo = (titulo != null) ? titulo : "";
+			asunto = (asunto != null) ? asunto : "";
+			aula = (aula != null) ? aula : "";
+			fecha = (fecha != null) ? fecha : new Timestamp(System.currentTimeMillis());
 
-	        // Crear la reunión con los valores recibidos
-	        Reuniones reunion = new Reuniones();
-	        reunion.setIdReunion(idReunion);
-	        reunion.setUsersByProfesorId(profesor);
-	        reunion.setUsersByAlumnoId(alumno);
-	        reunion.setEstado(estado);
-	        reunion.setEstadoEus(estadoEus);
-	        reunion.setIdCentro(idCentro);
-	        reunion.setTitulo(titulo);
-	        reunion.setAsunto(asunto);
-	        reunion.setAula(aula);
-	        reunion.setFecha(fecha);
+			// Crear la reunión con los valores recibidos
+			Reuniones reunion = new Reuniones();
+			reunion.setIdReunion(idReunion);
+			reunion.setUsersByProfesorId(profesor);
+			reunion.setUsersByAlumnoId(alumno);
+			reunion.setEstado(estado);
+			reunion.setEstadoEus(estadoEus);
+			reunion.setIdCentro(idCentro);
+			reunion.setTitulo(titulo);
+			reunion.setAsunto(asunto);
+			reunion.setAula(aula);
+			reunion.setFecha(fecha);
 
-	        // Procesar la reunión (guardarla en base de datos o realizar la acción correspondiente)
-	        BileraC bileraControlador = new BileraC();
-	        bileraControlador.sortuBilera(reunion);
+			// Procesar la reunión (guardarla en base de datos o realizar la acción
+			// correspondiente)
+			BileraC bileraControlador = new BileraC();
+			bileraControlador.sortuBilera(reunion);
 
-	        // Enviar confirmación al cliente
-	        salida.writeObject("OK");
-	        salida.flush();
+			// Enviar confirmación al cliente
+			salida.writeObject("OK");
+			salida.flush();
 
-	    } catch (EOFException eofEx) {
-	        System.err.println("EOFException: La conexión se cerró antes de recibir todos los datos.");
-	        eofEx.printStackTrace();
-	    } catch (ClassNotFoundException cnfEx) {
-	        System.err.println("Error de deserialización: " + cnfEx.getMessage());
-	        cnfEx.printStackTrace();
-	    } catch (IOException ioEx) {
-	        System.err.println("Error de entrada/salida: " + ioEx.getMessage());
-	        ioEx.printStackTrace();
-	    } catch (Exception e) {
-	        System.err.println("Error inesperado: " + e.getMessage());
-	        e.printStackTrace();
-	        }
-	    }
-
-
-
-
-
+		} catch (EOFException eofEx) {
+			System.err.println("EOFException: La conexión se cerró antes de recibir todos los datos.");
+			eofEx.printStackTrace();
+		} catch (ClassNotFoundException cnfEx) {
+			System.err.println("Error de deserialización: " + cnfEx.getMessage());
+			cnfEx.printStackTrace();
+		} catch (IOException ioEx) {
+			System.err.println("Error de entrada/salida: " + ioEx.getMessage());
+			ioEx.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Error inesperado: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
 	private String convertirImagenABase64(byte[] imagenBytes) {
 		if (imagenBytes == null || imagenBytes.length == 0) {
