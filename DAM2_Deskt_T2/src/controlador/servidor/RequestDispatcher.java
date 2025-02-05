@@ -277,7 +277,7 @@ public class RequestDispatcher {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-            salida.writeObject("Errorea: ezin da objetua bidali.");
+			salida.writeObject("Errorea: ezin da objetua bidali.");
 		} finally {
 			try {
 				salida.flush();
@@ -295,7 +295,7 @@ public class RequestDispatcher {
 			salida.writeObject("OK");
 		} catch (Exception e) {
 			e.printStackTrace();
-            salida.writeObject("Errorea: ezin da objetua bidali.");
+			salida.writeObject("Errorea: ezin da objetua bidali.");
 		} finally {
 			try {
 				salida.flush();
@@ -311,7 +311,7 @@ public class RequestDispatcher {
 			String password = (String) entrada.readObject();
 
 			if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-				salida.writeObject("Errorea: Nombre de usuario o contrase�a vacios.");
+				salida.writeObject("Errorea: Erabiltzailea edo pasahitza hutsik daude.");
 				return;
 			}
 
@@ -324,11 +324,11 @@ public class RequestDispatcher {
 				salida.writeObject(user.getTipos().getId());
 
 			} else {
-				salida.writeObject("Error: Usuario o contrase�a incorrectos.");
+				salida.writeObject("Errorea: Erabiltzailea edo pasahitza txarto daude.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error en el servidor.");
+			salida.writeObject("Zerbitzarian errorea.");
 		}
 	}
 
@@ -340,9 +340,8 @@ public class RequestDispatcher {
 
 			if (horarios != null) {
 				salida.writeObject("OK");
-				salida.writeObject(horarios); // Enviar la lista de horarios
+				salida.writeObject(horarios);
 
-				// Crear listas separadas para Modulos, Users, y HorariosId
 				ArrayList<Modulos> modulos = new ArrayList<>();
 				ArrayList<Users> users = new ArrayList<>();
 				ArrayList<HorariosId> horariosIda = new ArrayList<>();
@@ -425,11 +424,11 @@ public class RequestDispatcher {
 				salida.writeObject(ikasleak);
 				salida.flush();
 			} else {
-				salida.writeObject("Error: No se pudieron obtener las reuniones.");
+				salida.writeObject("Errorea: Ezin dira bilerak lortu.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+			salida.writeObject("Errorea: ezin izan da izan bilerak lortu.");
 		} finally {
 			try {
 				salida.flush();
@@ -459,11 +458,11 @@ public class RequestDispatcher {
 				salida.flush();
 
 			} else {
-				salida.writeObject("Error: No se pudieron obtener las reuniones.");
+				salida.writeObject("Errorea: Ezin dira bilerak lortu.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+			salida.writeObject("Errorea: ezin izan da izan bilerak lortu.");
 		} finally {
 			try {
 				salida.flush();
@@ -480,17 +479,14 @@ public class RequestDispatcher {
 			LoginC loginControlador = new LoginC();
 			Users user = loginControlador.getUser(username);
 
-			// Send the email with the new password
 			MailC mailControler = new MailC();
 			String encryptedPass = mailControler.sendMail(user.getEmail());
 			user.setPassword(encryptedPass);
 
 			System.out.println("Pasahitza enkriptatua: " + mailControler.encrypt("1234"));
 
-			// Update the user in the database
 			boolean passIsUpdated = loginControlador.updatePass(user.getUsername(), encryptedPass);
 
-			// Komprobatu ea pasahitza aldatu den ondo eta enkriptazio zuzena den
 			if (encryptedPass != "Error" && passIsUpdated) {
 				salida.writeObject("OK");
 			} else {
@@ -543,11 +539,11 @@ public class RequestDispatcher {
 				salida.flush();
 
 			} else {
-				salida.writeObject("Error: No se pudieron obtener las matriculaciones.");
+				salida.writeObject("Errorea: Ezin dira ordutegiak lortu.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			salida.writeObject("Error: No se pudo procesar la solicitud.");
+			salida.writeObject("Errorea datu basean edo zerbitzarian.");
 		} finally {
 			try {
 				salida.flush();
@@ -562,28 +558,25 @@ public class RequestDispatcher {
 		try {
 			IkastetxeakC ikastetxeakC = new IkastetxeakC();
 
-			// Leer el ID del centro enviado por el cliente
 			String idCentro = (String) entrada.readObject();
-
-			// Obtener la lista de Ikastetxeak por ID
 			List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortuIDz(idCentro);
 
 			if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
-				salida.writeObject("OK"); // Respuesta de éxito
-				salida.writeObject(ikastetxeak); // Enviar lista de Ikastetxeak
+				salida.writeObject("OK");
+				salida.writeObject(ikastetxeak);
 			} else {
-				salida.writeObject("Error: No se encontraron centros educativos para el ID proporcionado.");
+				salida.writeObject("Errorea: ezin da aurkitu ikastetxe hau.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
-				salida.writeObject("Error: No se pudo procesar la solicitud.");
+				salida.writeObject("Errorea datu basean edo zerbitzarian.");
 			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
 			}
 		} finally {
 			try {
-				salida.flush(); // Asegúrate de que los datos se envíen correctamente
+				salida.flush();
 			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
 			}
@@ -594,25 +587,24 @@ public class RequestDispatcher {
 		try {
 			IkastetxeakC ikastetxeakC = new IkastetxeakC();
 
-			// Obtener la lista completa de Ikastetxeak
 			List<Ikastetxeak> ikastetxeak = ikastetxeakC.ikastetxeakLortu();
 
 			if (ikastetxeak != null && !ikastetxeak.isEmpty()) {
-				salida.writeObject("OK"); // Respuesta de éxito
-				salida.writeObject(ikastetxeak); // Enviar lista completa
+				salida.writeObject("OK");
+				salida.writeObject(ikastetxeak);
 			} else {
-				salida.writeObject("ERROR: No se encontraron centros educativos.");
+				salida.writeObject("Errorea: ez dira topatu ikastetxeak.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
-				salida.writeObject("ERROR: No se pudo procesar la solicitud.");
+				salida.writeObject("Errorea datu basean edo zerbitzarian.");
 			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
 			}
 		} finally {
 			try {
-				salida.flush(); // Asegurar que los datos se envían correctamente
+				salida.flush();
 			} catch (IOException ioEx) {
 				ioEx.printStackTrace();
 			}
@@ -640,9 +632,6 @@ public class RequestDispatcher {
 		try {
 
 			Integer idReunion = (Integer) entrada.readObject();
-			System.out.println("ID de la reunión: " + idReunion);
-
-			// Leer los objetos de la entrada
 
 			Users profesor = (Users) entrada.readObject();
 			Users alumno = (Users) entrada.readObject();
@@ -654,7 +643,6 @@ public class RequestDispatcher {
 			String aula = (String) entrada.readObject();
 			Timestamp fecha = (Timestamp) entrada.readObject();
 
-			// Validar si algún valor es nulo y reemplazarlo si es necesario
 			idReunion = (idReunion != null) ? idReunion : 0;
 			profesor = (profesor != null) ? profesor : new Users();
 			alumno = (alumno != null) ? alumno : new Users();
@@ -666,7 +654,6 @@ public class RequestDispatcher {
 			aula = (aula != null) ? aula : "";
 			fecha = (fecha != null) ? fecha : new Timestamp(System.currentTimeMillis());
 
-			// Crear la reunión con los valores recibidos
 			Reuniones reunion = new Reuniones();
 			reunion.setIdReunion(idReunion);
 			reunion.setUsersByProfesorId(profesor);
@@ -679,26 +666,23 @@ public class RequestDispatcher {
 			reunion.setAula(aula);
 			reunion.setFecha(fecha);
 
-			// Procesar la reunión (guardarla en base de datos o realizar la acción
-			// correspondiente)
 			BileraC bileraControlador = new BileraC();
 			bileraControlador.sortuBilera(reunion);
 
-			// Enviar confirmación al cliente
 			salida.writeObject("OK");
 			salida.flush();
 
 		} catch (EOFException eofEx) {
-			System.err.println("EOFException: La conexión se cerró antes de recibir todos los datos.");
+			System.err.println("Errorea datu basean edo zerbitzarian.");
 			eofEx.printStackTrace();
 		} catch (ClassNotFoundException cnfEx) {
-			System.err.println("Error de deserialización: " + cnfEx.getMessage());
+			System.err.println("Desileraxio errorea: " + cnfEx.getMessage());
 			cnfEx.printStackTrace();
 		} catch (IOException ioEx) {
-			System.err.println("Error de entrada/salida: " + ioEx.getMessage());
+			System.err.println("Erorrea: irteera/sarrera: " + ioEx.getMessage());
 			ioEx.printStackTrace();
 		} catch (Exception e) {
-			System.err.println("Error inesperado: " + e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

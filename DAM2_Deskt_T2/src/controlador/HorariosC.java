@@ -8,11 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import controlador.db.HibernateUtil;
-import modelo.Ciclos;
 import modelo.Horarios;
-import modelo.HorariosId;
-import modelo.Modulos;
-import modelo.Users;
 
 public class HorariosC {
 
@@ -67,8 +63,7 @@ public class HorariosC {
 			List<Object[]> result = query.list();
 
 			for (Object[] row : result) {
-				String moduloNombre = (String) row[0]; // El valor MIN(m.nombre)
-				Horarios horario = (Horarios) row[1]; // La entidad Horarios
+				Horarios horario = (Horarios) row[1];
 				Hibernate.initialize(horario.getModulos());
 				Hibernate.initialize(horario.getUsers());
 

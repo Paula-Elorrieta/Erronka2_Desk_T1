@@ -41,8 +41,8 @@ public class MailC {
 			}
 		});
 
-//        String newPass = randomPass(GlobalData.PASSLENGHT);
-		String newPass = "1234";
+        String newPass = randomPass(GlobalData.PASSLENGHT);
+		//String newPass = "1234";
 
 		String encryptedPass = "Error";
 		try {
@@ -52,7 +52,6 @@ public class MailC {
 		}
 
 		try {
-			// Sortu mezuaren gorputza
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(bidaliEmail));
@@ -60,7 +59,6 @@ public class MailC {
 			message.setText("Kaixo, zure pasahitz berria " + newPass + " da.\nAldaketaren ariketa: "
 					+ java.time.LocalTime.now());
 
-			// Bidali mezua
 			Transport.send(message);
 
 			System.out.println("Correo enviado exitosamente");

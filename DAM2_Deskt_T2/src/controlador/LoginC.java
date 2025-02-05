@@ -25,7 +25,6 @@ public class LoginC {
 		}
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			// Seleccionar solo los campos b�sicos de la clase Users
 			String hql = "SELECT new Users(u.id, u.tipos, u.email, u.username, u.password, "
 					+ "u.nombre, u.apellidos, u.dni, u.direccion, u.telefono1, u.telefono2, u.argazkia) "
 					+ "FROM Users u " + "WHERE u.username = :username AND u.password = :password";
@@ -47,7 +46,6 @@ public class LoginC {
 	public Users getUser(String username) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			// Seleccionar solo los campos b�sicos de la clase Users
 			String hql = "SELECT new Users(u.id, u.tipos, u.email, u.username, u.password, "
 					+ "u.nombre, u.apellidos, u.dni, u.direccion, u.telefono1, u.telefono2, u.argazkia) "
 					+ "FROM Users u " + "WHERE u.username = :username";
@@ -198,11 +196,6 @@ public class LoginC {
 		} finally {
 			session.close();
 		}
-	}
-
-	public static void main(String[] args) {
-		LoginC login = new LoginC();
-		login.getUsersGuztiak();
 	}
 
 }
